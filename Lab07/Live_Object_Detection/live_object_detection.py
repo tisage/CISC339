@@ -1,9 +1,15 @@
 """
 Live Object Detection Demo using PyTorch and OpenCV.
 
-This script captures video from a webcam, performs real-time object detection
-using a pre-trained SSDLite model (MobileNetV3 backbone), and displays the results.
-The model is optimized and lightweight, suitable for running on Mac CPUs/GPUs.
+This script completely decouples the Video Rendering (Main Thread) from the 
+AI Inference (Background Thread). This ensures your webcam video runs flawlessly 
+at 30+ FPS (zero lag, zero stutter) while the AI updates the bounding boxes 
+as fast as the hardware allows (e.g., 5-10 FPS on Mac).
+
+Features:
+- Asynchronous AI inference
+- Real-time smooth video playback
+- Lower confidence threshold for detecting more objects
 """
 
 import cv2
@@ -12,9 +18,9 @@ import torchvision
 from torchvision.transforms import functional as F
 import numpy as np
 import time
+import threading
 
 # List of COCO dataset class names (91 classes)
-# These are the labels the pre-trained model was trained on.
 COCO_CLASSES = [
     '__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
     'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'N/A', 'stop sign',
@@ -30,155 +36,172 @@ COCO_CLASSES = [
     'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush'
 ]
 
+# --- Global variables for Async Thread Communication ---
+latest_frame_for_inference = None
+latest_detections = None
+lock = threading.Lock()
+is_running = True
+inference_fps = 0.0
+
 def get_device():
     """Select the best available device for computation."""
     if torch.backends.mps.is_available():
-        # Metal Performance Shaders for Apple Silicon (M1/M2/M3)
         print("Hardware Match: Apple Silicon (MPS) detected. GPU acceleration enabled!")
         return torch.device("mps")  
     elif torch.cuda.is_available():
-        # NVIDIA GPU
         print("Hardware Match: NVIDIA GPU (CUDA) detected. GPU acceleration enabled!")
         return torch.device("cuda") 
     else:
-        # Fallback to CPU
         print("Hardware Match: No compatible GPU found. Defaulting to CPU.")
         return torch.device("cpu")  
 
-def main():
-    # 1. Setup device
-    device = get_device()
-    print(f"Using compute device: {device}")
-
-    # 2. Load pre-trained model
-    print("Loading pre-trained SSDLite MobileNetV3 model...")
-    # SSDLite is optimized for mobile/edge CPU/GPU, offering a good balance of speed and accuracy
-    weights = torchvision.models.detection.SSDLite320_MobileNet_V3_Large_Weights.DEFAULT
-    model = torchvision.models.detection.ssdlite320_mobilenet_v3_large(weights=weights)
+def inference_worker(model, device):
+    """
+    Background thread that constantly checks if a new frame is available.
+    If so, it runs PyTorch inference and saves the latest bounding boxes.
+    """
+    global latest_frame_for_inference, latest_detections, is_running, inference_fps
     
-    # Move model to the selected device and set it to evaluation mode
-    model.to(device)
-    model.eval()  
-
-    # 3. Initialize video capture
-    # Automatically find the first available camera index (checks indices 0 to 4)
-    print("Searching for available cameras...")
-    cap = None
-    camera_index = -1
-    
-    for i in range(5):
-        print(f"  -> Checking camera index {i}...")
-        temp_cap = cv2.VideoCapture(i)
-        if temp_cap.isOpened():
-            # Test if you can actually read a valid frame
-            ret, _ = temp_cap.read()
-            if ret:
-                cap = temp_cap
-                camera_index = i
-                print(f"  [!] Success: Found working camera at index {camera_index}!")
-                break
-            else:
-                temp_cap.release()
-        else:
-            temp_cap.release()
-            
-    if cap is None or not cap.isOpened():
-        print("Error: Could not find or open any webcams.")
-        print("Please check if the camera is connected and you have granted Terminal/Python camera permissions in Mac Privacy settings.")
-        return
-
-    # Set camera resolution (optional, lower resolution = faster inference)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-
-    print("Starting video source. Press 'q' to quit.")
-
-    # 4. Process video stream
-    frame_count = 0
-    process_every_n_frames = 3  # [优化] 跳帧机制：每 3 帧进行一次模型推理，避免视频阻塞卡顿
-    last_predictions = None
-
-    with torch.no_grad(): # Disable gradient calculation for inference (saves memory & speeds up)
-        while True:
-            start_time = time.time()
-            
-            # Capture frame-by-frame
-            ret, frame = cap.read()
-            if not ret:
-                print("Failed to grab frame.")
-                break
+    while is_running:
+        frame_to_process = None
+        
+        # Safely grab the latest frame
+        with lock:
+            if latest_frame_for_inference is not None:
+                frame_to_process = latest_frame_for_inference.copy()
+                # Clear it so we don't process the same frame twice
+                latest_frame_for_inference = None
                 
-            frame_count += 1
-
-            # Only run heavy PyTorch inference every N frames
-            if frame_count % process_every_n_frames == 0 or last_predictions is None:
-                # Convert OpenCV frame (BGR) to RGB format expected by PyTorch
-                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                
-                # Convert numpy array to PyTorch tensor
-                # The model expects a list of tensors, each of shape [C, H, W], normalized to [0, 1]
-                tensor_frame = F.to_tensor(rgb_frame).to(device)
-    
-                # Perform object detection
-                # The output is a list of dictionaries (one for each input image)
+        if frame_to_process is not None:
+            inf_start = time.time()
+            
+            # Prepare image for PyTorch
+            rgb_frame = cv2.cvtColor(frame_to_process, cv2.COLOR_BGR2RGB)
+            tensor_frame = F.to_tensor(rgb_frame).to(device)
+            
+            # Run Model
+            with torch.no_grad():
                 predictions = model([tensor_frame])[0]
                 
-                # Move to CPU and compute numpy arrays only when a new inference is made
-                last_predictions = {
+                # Move to CPU explicitly and immediately to free device memory
+                preds_cpu = {
                     'scores': predictions['scores'].cpu().numpy(),
                     'boxes': predictions['boxes'].cpu().numpy(),
                     'labels': predictions['labels'].cpu().numpy()
                 }
 
-            # Use the latest available predictions for drawing
-            scores = last_predictions['scores']
-            boxes = last_predictions['boxes']
-            labels = last_predictions['labels']
+            # Safely store results
+            with lock:
+                latest_detections = preds_cpu
+                
+            inf_time = time.time() - inf_start
+            inference_fps = 1.0 / inf_time if inf_time > 0 else 0
+        else:
+            # Prevent 100% CPU utilization when waiting
+            time.sleep(0.005)
 
-            # Filter predictions by confidence score threshold
-            threshold = 0.5
+def main():
+    global latest_frame_for_inference, latest_detections, is_running
+    
+    device = get_device()
+    print(f"Using compute device: {device}")
 
+    # Initialize PyTorch Model
+    print("Loading pre-trained model...")
+    weights = torchvision.models.detection.SSDLite320_MobileNet_V3_Large_Weights.DEFAULT
+    model = torchvision.models.detection.ssdlite320_mobilenet_v3_large(weights=weights)
+    model.to(device)
+    model.eval()  
+
+    # Test camera
+    target_camera_index = 0
+    cap = cv2.VideoCapture(target_camera_index)
+    if not cap.isOpened():
+        print(f"Error: Could not open webcam at index {target_camera_index}.")
+        return
+
+    # Keep resolution reasonable to balance webcam speed and accuracy
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+    print("Starting background inference thread...")
+    worker_thread = threading.Thread(target=inference_worker, args=(model, device))
+    worker_thread.start()
+
+    print("Starting Main UI. Press 'q' to quit.")
+    
+    # Confidence threshold to show boxes
+    # IMPORTANT: Lowered from 0.5 to 0.35 so more objects will be detected!
+    CONFIDENCE_THRESHOLD = 0.35 
+
+    while True:
+        main_start = time.time()
+        ret, frame = cap.read()
+        if not ret or frame is None:
+            continue
+
+        # 1. Dispatch copy of this frame to the background AI thread
+        with lock:
+             # Just overwrite the old one; the background thread will pick it up when ready.
+             latest_frame_for_inference = frame.copy()
+             # Grab whatever detection results are currently available
+             current_detections = latest_detections
+
+        display_frame = frame.copy()
+        objects_detected = 0
+
+        # 2. Draw the bounding boxes if we have any cached
+        if current_detections is not None:
+            scores = current_detections['scores']
+            boxes = current_detections['boxes']
+            labels = current_detections['labels']
+            
             for i in range(len(scores)):
-                if scores[i] > threshold:
-                    # Extract bounding box coordinates
+                if scores[i] > CONFIDENCE_THRESHOLD:
+                    objects_detected += 1
+                    
                     box = boxes[i].astype(int)
                     x1, y1, x2, y2 = box
 
-                    # Get predicted class label
                     label_idx = labels[i]
                     label_name = COCO_CLASSES[label_idx] if label_idx < len(COCO_CLASSES) else "Unknown"
-                    
-                    # Create label text with confidence score
                     label_text = f"{label_name}: {scores[i]:.2f}"
 
-                    # Draw bounding box on the original frame
-                    color = (0, 255, 0) # Green color in BGR format
+                    color = (0, 255, 0) # Green box
                     thickness = 2
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, thickness)
+                    cv2.rectangle(display_frame, (x1, y1), (x2, y2), color, thickness)
                     
-                    # Draw text background to make text readable
+                    # Highlight text background
                     (text_w, text_h), baseline = cv2.getTextSize(label_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
-                    cv2.rectangle(frame, (x1, y1 - text_h - baseline), (x1 + text_w, y1), color, -1)
+                    cv2.rectangle(display_frame, (x1, y1 - text_h - baseline), (x1 + text_w, y1), color, -1)
                     
-                    # Draw label text
-                    cv2.putText(frame, label_text, (x1, y1 - 5), 
+                    # Add Text
+                    cv2.putText(display_frame, label_text, (x1, y1 - 5), 
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
 
-            # Calculate and display FPS (Frames Per Second)
-            fps = 1.0 / (time.time() - start_time)
-            cv2.putText(frame, f"FPS: {fps:.1f}", (10, 30), 
-                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 2)
+        # 3. Render Status UI on top
+        ui_fps = 1.0 / (time.time() - main_start)
+        # Show both the UI Smoothness (FPS) and the AI's Brain Speed (Inference FPS)
+        status_text_1 = f"Camera/Video FPS: {ui_fps:.1f} (Smooth)"
+        status_text_2 = f"AI Backend FPS: {inference_fps:.1f} | Objects: {objects_detected}"
+        
+        cv2.putText(display_frame, status_text_1, (10, 30), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 2)
+        cv2.putText(display_frame, status_text_2, (10, 60), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
 
-            # Display the resulting frame
-            cv2.imshow('Live Object Detection (Press Q to quit)', frame)
+        # 4. Show Window
+        cv2.imshow('Live Object Detection (True Async)', display_frame)
 
-            # Break the loop if 'q' is pressed
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-    # 5. Clean up
+    # Clean UI and shutdown background thread
+    is_running = False
+    worker_thread.join()
     cap.release()
     cv2.destroyAllWindows()
+    print("Shutdown complete.")
 
 if __name__ == "__main__":
     main()
