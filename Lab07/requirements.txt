@@ -1,0 +1,19 @@
+# Course: CISC339 - Lab07 (PyTorch Applied Demos)
+# Required dependencies for both Computer Vision and Document Understanding demos
+
+# ---- Core PyTorch & Ecosystem ----
+# Using robust versions compatible with Apple Silicon (MPS backend)
+torch>=2.0.0
+torchvision>=0.15.0
+
+# ---- Demo 1: Live Object Detection ----
+# OpenCV for capturing webcam and drawing bounding boxes
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# ---- Demo 2: Document Understanding ----
+# Hugging Face Transformers for utilizing the pre-trained NLP/Vision Donut model
+transformers>=4.30.0
+Pillow>=9.5.0          # Required for processing image files (PIL)
+sentencepiece>=0.1.99  # Required by Donut's tokenizer
+protobuf>=3.20.0       # Serialized message formats, required by SentencePiece
