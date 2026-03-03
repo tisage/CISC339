@@ -19,6 +19,7 @@ from torchvision.transforms import functional as F
 import numpy as np
 import time
 import threading
+import argparse
 
 # List of COCO dataset class names (91 classes)
 COCO_CLASSES = [
@@ -101,6 +102,10 @@ def inference_worker(model, device):
             time.sleep(0.005)
 
 def main():
+    parser = argparse.ArgumentParser(description="Live Object Detection Demo")
+    parser.add_argument("-c", "--camera", type=int, default=0, help="Starting camera index (0 for built-in, 1 or 2 for USB usually)")
+    args = parser.parse_args()
+
     global latest_frame_for_inference, latest_detections, is_running
     
     device = get_device()
@@ -114,11 +119,20 @@ def main():
     model.eval()  
 
     # Test camera
-    target_camera_index = 0
+    target_camera_index = args.camera
     cap = cv2.VideoCapture(target_camera_index)
     if not cap.isOpened():
         print(f"Error: Could not open webcam at index {target_camera_index}.")
-        return
+        print("Falling back to scanning available cameras...")
+        for i in range(5):
+            cap = cv2.VideoCapture(i)
+            if cap.isOpened() and cap.read()[0]:
+                target_camera_index = i
+                print(f"Auto-selected working camera index: {i}")
+                break
+        else:
+            print("Fatal Error: No working cameras found.")
+            return
 
     # Keep resolution reasonable to balance webcam speed and accuracy
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -128,7 +142,11 @@ def main():
     worker_thread = threading.Thread(target=inference_worker, args=(model, device))
     worker_thread.start()
 
-    print("Starting Main UI. Press 'q' to quit.")
+    print("\n" + "-"*30)
+    print("🎮 Controls:")
+    print(" [q] : Quit the application")
+    print(" [c] : Switch to next camera (e.g., from Mac to USB)")
+    print("-" * 30 + "\n")
     
     # Confidence threshold to show boxes
     # IMPORTANT: Lowered from 0.5 to 0.35 so more objects will be detected!
@@ -193,8 +211,35 @@ def main():
         # 4. Show Window
         cv2.imshow('Live Object Detection (True Async)', display_frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'):
             break
+        elif key == ord('c'):
+            # Switch to next camera
+            print("\nScanning for next available camera...")
+            cap.release()
+            new_index = target_camera_index
+            
+            # test up to 4 other indices
+            for i in range(1, 5):
+                test_idx = (target_camera_index + i) % 5
+                temp_cap = cv2.VideoCapture(test_idx)
+                if temp_cap.isOpened() and temp_cap.read()[0]:
+                    new_index = test_idx
+                    cap = temp_cap
+                    break
+                temp_cap.release()
+                
+            if new_index == target_camera_index:
+                 print("No other working cameras found. Reopening current one.")
+                 cap = cv2.VideoCapture(target_camera_index)
+            else:
+                 target_camera_index = new_index
+                 print(f">>> Successfully switched to Camera Index: {target_camera_index} <<<")
+                 
+            # Re-apply resolution limits
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     # Clean UI and shutdown background thread
     is_running = False
