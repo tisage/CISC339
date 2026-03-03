@@ -3,7 +3,7 @@ Live Object Detection Demo using PyTorch and OpenCV.
 
 This script completely decouples the Video Rendering (Main Thread) from the 
 AI Inference (Background Thread). This ensures your webcam video runs flawlessly 
-at 30+ FPS (zero lag, zero stutter) while the AI updates the bounding boxes 
+at high FPS (zero lag, zero stutter) while the AI updates the bounding boxes 
 as fast as the hardware allows (e.g., 5-10 FPS on Mac).
 
 Features:
@@ -200,16 +200,17 @@ def main():
         # 3. Render Status UI on top
         ui_fps = 1.0 / (time.time() - main_start)
         # Show both the UI Smoothness (FPS) and the AI's Brain Speed (Inference FPS)
-        status_text_1 = f"Camera/Video FPS: {ui_fps:.1f} (Smooth)"
-        status_text_2 = f"AI Backend FPS: {inference_fps:.1f} | Objects: {objects_detected}"
+        status_text_1 = f"Video FPS: {ui_fps:.1f} | AI FPS: {inference_fps:.1f}"
+        status_text_2 = f"Objects: {objects_detected}"
         
         cv2.putText(display_frame, status_text_1, (10, 30), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 2)
         cv2.putText(display_frame, status_text_2, (10, 60), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
 
-        # 4. Show Window
-        cv2.imshow('Live Object Detection (True Async)', display_frame)
+        # 4. Show Window with controls specified in the title bar
+        window_title = 'Live Object Detection | [C] Switch Camera | [Q] Quit'
+        cv2.imshow(window_title, display_frame)
 
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
