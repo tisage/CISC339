@@ -133,3 +133,6 @@ dmypy.json
 
 # Virtual environment
 .venv/
+
+# Document Understanding Demo Output
+Scanned_Documents/
