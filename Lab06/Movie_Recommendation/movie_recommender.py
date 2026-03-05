@@ -144,4 +144,4 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
     btn.click(fn=recommend_movies, inputs=[movie_dropdown, rec_count], outputs=output_box)
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", inbrowser=True)
+    demo.launch(share=True)

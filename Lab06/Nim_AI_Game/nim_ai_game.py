@@ -208,4 +208,4 @@ with gr.Blocks(theme=gr.themes.Base()) as ui:
     ui.load(start_game, outputs=[game_state, board_display, status, human_player])
 
 if __name__ == "__main__":
-    ui.launch(server_name="127.0.0.1", inbrowser=True)
+    ui.launch(share=True)
