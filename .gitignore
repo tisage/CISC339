@@ -138,3 +138,7 @@ dmypy.json
 # Document Understanding Demo Output
 Scanned_Documents/
 teaching/
+
+# AI Agents
+CLAUDE.md
+.claude/
