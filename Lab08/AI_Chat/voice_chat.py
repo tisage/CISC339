@@ -345,18 +345,9 @@ class TTSEngine:
     Win   : pyttsx3    → fallback if kokoro-onnx unavailable
     """
 
-    # Kokoro-ONNX model file URLs (thewh1teagle/kokoro-onnx releases)
-    _MODEL_URLS = {
-        "kokoro-v0_19.onnx": (
-            "https://github.com/thewh1teagle/kokoro-onnx/releases/"
-            "download/model-files-v1.0/kokoro-v0_19.onnx"
-        ),
-        "voices.json": (
-            "https://github.com/thewh1teagle/kokoro-onnx/releases/"
-            "download/model-files-v1.0/voices.json"
-        ),
-    }
-    _CACHE_DIR = pathlib.Path.home() / ".cache" / "kokoro_onnx"
+    # Candidate model filenames tried in order (newest first)
+    _MODEL_NAMES = ["kokoro.onnx", "kokoro-v0_19.onnx"]
+    _CACHE_DIR   = pathlib.Path.home() / ".cache" / "kokoro_onnx"
 
     def __init__(self, plat: str):
         self.plat    = plat
@@ -366,7 +357,7 @@ class TTSEngine:
     # kokoro-onnx: auto-download models, return True on success
     # ------------------------------------------------------------------
     def _init_kokoro_onnx(self) -> bool:
-        """Try to initialise kokoro-onnx. Downloads model files if missing."""
+        """Try to initialise kokoro-onnx using model file(s) in _CACHE_DIR."""
         try:
             from kokoro_onnx import Kokoro
             import soundfile as sf
@@ -375,38 +366,39 @@ class TTSEngine:
             print("  [TTS] kokoro-onnx not installed: pip install kokoro-onnx soundfile sounddevice")
             return False
 
-        self._CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        for fname, url in self._MODEL_URLS.items():
-            dest = self._CACHE_DIR / fname
-            if dest.exists():
-                continue
-            print(f"  [TTS] Downloading {fname} …  (one-time, ~340 MB for the model)")
-            try:
-                import urllib.request
-                def _progress(block, block_size, total):
-                    if total > 0:
-                        pct = min(100, block * block_size * 100 // total)
-                        print(f"\r  [TTS] {fname}: {pct:3d}%", end="", flush=True)
-                urllib.request.urlretrieve(url, dest, reporthook=_progress)
-                print()  # newline after progress
-            except Exception as e:
-                print(f"\n  [TTS] Download failed: {e}")
-                print(f"  [TTS] Manual download: {url}")
-                print(f"  [TTS] Save to: {dest}")
-                return False
-
-        try:
-            self._kokoro = Kokoro(
-                str(self._CACHE_DIR / "kokoro-v0_19.onnx"),
-                str(self._CACHE_DIR / "voices.json"),
-            )
-            self._sf = sf
-            self._sd = sd
-            print(f"TTS  : kokoro-onnx  (models: {self._CACHE_DIR})")
-            return True
-        except Exception as e:
-            print(f"  [TTS] kokoro-onnx init failed: {e}")
+        # Find the model file
+        model_path = None
+        for name in self._MODEL_NAMES:
+            candidate = self._CACHE_DIR / name
+            if candidate.exists():
+                model_path = candidate
+                break
+        if model_path is None:
+            print(f"  [TTS] No kokoro model found in {self._CACHE_DIR}")
+            print(f"  [TTS] Download kokoro.onnx and place it there.")
             return False
+
+        voices_path = self._CACHE_DIR / "voices.json"
+
+        # Try newer single-file API first, then legacy two-file API
+        last_err = None
+        for args in (
+            [str(model_path)],                                          # new API
+            [str(model_path), str(voices_path)] if voices_path.exists() else None,  # legacy
+        ):
+            if args is None:
+                continue
+            try:
+                self._kokoro = Kokoro(*args)
+                self._sf = sf
+                self._sd = sd
+                print(f"TTS  : kokoro-onnx  ({model_path.name})")
+                return True
+            except Exception as e:
+                last_err = e
+
+        print(f"  [TTS] kokoro-onnx init failed: {last_err}")
+        return False
 
     # ------------------------------------------------------------------
     # Internal: try every known mlx-audio API pattern, return a callable
@@ -678,10 +670,9 @@ def main() -> None:
         print("  Please enter t or a.")
 
     if mode == "t":
-        print("\n  Text mode — type your message, or enter  q  to quit,  c  to clear history.\n")
+        print("\n  Text mode.  q = quit\n")
     else:
-        print("\n  Audio mode — press ENTER to record, ENTER again to stop.\n"
-              "  Enter  q  to quit,  c  to clear history.\n")
+        print("\n  Audio mode.  ENTER = start recording · ENTER = stop · q = quit\n")
 
     # ── Conversation loop ────────────────────────────────────────────────────
     AUDIO_PROMPT = (
@@ -718,18 +709,14 @@ def main() -> None:
         # ── Audio mode ───────────────────────────────────────────────────────
         else:
             try:
-                pre = input(f"  [{turn}] Press ENTER to record  (q=quit  c=clear) › ").strip().lower()
+                pre = input(f"  [{turn}] ↵ record · q quit › ").strip().lower()
             except (KeyboardInterrupt, EOFError):
                 print("\n  Goodbye!")
                 break
             if pre == "q":
                 print("  Goodbye!")
                 break
-            if pre == "c":
-                history.clear()
-                print("  History cleared.\n")
-                continue
-            # user pressed ENTER (or typed anything else) — start recording
+            # user pressed ENTER — start recording
             wav_path = record_push_to_talk(skip_start_prompt=True)
             if wav_path is None:
                 continue
