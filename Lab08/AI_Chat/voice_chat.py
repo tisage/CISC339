@@ -31,6 +31,7 @@ import os
 import pathlib
 import sys
 import wave
+import warnings
 import base64
 import platform
 import subprocess
@@ -38,6 +39,12 @@ import tempfile
 import textwrap
 import threading
 from typing import Optional
+
+# Suppress Gemma4 audio processor misconfiguration warning (fixed in mlx-vlm post-PR#906)
+warnings.filterwarnings(
+    "ignore",
+    message=".*At least one mel filter has all zero values.*",
+)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Configuration
@@ -346,8 +353,10 @@ class TTSEngine:
     """
 
     # Candidate model filenames tried in order (newest first)
-    _MODEL_NAMES = ["kokoro.onnx", "kokoro-v0_19.onnx"]
-    _CACHE_DIR   = pathlib.Path.home() / ".cache" / "kokoro_onnx"
+    _MODEL_NAMES  = ["kokoro-v1.0.onnx", "kokoro.onnx", "kokoro-v0_19.onnx"]
+    # Candidate voices filenames tried in order (newest first)
+    _VOICES_NAMES = ["voices-v1.0.bin", "voices.json"]
+    _CACHE_DIR    = pathlib.Path.home() / ".cache" / "kokoro_onnx"
 
     def __init__(self, plat: str):
         self.plat    = plat
@@ -366,7 +375,7 @@ class TTSEngine:
             print("  [TTS] kokoro-onnx not installed: pip install kokoro-onnx soundfile sounddevice")
             return False
 
-        # Find the model file
+        # Find model file
         model_path = None
         for name in self._MODEL_NAMES:
             candidate = self._CACHE_DIR / name
@@ -375,30 +384,30 @@ class TTSEngine:
                 break
         if model_path is None:
             print(f"  [TTS] No kokoro model found in {self._CACHE_DIR}")
-            print(f"  [TTS] Download kokoro.onnx and place it there.")
+            print(f"  [TTS] Download kokoro-v1.0.onnx from github.com/thewh1teagle/kokoro-onnx/releases")
             return False
 
-        voices_path = self._CACHE_DIR / "voices.json"
+        # Find voices file
+        voices_path = None
+        for name in self._VOICES_NAMES:
+            candidate = self._CACHE_DIR / name
+            if candidate.exists():
+                voices_path = candidate
+                break
+        if voices_path is None:
+            print(f"  [TTS] No kokoro voices file found in {self._CACHE_DIR}")
+            print(f"  [TTS] Download voices-v1.0.bin from the same release page")
+            return False
 
-        # Try newer single-file API first, then legacy two-file API
-        last_err = None
-        for args in (
-            [str(model_path)],                                          # new API
-            [str(model_path), str(voices_path)] if voices_path.exists() else None,  # legacy
-        ):
-            if args is None:
-                continue
-            try:
-                self._kokoro = Kokoro(*args)
-                self._sf = sf
-                self._sd = sd
-                print(f"TTS  : kokoro-onnx  ({model_path.name})")
-                return True
-            except Exception as e:
-                last_err = e
-
-        print(f"  [TTS] kokoro-onnx init failed: {last_err}")
-        return False
+        try:
+            self._kokoro = Kokoro(str(model_path), str(voices_path))
+            self._sf = sf
+            self._sd = sd
+            print(f"TTS  : kokoro-onnx  ({model_path.name} + {voices_path.name})")
+            return True
+        except Exception as e:
+            print(f"  [TTS] kokoro-onnx init failed: {e}")
+            return False
 
     # ------------------------------------------------------------------
     # Internal: try every known mlx-audio API pattern, return a callable
