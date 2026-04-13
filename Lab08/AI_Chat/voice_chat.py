@@ -299,11 +299,25 @@ class TTSEngine:
         if plat == "apple_silicon":
             try:
                 import mlx_audio
-                self._mlx_audio = mlx_audio
+                # mlx-audio API varies by version:
+                #   ≥0.2: mlx_audio.tts is a submodule → use generate() inside it
+                #   <0.2: mlx_audio.tts is a direct callable
+                if callable(getattr(mlx_audio, "tts", None)):
+                    self._mlx_audio = mlx_audio
+                    self._tts_mode  = "fn"
+                elif hasattr(mlx_audio, "tts") and callable(
+                        getattr(mlx_audio.tts, "generate", None)):
+                    self._mlx_audio = mlx_audio
+                    self._tts_mode  = "submodule"
+                else:
+                    raise AttributeError(
+                        "Cannot find a callable TTS in mlx_audio. "
+                        "Run: pip install --upgrade mlx-audio"
+                    )
                 print("TTS  : mlx-audio (Kokoro-82M)")
                 return "mlx_audio"
-            except ImportError:
-                print("TTS  : macOS say  (install mlx-audio for better quality)")
+            except Exception as e:
+                print(f"TTS  : macOS say  (mlx-audio unavailable — {e})")
                 return "say"
 
         else:
@@ -345,14 +359,21 @@ class TTSEngine:
         if self.backend == "mlx_audio":
             tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
             tmp.close()
+            spoken = False
             try:
-                self._mlx_audio.tts(text, voice="af_heart", output=tmp.name)
+                if self._tts_mode == "fn":
+                    self._mlx_audio.tts(text, voice="af_heart", output=tmp.name)
+                else:  # submodule
+                    self._mlx_audio.tts.generate(text, voice="af_heart", output=tmp.name)
                 subprocess.run(["afplay", tmp.name], check=True)
+                spoken = True
             except Exception as e:
-                print(f"  [TTS] mlx-audio error: {e}")
+                print(f"  [TTS] mlx-audio error: {e} — falling back to say")
             finally:
                 if os.path.exists(tmp.name):
                     os.unlink(tmp.name)
+            if not spoken:
+                subprocess.run(["say", "--", text])
 
         elif self.backend == "say":
             try:
