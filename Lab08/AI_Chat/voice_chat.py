@@ -53,6 +53,49 @@ SYSTEM_PROMPT = (
     "If the user speaks in a language other than English, reply in that same language."
 )
 
+# ── Kokoro voice library per language ────────────────────────────────────────
+# Format: language_code → (kokoro_voice, kokoro_lang_code)
+# kokoro_lang_code is used by KokoroPipeline; voice prefix must match it.
+# Voices confirmed in Kokoro-82M: af_*, am_*, bf_*, bm_*, ef_*, ff_*,
+#   hf_alpha, if_sara, jf_alpha, jf_gongitsune, pf_dora, zf_xiaobei
+KOKORO_VOICES: dict[str, tuple[str, str]] = {
+    "en": ("af_heart",   "a"),   # American English female
+    "zh": ("zf_xiaobei", "z"),   # Mandarin Chinese female
+    "ja": ("jf_alpha",   "j"),   # Japanese female
+    "ko": ("af_heart",   "a"),   # Korean — no dedicated Kokoro voice, fall back to EN
+    "es": ("ef_dora",    "e"),   # Spanish female
+    "fr": ("ff_siwis",   "f"),   # French female
+    "hi": ("hf_alpha",   "h"),   # Hindi female
+    "it": ("if_sara",    "i"),   # Italian female
+    "pt": ("pf_dora",    "p"),   # Portuguese female
+}
+KOKORO_DEFAULT = ("af_heart", "a")   # fallback for unsupported languages
+
+
+def detect_language(text: str) -> str:
+    """
+    Fast, dependency-free language detection using Unicode block frequencies.
+    Returns a BCP-47 language code: 'en' | 'zh' | 'ja' | 'ko' | ...
+    Accurate for CJK; for Latin-script languages defaults to 'en'.
+    """
+    if not text:
+        return "en"
+    n = len(text)
+    counts = {
+        "zh": sum(1 for c in text if "\u4e00" <= c <= "\u9fff"   # CJK Unified
+                                  or "\u3400" <= c <= "\u4dbf"),  # CJK Extension A
+        "ja": sum(1 for c in text if "\u3040" <= c <= "\u30ff"),  # Hiragana + Katakana
+        "ko": sum(1 for c in text if "\uac00" <= c <= "\ud7a3"),  # Hangul syllables
+        "ar": sum(1 for c in text if "\u0600" <= c <= "\u06ff"),  # Arabic
+        "hi": sum(1 for c in text if "\u0900" <= c <= "\u097f"),  # Devanagari
+    }
+    # Japanese text often contains CJK too; prefer 'ja' when kana present
+    best_lang, best_count = "en", 0
+    for lang, count in counts.items():
+        if count / n > 0.08 and count > best_count:
+            best_lang, best_count = lang, count
+    return best_lang
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 1.  Hardware Detection
@@ -159,16 +202,22 @@ class MLXBackend:
         self.model, self.processor = load(MLX_MODEL_ID)
         print("Model ready.\n")
 
-    def chat(self, user_text: str, audio_path: Optional[str] = None) -> str:
+    def chat(self, user_text: str,
+             history: Optional[list] = None,
+             audio_path: Optional[str] = None) -> str:
         """
-        Send a text prompt (and optionally a .wav file) to Gemma 4 E4B.
-        When audio_path is given, Gemma 4 hears the audio and reads the prompt.
+        Send a message to Gemma 4 E4B with full conversation history.
+        history = [{"role": "user"|"assistant", "content": "..."}, ...]
+        audio_path: path to .wav for the CURRENT turn only.
         """
+        history = history or []
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history \
+                 + [{"role": "user", "content": user_text}]
+
         if audio_path:
-            # num_audios=1 tells the template to insert one <audio> token
             prompt = self._apply_template(
                 self.processor, self.model.config,
-                user_text,
+                messages,
                 num_audios=1,
             )
             response = self._generate(
@@ -181,7 +230,7 @@ class MLXBackend:
         else:
             prompt = self._apply_template(
                 self.processor, self.model.config,
-                user_text,
+                messages,
             )
             response = self._generate(
                 model=self.model,
@@ -190,7 +239,6 @@ class MLXBackend:
                 max_tokens=512,
             )
 
-        # generate() returns a GenerationResult object; .text is the string
         text = response.text if hasattr(response, "text") else str(response)
         return text.strip()
 
@@ -223,21 +271,22 @@ class OllamaBackend:
             print("    if not: run 'ollama serve' in a terminal.")
             sys.exit(1)
 
-    def _call_ollama(self, user_text: str, audio_b64: Optional[str] = None) -> str:
+    def _call_ollama(self, user_text: str,
+                     history: Optional[list] = None,
+                     audio_b64: Optional[str] = None) -> str:
         """Raw HTTP call to the Ollama /api/chat endpoint."""
         import requests
 
+        history = history or []
         message: dict = {"role": "user", "content": user_text}
         if audio_b64:
-            # Ollama 0.7+ audio key for Gemma 4 E4B
             message["audios"] = [audio_b64]
 
         payload = {
             "model": OLLAMA_MODEL_ID,
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                message,
-            ],
+            "messages": [{"role": "system", "content": SYSTEM_PROMPT}]
+                        + history
+                        + [message],
             "stream": False,
         }
 
@@ -260,21 +309,23 @@ class OllamaBackend:
         print(f"  [STT] Whisper: \"{transcript}\"")
         return transcript
 
-    def chat(self, user_text: str, audio_path: Optional[str] = None) -> str:
+    def chat(self, user_text: str,
+             history: Optional[list] = None,
+             audio_path: Optional[str] = None) -> str:
+        history = history or []
         if not audio_path:
-            return self._call_ollama(user_text)
+            return self._call_ollama(user_text, history=history)
 
-        # Try native Ollama audio first
         try:
             with open(audio_path, "rb") as f:
                 audio_b64 = base64.b64encode(f.read()).decode()
-            return self._call_ollama(user_text, audio_b64=audio_b64)
+            return self._call_ollama(user_text, history=history, audio_b64=audio_b64)
 
         except Exception as e:
             print(f"  [Audio] Ollama native audio failed ({e})")
             print("  [Audio] Falling back to Whisper STT …")
             transcript = self._whisper_transcribe(audio_path)
-            return self._call_ollama(transcript)
+            return self._call_ollama(transcript, history=history)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -295,30 +346,89 @@ class TTSEngine:
         self.plat    = plat
         self.backend = self._init(plat)
 
+    # ------------------------------------------------------------------
+    # Internal: try every known mlx-audio API pattern, return a callable
+    # (text, wav_path) -> None   or   None if nothing works.
+    # ------------------------------------------------------------------
+    def _discover_mlx_tts(self):
+        import importlib, numpy as np
+        import sounddevice as sd
+        import soundfile as sf
+
+        try:
+            import mlx_audio
+        except ImportError:
+            print("  [TTS diag] mlx_audio not installed: pip install mlx-audio")
+            return None
+
+        print(f"  [TTS diag] mlx_audio found, inspecting API …")
+        print(f"  [TTS diag] top-level attrs: {[x for x in dir(mlx_audio) if not x.startswith('_')]}")
+
+        # All patterns return a function with signature:
+        #   _fn(text: str, wav: str, voice: str, lang_code: str) -> None
+
+        # ── Pattern 1: mlx_audio.tts(text, voice=, output=) ──────────────
+        if callable(getattr(mlx_audio, "tts", None)):
+            print("  [TTS diag] Pattern 1 matched: mlx_audio.tts() is callable")
+            def _fn(text, wav, voice, lang_code):
+                mlx_audio.tts(text, voice=voice, output=wav)
+            return _fn
+
+        # ── Pattern 2: mlx_audio.tts.generate(text, voice=, output=) ─────
+        tts_mod = getattr(mlx_audio, "tts", None)
+        if tts_mod is not None:
+            print(f"  [TTS diag] mlx_audio.tts is a module; attrs: {[x for x in dir(tts_mod) if not x.startswith('_')]}")
+            if callable(getattr(tts_mod, "generate", None)):
+                print("  [TTS diag] Pattern 2 matched: mlx_audio.tts.generate()")
+                def _fn(text, wav, voice, lang_code):
+                    audio, sr = tts_mod.generate(text, voice=voice)
+                    sf.write(wav, audio, sr)
+                return _fn
+
+        # ── Pattern 3: from mlx_audio.tts import generate ────────────────
+        try:
+            from mlx_audio.tts import generate as tts_gen
+            print("  [TTS diag] Pattern 3 matched: from mlx_audio.tts import generate")
+            def _fn(text, wav, voice, lang_code):
+                result = tts_gen(text, voice=voice)
+                if isinstance(result, tuple):
+                    audio, sr = result
+                else:
+                    audio, sr = result, 24000
+                sf.write(wav, audio, sr)
+            return _fn
+        except Exception as e:
+            print(f"  [TTS diag] Pattern 3 failed: {e}")
+
+        # ── Pattern 4: KokoroPipeline (lang_code switches per call) ───────
+        try:
+            from mlx_audio.tts.models.kokoro import KokoroPipeline
+            print("  [TTS diag] Pattern 4 matched: KokoroPipeline")
+            # Cache pipelines by lang_code to avoid reloading
+            _pipelines: dict = {}
+            def _fn(text, wav, voice, lang_code):
+                if lang_code not in _pipelines:
+                    _pipelines[lang_code] = KokoroPipeline(lang_code=lang_code)
+                pipeline = _pipelines[lang_code]
+                chunks = [a for _, _, a in pipeline(text, voice=voice, speed=1.0)]
+                if chunks:
+                    sf.write(wav, np.concatenate(chunks), 24000)
+            return _fn
+        except Exception as e:
+            print(f"  [TTS diag] Pattern 4 failed: {e}")
+
+        print("  [TTS diag] No working mlx-audio TTS API found.")
+        return None
+
     def _init(self, plat: str) -> str:
         if plat == "apple_silicon":
-            try:
-                import mlx_audio
-                # mlx-audio API varies by version:
-                #   ≥0.2: mlx_audio.tts is a submodule → use generate() inside it
-                #   <0.2: mlx_audio.tts is a direct callable
-                if callable(getattr(mlx_audio, "tts", None)):
-                    self._mlx_audio = mlx_audio
-                    self._tts_mode  = "fn"
-                elif hasattr(mlx_audio, "tts") and callable(
-                        getattr(mlx_audio.tts, "generate", None)):
-                    self._mlx_audio = mlx_audio
-                    self._tts_mode  = "submodule"
-                else:
-                    raise AttributeError(
-                        "Cannot find a callable TTS in mlx_audio. "
-                        "Run: pip install --upgrade mlx-audio"
-                    )
+            tts_fn = self._discover_mlx_tts()
+            if tts_fn is not None:
+                self._tts_fn = tts_fn
                 print("TTS  : mlx-audio (Kokoro-82M)")
                 return "mlx_audio"
-            except Exception as e:
-                print(f"TTS  : macOS say  (mlx-audio unavailable — {e})")
-                return "say"
+            print("TTS  : macOS say  (mlx-audio Kokoro not found — see diagnostics above)")
+            return "say"
 
         else:
             # Try kokoro-onnx first (high quality, cross-platform)
@@ -356,15 +466,18 @@ class TTSEngine:
         )
         print(f"\n{wrapped}\n")
 
+        # Detect language and pick the right Kokoro voice
+        lang = detect_language(text)
+        voice, lang_code = KOKORO_VOICES.get(lang, KOKORO_DEFAULT)
+        if lang != "en":
+            print(f"  [TTS] detected language: {lang}  →  voice: {voice}")
+
         if self.backend == "mlx_audio":
             tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
             tmp.close()
             spoken = False
             try:
-                if self._tts_mode == "fn":
-                    self._mlx_audio.tts(text, voice="af_heart", output=tmp.name)
-                else:  # submodule
-                    self._mlx_audio.tts.generate(text, voice="af_heart", output=tmp.name)
+                self._tts_fn(text, tmp.name, voice, lang_code)
                 subprocess.run(["afplay", tmp.name], check=True)
                 spoken = True
             except Exception as e:
@@ -373,17 +486,26 @@ class TTSEngine:
                 if os.path.exists(tmp.name):
                     os.unlink(tmp.name)
             if not spoken:
-                subprocess.run(["say", "--", text])
+                # macOS say supports language with -v; pick a sensible voice
+                say_voices = {"zh": "Tingting", "ja": "Kyoko", "ko": "Yuna",
+                              "fr": "Thomas",   "es": "Monica"}
+                say_v = say_voices.get(lang)
+                cmd = ["say", "-v", say_v, "--", text] if say_v else ["say", "--", text]
+                subprocess.run(cmd)
 
         elif self.backend == "say":
+            say_voices = {"zh": "Tingting", "ja": "Kyoko", "ko": "Yuna",
+                          "fr": "Thomas",   "es": "Monica"}
+            say_v = say_voices.get(lang)
+            cmd = ["say", "-v", say_v, "--", text] if say_v else ["say", "--", text]
             try:
-                subprocess.run(["say", "--", text], check=True)
+                subprocess.run(cmd, check=True)
             except Exception:
-                pass  # text already printed above
+                pass
 
         elif self.backend == "kokoro_onnx":
             try:
-                samples, sr = self._kokoro.create(text, voice="af_bella", speed=1.0)
+                samples, sr = self._kokoro.create(text, voice=voice, speed=1.0)
                 self._sd.play(samples, sr)
                 self._sd.wait()
             except Exception as e:
@@ -475,16 +597,25 @@ def main() -> None:
     # ── Instructions ────────────────────────────────────────────────────────
     print()
     print("  Commands")
-    print("  ─────────────────────────────────")
+    print("  ─────────────────────────────────────────────────────")
     print("  t  →  Type a message")
     print("  a  →  Audio  (push-to-talk: ENTER start / ENTER stop)")
+    print("  c  →  Clear conversation history")
     print("  q  →  Quit")
     print()
 
+    # ── Conversation history ──────────────────────────────────────────────────
+    # Each entry: {"role": "user"|"assistant", "content": "..."}
+    # Audio turns store "[voice message]" as user content so the model
+    # still sees the conversational context even without the audio file.
+    MAX_TURNS = 20    # keep last 20 exchanges (40 messages) to avoid OOM
+    history: list = []
+
     # ── Conversation loop ────────────────────────────────────────────────────
     while True:
+        turn = len(history) // 2 + 1
         try:
-            cmd = input("  Mode [t / a / q] > ").strip().lower()
+            cmd = input(f"  [{turn}] Mode [t / a / c / q] > ").strip().lower()
         except (KeyboardInterrupt, EOFError):
             print("\n  Goodbye!")
             break
@@ -494,16 +625,25 @@ def main() -> None:
             print("  Goodbye!")
             break
 
+        # ── Clear history ─────────────────────────────────────────────────────
+        elif cmd == "c":
+            history.clear()
+            print("  History cleared. Starting a new conversation.\n")
+
         # ── Text input ───────────────────────────────────────────────────────
         elif cmd == "t":
             user_text = input("  You  ▶  ").strip()
             if not user_text:
                 continue
             print("  …  thinking")
-            response = llm.chat(
-                f"{SYSTEM_PROMPT}\n\nUser: {user_text}"
-            )
+            response = llm.chat(user_text, history=history)
             tts.speak(response)
+            # Append this turn to history
+            history.append({"role": "user",      "content": user_text})
+            history.append({"role": "assistant", "content": response})
+            # Trim to last MAX_TURNS exchanges
+            if len(history) > MAX_TURNS * 2:
+                history = history[-MAX_TURNS * 2:]
 
         # ── Audio input (push-to-talk) ────────────────────────────────────────
         elif cmd == "a":
@@ -511,18 +651,19 @@ def main() -> None:
             if wav_path is None:
                 continue
             print("  …  processing audio")
-            # The prompt tells Gemma 4 to listen and respond conversationally.
-            # Gemma 4 E4B understands 140+ languages natively from audio —
-            # no separate speech-to-text step is needed on Apple Silicon.
             audio_prompt = (
-                f"{SYSTEM_PROMPT}\n\n"
-                "The user sent you a voice message. "
+                "The user sent a voice message. "
                 "Listen carefully, understand it, and reply conversationally. "
                 "If the speaker uses a language other than English, reply in that language."
             )
-            response = llm.chat(audio_prompt, audio_path=wav_path)
-            os.unlink(wav_path)    # delete temp file
+            response = llm.chat(audio_prompt, history=history, audio_path=wav_path)
+            os.unlink(wav_path)
             tts.speak(response)
+            # Store audio turn in history as placeholder text
+            history.append({"role": "user",      "content": "[voice message]"})
+            history.append({"role": "assistant", "content": response})
+            if len(history) > MAX_TURNS * 2:
+                history = history[-MAX_TURNS * 2:]
 
         # ── Unknown ──────────────────────────────────────────────────────────
         else:
