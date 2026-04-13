@@ -28,6 +28,7 @@ Run:
 """
 
 import os
+import pathlib
 import sys
 import wave
 import base64
@@ -336,15 +337,76 @@ class TTSEngine:
     """
     Text-to-speech with automatic platform selection.
 
-    Mac   : mlx-audio  (Kokoro-82M via MLX, ~33× realtime, high quality)
-            → fallback: macOS built-in `say` (zero install, lower quality)
-    Win   : pyttsx3    (Windows SAPI, built-in voices, no download needed)
-            → upgrade:  pip install kokoro-onnx soundfile  (much more natural)
+    All   : kokoro-onnx  (Kokoro-82M via ONNX, natural neural voice, multilingual)
+              pip install kokoro-onnx soundfile sounddevice
+              Models auto-downloaded to ~/.cache/kokoro_onnx/ on first run (~340 MB)
+    Mac   : mlx-audio  → fallback if kokoro-onnx unavailable
+    Mac   : macOS say  → last resort
+    Win   : pyttsx3    → fallback if kokoro-onnx unavailable
     """
+
+    # Kokoro-ONNX model file URLs (thewh1teagle/kokoro-onnx releases)
+    _MODEL_URLS = {
+        "kokoro-v0_19.onnx": (
+            "https://github.com/thewh1teagle/kokoro-onnx/releases/"
+            "download/model-files-v1.0/kokoro-v0_19.onnx"
+        ),
+        "voices.json": (
+            "https://github.com/thewh1teagle/kokoro-onnx/releases/"
+            "download/model-files-v1.0/voices.json"
+        ),
+    }
+    _CACHE_DIR = pathlib.Path.home() / ".cache" / "kokoro_onnx"
 
     def __init__(self, plat: str):
         self.plat    = plat
         self.backend = self._init(plat)
+
+    # ------------------------------------------------------------------
+    # kokoro-onnx: auto-download models, return True on success
+    # ------------------------------------------------------------------
+    def _init_kokoro_onnx(self) -> bool:
+        """Try to initialise kokoro-onnx. Downloads model files if missing."""
+        try:
+            from kokoro_onnx import Kokoro
+            import soundfile as sf
+            import sounddevice as sd
+        except ImportError:
+            print("  [TTS] kokoro-onnx not installed: pip install kokoro-onnx soundfile sounddevice")
+            return False
+
+        self._CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        for fname, url in self._MODEL_URLS.items():
+            dest = self._CACHE_DIR / fname
+            if dest.exists():
+                continue
+            print(f"  [TTS] Downloading {fname} …  (one-time, ~340 MB for the model)")
+            try:
+                import urllib.request
+                def _progress(block, block_size, total):
+                    if total > 0:
+                        pct = min(100, block * block_size * 100 // total)
+                        print(f"\r  [TTS] {fname}: {pct:3d}%", end="", flush=True)
+                urllib.request.urlretrieve(url, dest, reporthook=_progress)
+                print()  # newline after progress
+            except Exception as e:
+                print(f"\n  [TTS] Download failed: {e}")
+                print(f"  [TTS] Manual download: {url}")
+                print(f"  [TTS] Save to: {dest}")
+                return False
+
+        try:
+            self._kokoro = Kokoro(
+                str(self._CACHE_DIR / "kokoro-v0_19.onnx"),
+                str(self._CACHE_DIR / "voices.json"),
+            )
+            self._sf = sf
+            self._sd = sd
+            print(f"TTS  : kokoro-onnx  (models: {self._CACHE_DIR})")
+            return True
+        except Exception as e:
+            print(f"  [TTS] kokoro-onnx init failed: {e}")
+            return False
 
     # ------------------------------------------------------------------
     # Internal: try every known mlx-audio API pattern, return a callable
@@ -421,40 +483,31 @@ class TTSEngine:
         return None
 
     def _init(self, plat: str) -> str:
+        # ── 1. kokoro-onnx: best quality, works on all platforms ─────────
+        if self._init_kokoro_onnx():
+            return "kokoro_onnx"
+
+        # ── 2. macOS fallbacks ────────────────────────────────────────────
         if plat == "apple_silicon":
             tts_fn = self._discover_mlx_tts()
             if tts_fn is not None:
                 self._tts_fn = tts_fn
-                print("TTS  : mlx-audio (Kokoro-82M)")
+                print("TTS  : mlx-audio (Kokoro-82M via MLX)")
                 return "mlx_audio"
-            print("TTS  : macOS say  (mlx-audio Kokoro not found — see diagnostics above)")
+            print("TTS  : macOS say  (install kokoro-onnx for better quality)")
             return "say"
 
-        else:
-            # Try kokoro-onnx first (high quality, cross-platform)
-            try:
-                from kokoro_onnx import Kokoro
-                import soundfile as sf
-                import sounddevice as sd
-                self._kokoro = Kokoro("kokoro-v0_19.onnx", "voices.json")
-                self._sf = sf
-                self._sd = sd
-                print("TTS  : kokoro-onnx (high quality)")
-                return "kokoro_onnx"
-            except Exception:
-                pass
-
-            # Fall back to pyttsx3 (always available on Windows)
-            try:
-                import pyttsx3
-                engine = pyttsx3.init()
-                engine.setProperty("rate", 170)
-                self._pyttsx3 = engine
-                print("TTS  : pyttsx3  (tip: pip install kokoro-onnx soundfile for better voice)")
-                return "pyttsx3"
-            except Exception:
-                print("TTS  : disabled  (pip install pyttsx3)")
-                return "none"
+        # ── 3. Windows fallback ───────────────────────────────────────────
+        try:
+            import pyttsx3
+            engine = pyttsx3.init()
+            engine.setProperty("rate", 170)
+            self._pyttsx3 = engine
+            print("TTS  : pyttsx3  (tip: pip install kokoro-onnx soundfile sounddevice)")
+            return "pyttsx3"
+        except Exception:
+            print("TTS  : disabled  (pip install kokoro-onnx or pyttsx3)")
+            return "none"
 
     def speak(self, text: str) -> None:
         """Print the AI response and optionally speak it aloud."""
