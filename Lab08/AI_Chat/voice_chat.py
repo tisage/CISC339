@@ -3,24 +3,27 @@
 Lab 08 — Local LLM Voice Chat Demo
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Model  : Gemma 4 E4B  (text + native audio input)
-Backend: mlx-vlm   on Apple Silicon  (primary, ~90–120 tok/s)
-         Ollama    on Windows / Linux (primary, ~40–60 tok/s)
-TTS    : mlx-audio (Kokoro-82M, 33× realtime) on Mac
-         pyttsx3   (Windows SAPI)             on Windows
+Backend: mlx-vlm  on Apple Silicon  (~90–120 tok/s)
+         Ollama   on Windows / Linux (~40–60 tok/s)
+TTS    : kokoro-onnx (Kokoro-82M, English + Western EU)
+         → fallback: macOS say / Windows pyttsx3
 Input  : [t] keyboard text  |  [a] push-to-talk recording
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 QUICK SETUP
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Mac (Apple Silicon):
-  pip install mlx-vlm mlx-audio sounddevice numpy
-  # Model is auto-downloaded on first run (~8 GB)
+  pip install mlx-vlm kokoro-onnx sounddevice soundfile numpy
+  brew install espeak-ng
+  # LLM model auto-downloaded on first run (~8 GB)
+  # Kokoro models: place kokoro-v1.0.onnx + voices-v1.0.bin
+  #   in ~/.cache/kokoro_onnx/
 
 Windows + NVIDIA:
   1. Install Ollama: https://ollama.com
-  2. ollama pull gemma4:e4b            (downloads ~5 GB)
-  3. pip install sounddevice numpy requests pyttsx3
-  # Optional better TTS: pip install kokoro-onnx soundfile
+  2. ollama pull gemma4:e4b
+  3. pip install kokoro-onnx sounddevice soundfile numpy requests
+  # Place kokoro model files in %USERPROFILE%\.cache\kokoro_onnx\
 
 Run:
   python demo_voice_chat.py
@@ -61,24 +64,21 @@ SYSTEM_PROMPT = (
     "If the user speaks in a language other than English, reply in that same language."
 )
 
-# ── Kokoro voice library per language ────────────────────────────────────────
-# Format: language_code → (kokoro_voice, mlx_lang_code, onnx_lang)
-# mlx_lang_code  : used by KokoroPipeline (mlx-audio backend)
-# onnx_lang      : passed as lang= to kokoro-onnx Kokoro.create()
-# Voices confirmed in Kokoro-82M: af_*, am_*, bf_*, bm_*, ef_*, ff_*,
-#   hf_alpha, if_sara, jf_alpha, jf_gongitsune, pf_dora, zf_xiaobei
-KOKORO_VOICES: dict[str, tuple[str, str, str]] = {
-    "en": ("af_heart",   "a", "en-us"),  # American English female
-    "zh": ("zf_xiaobei", "z", "zh"),     # Mandarin Chinese female
-    "ja": ("jf_alpha",   "j", "ja"),     # Japanese female
-    "ko": ("af_heart",   "a", "en-us"),  # Korean — no dedicated voice, fall back to EN
-    "es": ("ef_dora",    "e", "es"),     # Spanish female
-    "fr": ("ff_siwis",   "f", "fr-fr"),  # French female
-    "hi": ("hf_alpha",   "h", "hi"),     # Hindi female
-    "it": ("if_sara",    "i", "it"),     # Italian female
-    "pt": ("pf_dora",    "p", "pt-br"),  # Portuguese female
+# ── Kokoro voices (Western languages supported by the base model) ─────────────
+# Format: lang_code → (kokoro_voice, onnx_lang)
+KOKORO_VOICES: dict[str, tuple[str, str]] = {
+    "en": ("af_heart",  "en-us"),
+    "es": ("ef_dora",   "es"),
+    "fr": ("ff_siwis",  "fr-fr"),
+    "hi": ("hf_alpha",  "hi"),
+    "it": ("if_sara",   "it"),
+    "pt": ("pf_dora",   "pt-br"),
 }
-KOKORO_DEFAULT = ("af_heart", "a", "en-us")   # fallback for unsupported languages
+KOKORO_DEFAULT = ("af_heart", "en-us")
+
+# ── macOS say voice fallback ──────────────────────────────────────────────────
+SAY_VOICES = {"en": "Ava", "zh": "Tingting", "ja": "Kyoko", "ko": "Yuna",
+              "fr": "Thomas", "es": "Monica"}
 
 
 def detect_language(text: str) -> str:
@@ -343,278 +343,86 @@ class OllamaBackend:
 
 class TTSEngine:
     """
-    Text-to-speech with automatic platform selection.
-
-    All   : kokoro-onnx  (Kokoro-82M via ONNX, natural neural voice, multilingual)
-              pip install kokoro-onnx soundfile sounddevice
-              Models auto-downloaded to ~/.cache/kokoro_onnx/ on first run (~340 MB)
-    Mac   : mlx-audio  → fallback if kokoro-onnx unavailable
-    Mac   : macOS say  → last resort
-    Win   : pyttsx3    → fallback if kokoro-onnx unavailable
+    Text-to-speech engine.
+      Primary : kokoro-onnx  (English + Western European languages)
+                  pip install kokoro-onnx soundfile sounddevice
+                  Place kokoro-v1.0.onnx + voices-v1.0.bin in ~/.cache/kokoro_onnx/
+      Mac fallback : macOS built-in `say`
+      Win fallback : pyttsx3
     """
 
-    # Candidate model/voices filenames tried in order (newest first)
-    _MODEL_NAMES    = ["kokoro-v1.0.onnx", "kokoro.onnx", "kokoro-v0_19.onnx"]
-    _VOICES_NAMES   = ["voices-v1.0.bin", "voices.json"]
-    # Chinese dedicated model
-    _ZH_MODEL_NAMES  = ["kokoro-v1.1-zh.onnx"]
-    _ZH_VOICES_NAMES = ["voices-v1.1-zh.bin"]
-    _CACHE_DIR       = pathlib.Path.home() / ".cache" / "kokoro_onnx"
+    _CACHE_DIR = pathlib.Path.home() / ".cache" / "kokoro_onnx"
 
     def __init__(self, plat: str):
         self.plat    = plat
         self.backend = self._init(plat)
 
-    # ------------------------------------------------------------------
-    # kokoro-onnx: auto-download models, return True on success
-    # ------------------------------------------------------------------
-    def _init_kokoro_onnx(self) -> bool:
-        """Try to initialise kokoro-onnx using model file(s) in _CACHE_DIR."""
+    def _init(self, plat: str) -> str:
+        # ── Try kokoro-onnx ───────────────────────────────────────────────
         try:
             from kokoro_onnx import Kokoro
-            import soundfile as sf
             import sounddevice as sd
+
+            model_path  = next((p for n in ["kokoro-v1.0.onnx", "kokoro.onnx"]
+                                if (p := self._CACHE_DIR / n).exists()), None)
+            voices_path = next((p for n in ["voices-v1.0.bin", "voices.json"]
+                                if (p := self._CACHE_DIR / n).exists()), None)
+
+            if model_path and voices_path:
+                self._kokoro = Kokoro(str(model_path), str(voices_path))
+                self._sd     = sd
+                print(f"TTS  : kokoro-onnx  ({model_path.name})")
+                return "kokoro_onnx"
+            else:
+                print(f"  [TTS] kokoro model/voices not found in {self._CACHE_DIR}")
         except ImportError:
-            print("  [TTS] kokoro-onnx not installed: pip install kokoro-onnx soundfile sounddevice")
-            return False
-
-        # Find model file
-        model_path = None
-        for name in self._MODEL_NAMES:
-            candidate = self._CACHE_DIR / name
-            if candidate.exists():
-                model_path = candidate
-                break
-        if model_path is None:
-            print(f"  [TTS] No kokoro model found in {self._CACHE_DIR}")
-            print(f"  [TTS] Download kokoro-v1.0.onnx from github.com/thewh1teagle/kokoro-onnx/releases")
-            return False
-
-        # Find voices file
-        voices_path = None
-        for name in self._VOICES_NAMES:
-            candidate = self._CACHE_DIR / name
-            if candidate.exists():
-                voices_path = candidate
-                break
-        if voices_path is None:
-            print(f"  [TTS] No kokoro voices file found in {self._CACHE_DIR}")
-            print(f"  [TTS] Download voices-v1.0.bin from the same release page")
-            return False
-
-        try:
-            self._kokoro = Kokoro(str(model_path), str(voices_path))
-            self._sf = sf
-            self._sd = sd
-            print(f"TTS  : kokoro-onnx  ({model_path.name} + {voices_path.name})")
+            print("  [TTS] kokoro-onnx not installed: pip install kokoro-onnx sounddevice")
         except Exception as e:
-            print(f"  [TTS] kokoro-onnx init failed: {e}")
-            return False
+            print(f"  [TTS] kokoro-onnx init error: {e}")
 
-        # Try to load the Chinese dedicated model (optional)
-        self._kokoro_zh = None
-        zh_model = next((self._CACHE_DIR / n for n in self._ZH_MODEL_NAMES
-                         if (self._CACHE_DIR / n).exists()), None)
-        zh_voices = next((self._CACHE_DIR / n for n in self._ZH_VOICES_NAMES
-                          if (self._CACHE_DIR / n).exists()), None)
-        if zh_model and zh_voices:
-            try:
-                self._kokoro_zh = Kokoro(str(zh_model), str(zh_voices))
-                print(f"TTS  : kokoro-onnx  zh model ({zh_model.name} + {zh_voices.name})")
-            except Exception as e:
-                print(f"  [TTS] Chinese kokoro model failed to load: {e}")
-
-        return True
-
-    # ------------------------------------------------------------------
-    # Internal: try every known mlx-audio API pattern, return a callable
-    # (text, wav_path) -> None   or   None if nothing works.
-    # ------------------------------------------------------------------
-    def _discover_mlx_tts(self):
-        import importlib, numpy as np
-        import sounddevice as sd
-        import soundfile as sf
-
-        try:
-            import mlx_audio
-        except ImportError:
-            print("  [TTS diag] mlx_audio not installed: pip install mlx-audio")
-            return None
-
-        print(f"  [TTS diag] mlx_audio found, inspecting API …")
-        print(f"  [TTS diag] top-level attrs: {[x for x in dir(mlx_audio) if not x.startswith('_')]}")
-
-        # All patterns return a function with signature:
-        #   _fn(text: str, wav: str, voice: str, lang_code: str) -> None
-
-        # ── Pattern 1: mlx_audio.tts(text, voice=, output=) ──────────────
-        if callable(getattr(mlx_audio, "tts", None)):
-            print("  [TTS diag] Pattern 1 matched: mlx_audio.tts() is callable")
-            def _fn(text, wav, voice, lang_code):
-                mlx_audio.tts(text, voice=voice, output=wav)
-            return _fn
-
-        # ── Pattern 2: mlx_audio.tts.generate(text, voice=, output=) ─────
-        tts_mod = getattr(mlx_audio, "tts", None)
-        if tts_mod is not None:
-            print(f"  [TTS diag] mlx_audio.tts is a module; attrs: {[x for x in dir(tts_mod) if not x.startswith('_')]}")
-            if callable(getattr(tts_mod, "generate", None)):
-                print("  [TTS diag] Pattern 2 matched: mlx_audio.tts.generate()")
-                def _fn(text, wav, voice, lang_code):
-                    audio, sr = tts_mod.generate(text, voice=voice)
-                    sf.write(wav, audio, sr)
-                return _fn
-
-        # ── Pattern 3: from mlx_audio.tts import generate ────────────────
-        try:
-            from mlx_audio.tts import generate as tts_gen
-            print("  [TTS diag] Pattern 3 matched: from mlx_audio.tts import generate")
-            def _fn(text, wav, voice, lang_code):
-                result = tts_gen(text, voice=voice)
-                if isinstance(result, tuple):
-                    audio, sr = result
-                else:
-                    audio, sr = result, 24000
-                sf.write(wav, audio, sr)
-            return _fn
-        except Exception as e:
-            print(f"  [TTS diag] Pattern 3 failed: {e}")
-
-        # ── Pattern 4: KokoroPipeline (lang_code switches per call) ───────
-        try:
-            from mlx_audio.tts.models.kokoro import KokoroPipeline
-            print("  [TTS diag] Pattern 4 matched: KokoroPipeline")
-            # Cache pipelines by lang_code to avoid reloading
-            _pipelines: dict = {}
-            def _fn(text, wav, voice, lang_code):
-                if lang_code not in _pipelines:
-                    _pipelines[lang_code] = KokoroPipeline(lang_code=lang_code)
-                pipeline = _pipelines[lang_code]
-                chunks = [a for _, _, a in pipeline(text, voice=voice, speed=1.0)]
-                if chunks:
-                    sf.write(wav, np.concatenate(chunks), 24000)
-            return _fn
-        except Exception as e:
-            print(f"  [TTS diag] Pattern 4 failed: {e}")
-
-        print("  [TTS diag] No working mlx-audio TTS API found.")
-        return None
-
-    def _init(self, plat: str) -> str:
-        # ── 1. kokoro-onnx: best quality, works on all platforms ─────────
-        if self._init_kokoro_onnx():
-            return "kokoro_onnx"
-
-        # ── 2. macOS fallbacks ────────────────────────────────────────────
+        # ── macOS fallback ────────────────────────────────────────────────
         if plat == "apple_silicon":
-            tts_fn = self._discover_mlx_tts()
-            if tts_fn is not None:
-                self._tts_fn = tts_fn
-                print("TTS  : mlx-audio (Kokoro-82M via MLX)")
-                return "mlx_audio"
             print("TTS  : macOS say  (install kokoro-onnx for better quality)")
             return "say"
 
-        # ── 3. Windows fallback ───────────────────────────────────────────
+        # ── Windows fallback ──────────────────────────────────────────────
         try:
             import pyttsx3
             engine = pyttsx3.init()
             engine.setProperty("rate", 170)
             self._pyttsx3 = engine
-            print("TTS  : pyttsx3  (tip: pip install kokoro-onnx soundfile sounddevice)")
+            print("TTS  : pyttsx3")
             return "pyttsx3"
         except Exception:
-            print("TTS  : disabled  (pip install kokoro-onnx or pyttsx3)")
+            print("TTS  : disabled")
             return "none"
 
     def speak(self, text: str) -> None:
-        """Print the AI response and optionally speak it aloud."""
-        # Always print, wrapped nicely
+        """Print the AI response and speak it aloud."""
         wrapped = textwrap.fill(
             text, width=68,
-            initial_indent    = "  AI  ▶  ",
-            subsequent_indent = "          "
+            initial_indent="  AI  ▶  ", subsequent_indent="          "
         )
         print(f"\n{wrapped}\n")
 
-        # Detect language and pick the right Kokoro voice
         lang = detect_language(text)
-        voice, lang_code, onnx_lang = KOKORO_VOICES.get(lang, KOKORO_DEFAULT)
-        if lang != "en":
-            print(f"  [TTS] detected language: {lang}  →  voice: {voice}")
+        voice, onnx_lang = KOKORO_VOICES.get(lang, KOKORO_DEFAULT)
 
-        # macOS say voice map — used as fallback when Kokoro fails
-        SAY_VOICES = {
-            "en": "Ava",      # macOS neural English (natural quality)
-            "zh": "Tingting", "ja": "Kyoko",
-            "ko": "Yuna",     "fr": "Thomas", "es": "Monica",
-        }
-
-        if self.backend == "mlx_audio":
-            tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-            tmp.close()
-            spoken = False
-            try:
-                self._tts_fn(text, tmp.name, voice, lang_code)
-                subprocess.run(["afplay", tmp.name], check=True)
-                spoken = True
-            except Exception as e:
-                err = str(e)
-                if "not callable" in err and lang == "en":
-                    print(f"  [TTS] English Kokoro failed ({err})")
-                    print("  [TTS] Fix: pip install 'misaki[en]'  then restart")
-                else:
-                    print(f"  [TTS] mlx-audio/{lang} error: {err}")
-                print(f"  [TTS] Falling back to macOS say -v {SAY_VOICES.get(lang, 'Ava')}")
-            finally:
-                if os.path.exists(tmp.name):
-                    os.unlink(tmp.name)
-            if not spoken:
-                say_v = SAY_VOICES.get(lang, "Ava")
-                subprocess.run(["say", "-v", say_v, "--", text])
-
-        elif self.backend == "say":
-            say_v = SAY_VOICES.get(lang, "Ava")
-            try:
-                subprocess.run(["say", "-v", say_v, "--", text], check=True)
-            except Exception:
-                pass
-
-        elif self.backend == "kokoro_onnx":
-            # Languages that work with the base kokoro model via espeak-ng:
-            #   en, es, fr, hi, it, pt  (all use misaki[en] / standard espeak)
-            # Languages that need a separate dedicated model:
-            #   zh → kokoro-v1.1-zh.onnx + misaki[zh]
-            #   ja → misaki[ja]
-            # For the latter, fall back to macOS say / pyttsx3.
-            # Chinese: use dedicated zh model if loaded, else fall back to say
-            if lang == "zh":
-                if self._kokoro_zh is not None:
-                    try:
-                        samples, sr = self._kokoro_zh.create(
-                            text, voice=voice, speed=1.0, lang="zh", is_phonemes=False)
-                        self._sd.play(samples, sr)
-                        self._sd.wait()
-                    except Exception as e:
-                        print(f"  [TTS] kokoro-onnx zh error: {e}")
-                        if self.plat == "apple_silicon":
-                            subprocess.run(["say", "-v", SAY_VOICES.get("zh", "Tingting"), "--", text])
-                elif self.plat == "apple_silicon":
-                    subprocess.run(["say", "-v", SAY_VOICES.get("zh", "Tingting"), "--", text])
-            # Japanese/Korean: always fall back (need separate model)
-            elif lang in ("ja", "ko"):
-                if self.plat == "apple_silicon":
-                    say_v = SAY_VOICES.get(lang, SAY_VOICES["en"])
-                    subprocess.run(["say", "-v", say_v, "--", text])
-            else:
+        if self.backend == "kokoro_onnx":
+            if lang in KOKORO_VOICES:
                 try:
-                    samples, sr = self._kokoro.create(text, voice=voice, speed=1.0, lang=onnx_lang)
+                    samples, sr = self._kokoro.create(
+                        text, voice=voice, speed=1.0, lang=onnx_lang)
                     self._sd.play(samples, sr)
                     self._sd.wait()
+                    return
                 except Exception as e:
                     print(f"  [TTS] kokoro-onnx error: {e}")
-                    if self.plat == "apple_silicon":
-                        subprocess.run(["say", "-v", SAY_VOICES.get(lang, SAY_VOICES["en"]), "--", text])
+            # Non-Western language or kokoro failed → system fallback
+            self._system_speak(text, lang)
+
+        elif self.backend == "say":
+            self._system_speak(text, lang)
 
         elif self.backend == "pyttsx3":
             try:
@@ -622,7 +430,12 @@ class TTSEngine:
                 self._pyttsx3.runAndWait()
             except Exception as e:
                 print(f"  [TTS] pyttsx3 error: {e}")
-        # backend == "none": text already printed
+
+    def _system_speak(self, text: str, lang: str) -> None:
+        """macOS say fallback."""
+        if self.plat == "apple_silicon":
+            say_v = SAY_VOICES.get(lang, SAY_VOICES["en"])
+            subprocess.run(["say", "-v", say_v, "--", text])
 
 
 # ─────────────────────────────────────────────────────────────────────────────
