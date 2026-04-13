@@ -9,6 +9,14 @@ TTS    : kokoro-onnx (Kokoro-82M, English + Western EU)
          → fallback: macOS say / Windows pyttsx3
 Input  : [t] keyboard text  |  [a] push-to-talk recording
 
+TESTED ON: macOS (Apple Silicon, M-series).
+           Windows / Linux path exists but is NOT fully tested.
+
+HARDWARE REQUIREMENTS:
+  Apple Silicon : M-series chip with 16 GB+ unified memory recommended.
+  NVIDIA GPU    : 8 GB VRAM minimum for Gemma 4 E4B (Q4 quantized).
+                  Without a GPU, inference will be too slow for live demo.
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 QUICK SETUP
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -16,17 +24,19 @@ Mac (Apple Silicon):
   pip install mlx-vlm kokoro-onnx sounddevice soundfile numpy
   brew install espeak-ng
   # LLM model auto-downloaded on first run (~8 GB)
-  # Kokoro models: place kokoro-v1.0.onnx + voices-v1.0.bin
-  #   in ~/.cache/kokoro_onnx/
+  # Kokoro model: place kokoro.onnx in ~/.cache/kokoro_onnx/
 
-Windows + NVIDIA:
+Windows + NVIDIA (≥8 GB VRAM):
   1. Install Ollama: https://ollama.com
   2. ollama pull gemma4:e4b
-  3. pip install kokoro-onnx sounddevice soundfile numpy requests
-  # Place kokoro model files in %USERPROFILE%\.cache\kokoro_onnx\
+  3. ollama serve          # keep running in a separate terminal
+  4. pip install kokoro-onnx sounddevice soundfile numpy requests
+  # Place kokoro.onnx in %USERPROFILE%\.cache\kokoro_onnx\
+  # If model loads on CPU instead of GPU, set:
+  #   set OLLAMA_FLASH_ATTENTION=0  (then restart ollama serve)
 
 Run:
-  python demo_voice_chat.py
+  python voice_chat.py
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
@@ -100,11 +110,21 @@ OLLAMA_MODEL_ID = "gemma4:e4b"
 OLLAMA_URL      = "http://localhost:11434/api/chat"
 SAMPLE_RATE     = 16_000   # 16 kHz — sufficient for speech
 
-SYSTEM_PROMPT = (
-    "You are a helpful, concise AI assistant. "
-    "Respond naturally and conversationally. "
-    "If the user speaks in a language other than English, reply in that same language."
-)
+SYSTEM_PROMPT = """\
+You are Gemma, an AI assistant running entirely on a local laptop — no cloud, no internet.
+You are being demonstrated live in an undergraduate Artificial Intelligence course (CISC 339).
+
+Your personality:
+- Curious and enthusiastic about AI topics
+- Witty and occasionally humorous, but never at the expense of clarity
+- Concise: aim for 2–4 sentences unless asked to elaborate
+- Honest about your limitations (you are a 4-billion-parameter model, not GPT-4)
+
+When students ask about AI concepts (neural networks, LLMs, training, etc.),
+give a clear intuitive explanation first, then add depth if asked.
+
+Always reply in the same language the user is speaking.\
+"""
 
 # ── Kokoro voices (Western languages supported by the base model) ─────────────
 # Format: lang_code → (kokoro_voice, onnx_lang)
