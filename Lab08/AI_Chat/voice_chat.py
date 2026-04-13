@@ -472,6 +472,13 @@ class TTSEngine:
         if lang != "en":
             print(f"  [TTS] detected language: {lang}  →  voice: {voice}")
 
+        # macOS say voice map — used as fallback when Kokoro fails
+        SAY_VOICES = {
+            "en": "Ava",      # macOS neural English (natural quality)
+            "zh": "Tingting", "ja": "Kyoko",
+            "ko": "Yuna",     "fr": "Thomas", "es": "Monica",
+        }
+
         if self.backend == "mlx_audio":
             tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
             tmp.close()
@@ -481,25 +488,24 @@ class TTSEngine:
                 subprocess.run(["afplay", tmp.name], check=True)
                 spoken = True
             except Exception as e:
-                print(f"  [TTS] mlx-audio error: {e} — falling back to say")
+                err = str(e)
+                if "not callable" in err and lang == "en":
+                    print(f"  [TTS] English Kokoro failed ({err})")
+                    print("  [TTS] Fix: pip install 'misaki[en]'  then restart")
+                else:
+                    print(f"  [TTS] mlx-audio/{lang} error: {err}")
+                print(f"  [TTS] Falling back to macOS say -v {SAY_VOICES.get(lang, 'Ava')}")
             finally:
                 if os.path.exists(tmp.name):
                     os.unlink(tmp.name)
             if not spoken:
-                # macOS say supports language with -v; pick a sensible voice
-                say_voices = {"zh": "Tingting", "ja": "Kyoko", "ko": "Yuna",
-                              "fr": "Thomas",   "es": "Monica"}
-                say_v = say_voices.get(lang)
-                cmd = ["say", "-v", say_v, "--", text] if say_v else ["say", "--", text]
-                subprocess.run(cmd)
+                say_v = SAY_VOICES.get(lang, "Ava")
+                subprocess.run(["say", "-v", say_v, "--", text])
 
         elif self.backend == "say":
-            say_voices = {"zh": "Tingting", "ja": "Kyoko", "ko": "Yuna",
-                          "fr": "Thomas",   "es": "Monica"}
-            say_v = say_voices.get(lang)
-            cmd = ["say", "-v", say_v, "--", text] if say_v else ["say", "--", text]
+            say_v = SAY_VOICES.get(lang, "Ava")
             try:
-                subprocess.run(cmd, check=True)
+                subprocess.run(["say", "-v", say_v, "--", text], check=True)
             except Exception:
                 pass
 
@@ -524,10 +530,10 @@ class TTSEngine:
 # 4.  Push-to-Talk Recording
 # ─────────────────────────────────────────────────────────────────────────────
 
-def record_push_to_talk() -> Optional[str]:
+def record_push_to_talk(skip_start_prompt: bool = False) -> Optional[str]:
     """
     Records microphone audio.
-      1. Press ENTER to start recording.
+      1. Press ENTER to start recording  (skipped when skip_start_prompt=True).
       2. Press ENTER again to stop.
     Returns path to a temporary 16-bit PCM .wav file.
     Caller is responsible for deleting the file after use.
@@ -539,8 +545,9 @@ def record_push_to_talk() -> Optional[str]:
         print("  [REC] Install: pip install sounddevice numpy")
         return None
 
-    print("  [REC] Press ENTER to start …", end="", flush=True)
-    input()
+    if not skip_start_prompt:
+        print("  [REC] Press ENTER to start …", end="", flush=True)
+        input()
 
     frames: list = []
     stop_event = threading.Event()
@@ -594,16 +601,6 @@ def main() -> None:
     llm = MLXBackend()  if plat == "apple_silicon" else OllamaBackend()
     tts = TTSEngine(plat)
 
-    # ── Instructions ────────────────────────────────────────────────────────
-    print()
-    print("  Commands")
-    print("  ─────────────────────────────────────────────────────")
-    print("  t  →  Type a message")
-    print("  a  →  Audio  (push-to-talk: ENTER start / ENTER stop)")
-    print("  c  →  Clear conversation history")
-    print("  q  →  Quit")
-    print()
-
     # ── Conversation history ──────────────────────────────────────────────────
     # Each entry: {"role": "user"|"assistant", "content": "..."}
     # Audio turns store "[voice message]" as user content so the model
@@ -611,63 +608,88 @@ def main() -> None:
     MAX_TURNS = 20    # keep last 20 exchanges (40 messages) to avoid OOM
     history: list = []
 
-    # ── Conversation loop ────────────────────────────────────────────────────
+    # ── Choose mode once ─────────────────────────────────────────────────────
+    print()
+    print("  Select input mode:")
+    print("  t  →  Text")
+    print("  a  →  Audio  (push-to-talk: ENTER start / ENTER stop)")
+    print()
     while True:
-        turn = len(history) // 2 + 1
         try:
-            cmd = input(f"  [{turn}] Mode [t / a / c / q] > ").strip().lower()
+            mode = input("  Mode [t / a] > ").strip().lower()
         except (KeyboardInterrupt, EOFError):
             print("\n  Goodbye!")
+            return
+        if mode in ("t", "a"):
             break
+        print("  Please enter t or a.")
 
-        # ── Quit ─────────────────────────────────────────────────────────────
-        if cmd == "q":
-            print("  Goodbye!")
-            break
+    if mode == "t":
+        print("\n  Text mode — type your message, or enter  q  to quit,  c  to clear history.\n")
+    else:
+        print("\n  Audio mode — press ENTER to record, ENTER again to stop.\n"
+              "  Enter  q  to quit,  c  to clear history.\n")
 
-        # ── Clear history ─────────────────────────────────────────────────────
-        elif cmd == "c":
-            history.clear()
-            print("  History cleared. Starting a new conversation.\n")
+    # ── Conversation loop ────────────────────────────────────────────────────
+    AUDIO_PROMPT = (
+        "The user sent a voice message. "
+        "Listen carefully, understand it, and reply conversationally. "
+        "If the speaker uses a language other than English, reply in that language."
+    )
 
-        # ── Text input ───────────────────────────────────────────────────────
-        elif cmd == "t":
-            user_text = input("  You  ▶  ").strip()
+    while True:
+        turn = len(history) // 2 + 1
+
+        # ── Text mode ────────────────────────────────────────────────────────
+        if mode == "t":
+            try:
+                user_text = input(f"  [{turn}] You  ▶  ").strip()
+            except (KeyboardInterrupt, EOFError):
+                print("\n  Goodbye!")
+                break
+            if user_text.lower() == "q":
+                print("  Goodbye!")
+                break
+            if user_text.lower() == "c":
+                history.clear()
+                print("  History cleared.\n")
+                continue
             if not user_text:
                 continue
             print("  …  thinking")
             response = llm.chat(user_text, history=history)
             tts.speak(response)
-            # Append this turn to history
             history.append({"role": "user",      "content": user_text})
             history.append({"role": "assistant", "content": response})
-            # Trim to last MAX_TURNS exchanges
-            if len(history) > MAX_TURNS * 2:
-                history = history[-MAX_TURNS * 2:]
 
-        # ── Audio input (push-to-talk) ────────────────────────────────────────
-        elif cmd == "a":
-            wav_path = record_push_to_talk()
+        # ── Audio mode ───────────────────────────────────────────────────────
+        else:
+            try:
+                pre = input(f"  [{turn}] Press ENTER to record  (q=quit  c=clear) › ").strip().lower()
+            except (KeyboardInterrupt, EOFError):
+                print("\n  Goodbye!")
+                break
+            if pre == "q":
+                print("  Goodbye!")
+                break
+            if pre == "c":
+                history.clear()
+                print("  History cleared.\n")
+                continue
+            # user pressed ENTER (or typed anything else) — start recording
+            wav_path = record_push_to_talk(skip_start_prompt=True)
             if wav_path is None:
                 continue
             print("  …  processing audio")
-            audio_prompt = (
-                "The user sent a voice message. "
-                "Listen carefully, understand it, and reply conversationally. "
-                "If the speaker uses a language other than English, reply in that language."
-            )
-            response = llm.chat(audio_prompt, history=history, audio_path=wav_path)
+            response = llm.chat(AUDIO_PROMPT, history=history, audio_path=wav_path)
             os.unlink(wav_path)
             tts.speak(response)
-            # Store audio turn in history as placeholder text
             history.append({"role": "user",      "content": "[voice message]"})
             history.append({"role": "assistant", "content": response})
-            if len(history) > MAX_TURNS * 2:
-                history = history[-MAX_TURNS * 2:]
 
-        # ── Unknown ──────────────────────────────────────────────────────────
-        else:
-            print("  Unknown command — use t, a, or q.")
+        # Trim history
+        if len(history) > MAX_TURNS * 2:
+            history = history[-MAX_TURNS * 2:]
 
 
 if __name__ == "__main__":
