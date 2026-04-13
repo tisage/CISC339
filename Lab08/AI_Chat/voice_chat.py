@@ -62,22 +62,23 @@ SYSTEM_PROMPT = (
 )
 
 # ── Kokoro voice library per language ────────────────────────────────────────
-# Format: language_code → (kokoro_voice, kokoro_lang_code)
-# kokoro_lang_code is used by KokoroPipeline; voice prefix must match it.
+# Format: language_code → (kokoro_voice, mlx_lang_code, onnx_lang)
+# mlx_lang_code  : used by KokoroPipeline (mlx-audio backend)
+# onnx_lang      : passed as lang= to kokoro-onnx Kokoro.create()
 # Voices confirmed in Kokoro-82M: af_*, am_*, bf_*, bm_*, ef_*, ff_*,
 #   hf_alpha, if_sara, jf_alpha, jf_gongitsune, pf_dora, zf_xiaobei
-KOKORO_VOICES: dict[str, tuple[str, str]] = {
-    "en": ("af_heart",   "a"),   # American English female
-    "zh": ("zf_xiaobei", "z"),   # Mandarin Chinese female
-    "ja": ("jf_alpha",   "j"),   # Japanese female
-    "ko": ("af_heart",   "a"),   # Korean — no dedicated Kokoro voice, fall back to EN
-    "es": ("ef_dora",    "e"),   # Spanish female
-    "fr": ("ff_siwis",   "f"),   # French female
-    "hi": ("hf_alpha",   "h"),   # Hindi female
-    "it": ("if_sara",    "i"),   # Italian female
-    "pt": ("pf_dora",    "p"),   # Portuguese female
+KOKORO_VOICES: dict[str, tuple[str, str, str]] = {
+    "en": ("af_heart",   "a", "en-us"),  # American English female
+    "zh": ("zf_xiaobei", "z", "zh"),     # Mandarin Chinese female
+    "ja": ("jf_alpha",   "j", "ja"),     # Japanese female
+    "ko": ("af_heart",   "a", "en-us"),  # Korean — no dedicated voice, fall back to EN
+    "es": ("ef_dora",    "e", "es"),     # Spanish female
+    "fr": ("ff_siwis",   "f", "fr-fr"),  # French female
+    "hi": ("hf_alpha",   "h", "hi"),     # Hindi female
+    "it": ("if_sara",    "i", "it"),     # Italian female
+    "pt": ("pf_dora",    "p", "pt-br"),  # Portuguese female
 }
-KOKORO_DEFAULT = ("af_heart", "a")   # fallback for unsupported languages
+KOKORO_DEFAULT = ("af_heart", "a", "en-us")   # fallback for unsupported languages
 
 
 def detect_language(text: str) -> str:
@@ -522,7 +523,7 @@ class TTSEngine:
 
         # Detect language and pick the right Kokoro voice
         lang = detect_language(text)
-        voice, lang_code = KOKORO_VOICES.get(lang, KOKORO_DEFAULT)
+        voice, lang_code, onnx_lang = KOKORO_VOICES.get(lang, KOKORO_DEFAULT)
         if lang != "en":
             print(f"  [TTS] detected language: {lang}  →  voice: {voice}")
 
@@ -565,7 +566,7 @@ class TTSEngine:
 
         elif self.backend == "kokoro_onnx":
             try:
-                samples, sr = self._kokoro.create(text, voice=voice, speed=1.0)
+                samples, sr = self._kokoro.create(text, voice=voice, speed=1.0, lang=onnx_lang)
                 self._sd.play(samples, sr)
                 self._sd.wait()
             except Exception as e:
@@ -662,83 +663,104 @@ def main() -> None:
     MAX_TURNS = 20    # keep last 20 exchanges (40 messages) to avoid OOM
     history: list = []
 
-    # ── Choose mode once ─────────────────────────────────────────────────────
-    print()
-    print("  Select input mode:")
-    print("  t  →  Text")
-    print("  a  →  Audio  (push-to-talk: ENTER start / ENTER stop)")
-    print()
-    while True:
-        try:
-            mode = input("  Mode [t / a] > ").strip().lower()
-        except (KeyboardInterrupt, EOFError):
-            print("\n  Goodbye!")
-            return
-        if mode in ("t", "a"):
-            break
-        print("  Please enter t or a.")
-
-    if mode == "t":
-        print("\n  Text mode.  q = quit\n")
-    else:
-        print("\n  Audio mode.  ENTER = start recording · ENTER = stop · q = quit\n")
-
-    # ── Conversation loop ────────────────────────────────────────────────────
     AUDIO_PROMPT = (
         "The user sent a voice message. "
         "Listen carefully, understand it, and reply conversationally. "
         "If the speaker uses a language other than English, reply in that language."
     )
 
+    def _hist_label() -> str:
+        n = len(history) // 2
+        return f"{n} turn{'s' if n != 1 else ''} in history"
+
+    # ── Outer menu loop ───────────────────────────────────────────────────────
     while True:
-        turn = len(history) // 2 + 1
+        print()
+        print("  ┌─────────────────────────────────────────────┐")
+        print(f"  │  {_hist_label():<43}│")
+        print("  │  t  Text mode                               │")
+        print("  │  a  Audio mode  (push-to-talk)              │")
+        print("  │  c  Clear history                           │")
+        print("  │  q  Quit                                    │")
+        print("  └─────────────────────────────────────────────┘")
+        try:
+            cmd = input("  > ").strip().lower()
+        except (KeyboardInterrupt, EOFError):
+            print("\n  Goodbye!")
+            return
 
-        # ── Text mode ────────────────────────────────────────────────────────
+        if cmd == "q":
+            print("  Goodbye!")
+            return
+        elif cmd == "c":
+            history.clear()
+            print("  History cleared.")
+            continue
+        elif cmd not in ("t", "a"):
+            continue
+
+        mode = cmd
+
         if mode == "t":
-            try:
-                user_text = input(f"  [{turn}] You  ▶  ").strip()
-            except (KeyboardInterrupt, EOFError):
-                print("\n  Goodbye!")
-                break
-            if user_text.lower() == "q":
-                print("  Goodbye!")
-                break
-            if user_text.lower() == "c":
-                history.clear()
-                print("  History cleared.\n")
-                continue
-            if not user_text:
-                continue
-            print("  …  thinking")
-            response = llm.chat(user_text, history=history)
-            tts.speak(response)
-            history.append({"role": "user",      "content": user_text})
-            history.append({"role": "assistant", "content": response})
-
-        # ── Audio mode ───────────────────────────────────────────────────────
+            print("  Text mode  —  m = menu · c = clear · q = quit\n")
         else:
-            try:
-                pre = input(f"  [{turn}] ↵ record · q quit › ").strip().lower()
-            except (KeyboardInterrupt, EOFError):
-                print("\n  Goodbye!")
-                break
-            if pre == "q":
-                print("  Goodbye!")
-                break
-            # user pressed ENTER — start recording
-            wav_path = record_push_to_talk(skip_start_prompt=True)
-            if wav_path is None:
-                continue
-            print("  …  processing audio")
-            response = llm.chat(AUDIO_PROMPT, history=history, audio_path=wav_path)
-            os.unlink(wav_path)
-            tts.speak(response)
-            history.append({"role": "user",      "content": "[voice message]"})
-            history.append({"role": "assistant", "content": response})
+            print("  Audio mode  —  ENTER = record · ENTER = stop · m = menu · q = quit\n")
 
-        # Trim history
-        if len(history) > MAX_TURNS * 2:
-            history = history[-MAX_TURNS * 2:]
+        # ── Inner conversation loop ───────────────────────────────────────────
+        while True:
+            turn = len(history) // 2 + 1
+
+            if mode == "t":
+                try:
+                    user_text = input(f"  [{turn}] You  ▶  ").strip()
+                except (KeyboardInterrupt, EOFError):
+                    print("\n  Goodbye!")
+                    return
+                if user_text.lower() == "q":
+                    print("  Goodbye!")
+                    return
+                if user_text.lower() == "m":
+                    break          # back to outer menu
+                if user_text.lower() == "c":
+                    history.clear()
+                    print(f"  History cleared.\n")
+                    continue
+                if not user_text:
+                    continue
+                print("  …  thinking")
+                response = llm.chat(user_text, history=history)
+                tts.speak(response)
+                history.append({"role": "user",      "content": user_text})
+                history.append({"role": "assistant", "content": response})
+
+            else:  # audio
+                try:
+                    pre = input(f"  [{turn}] ↵ record  ·  m menu  ·  q quit › ").strip().lower()
+                except (KeyboardInterrupt, EOFError):
+                    print("\n  Goodbye!")
+                    return
+                if pre == "q":
+                    print("  Goodbye!")
+                    return
+                if pre == "m":
+                    break          # back to outer menu
+                if pre == "c":
+                    history.clear()
+                    print(f"  History cleared.\n")
+                    continue
+                wav_path = record_push_to_talk(skip_start_prompt=True)
+                if wav_path is None:
+                    continue
+                print("  …  processing audio")
+                response = llm.chat(AUDIO_PROMPT, history=history, audio_path=wav_path)
+                os.unlink(wav_path)
+                tts.speak(response)
+                history.append({"role": "user",      "content": "[voice message]"})
+                history.append({"role": "assistant", "content": response})
+
+            # Trim history
+            if len(history) > MAX_TURNS * 2:
+                history = history[-MAX_TURNS * 2:]
 
 
 if __name__ == "__main__":
