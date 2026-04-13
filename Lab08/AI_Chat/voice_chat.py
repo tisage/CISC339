@@ -33,6 +33,7 @@ Run:
 import os
 import pathlib
 import sys
+import time
 import wave
 import warnings
 import base64
@@ -41,7 +42,48 @@ import subprocess
 import tempfile
 import textwrap
 import threading
+from contextlib import contextmanager
 from typing import Optional
+
+# ── ANSI colours (work on macOS terminal and Windows Terminal) ────────────────
+class C:
+    RESET  = "\033[0m"
+    BOLD   = "\033[1m"
+    DIM    = "\033[2m"
+    CYAN   = "\033[36m"
+    BCYAN  = "\033[96m"   # bright cyan
+    GREEN  = "\033[32m"
+    BGREEN = "\033[92m"
+    YELLOW = "\033[33m"
+    RED    = "\033[31m"
+    BRED   = "\033[91m"
+    GRAY   = "\033[90m"
+
+if platform.system() == "Windows":
+    os.system("color")    # enable ANSI on Windows console
+
+@contextmanager
+def spinner(msg: str):
+    """Display a braille spinner while a blocking call runs."""
+    stop = threading.Event()
+    frames = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+
+    def _spin():
+        i = 0
+        while not stop.is_set():
+            print(f"\r  {C.CYAN}{frames[i % len(frames)]}{C.RESET}  {C.DIM}{msg}{C.RESET}",
+                  end="", flush=True)
+            time.sleep(0.08)
+            i += 1
+
+    t = threading.Thread(target=_spin, daemon=True)
+    t.start()
+    try:
+        yield
+    finally:
+        stop.set()
+        t.join()
+        print(f"\r  {C.BGREEN}✓{C.RESET}  {C.DIM}{msg}{C.RESET}" + " " * 10)
 
 # Suppress Gemma4 audio processor misconfiguration warning (fixed in mlx-vlm post-PR#906)
 warnings.filterwarnings(
@@ -139,47 +181,50 @@ def detect_platform() -> str:
 
 def print_hardware_info(plat: str) -> None:
     """Prints a startup banner with detected hardware info."""
-    system  = platform.system()
-    machine = platform.machine()
+    W = 54
+    bar = f"  {C.CYAN}{'─' * W}{C.RESET}"
+    def row(label, value):
+        print(f"  {C.GRAY}{label:<8}{C.RESET} {value}")
 
     print()
-    print("━" * 60)
-    print("  Lab 08 — Local LLM Voice Chat  │  Gemma 4 E4B")
-    print("━" * 60)
-    print(f"  OS       : {system} ({machine})")
+    print(bar)
+    print(f"  {C.BCYAN}{C.BOLD}  ◈  Local AI Voice Chat{C.RESET}"
+          f"  {C.DIM}·  Gemma 4 E4B  ·  CISC 339{C.RESET}")
+    print(bar)
+
+    system  = platform.system()
+    machine = platform.machine()
+    row("os", f"{system}  {C.DIM}({machine}){C.RESET}")
 
     if plat == "apple_silicon":
         chip = subprocess.run(
             ["sysctl", "-n", "machdep.cpu.brand_string"],
             capture_output=True, text=True
         ).stdout.strip()
-        print(f"  Chip     : {chip}")
         try:
             import mlx.core as mx
             mem_gb = mx.device_info()["memory_size"] / 1024 ** 3
-            print(f"  GPU Mem  : {mem_gb:.0f} GB unified memory (MLX)")
+            row("chip", f"{chip}  {C.DIM}· {mem_gb:.0f} GB unified{C.RESET}")
         except Exception:
-            print(f"  GPU Mem  : (mlx not installed yet)")
-        print(f"  Inference: mlx-vlm  →  {MLX_MODEL_ID}")
-        print(f"  TTS      : mlx-audio (Kokoro-82M, ~33× realtime)")
+            row("chip", chip)
+        row("engine", f"mlx-vlm  {C.DIM}→  {MLX_MODEL_ID}{C.RESET}")
 
     elif plat == "nvidia":
         try:
             import torch
             gpu  = torch.cuda.get_device_name(0)
             vram = torch.cuda.get_device_properties(0).total_memory / 1024 ** 3
-            print(f"  GPU      : {gpu}  ({vram:.0f} GB VRAM)")
+            row("gpu", f"{gpu}  {C.DIM}· {vram:.0f} GB VRAM{C.RESET}")
         except Exception:
-            print(f"  GPU      : NVIDIA (detected via CUDA)")
-        print(f"  Inference: Ollama  →  {OLLAMA_MODEL_ID}")
-        print(f"  TTS      : pyttsx3 (Windows SAPI)")
+            row("gpu", "NVIDIA")
+        row("engine", f"Ollama  {C.DIM}→  {OLLAMA_MODEL_ID}{C.RESET}")
 
     else:
-        print(f"  GPU      : none  (CPU mode — responses will be slower)")
-        print(f"  Inference: Ollama  →  {OLLAMA_MODEL_ID}")
-        print(f"  TTS      : pyttsx3")
+        row("gpu", f"{C.DIM}none  (CPU — responses will be slower){C.RESET}")
+        row("engine", f"Ollama  {C.DIM}→  {OLLAMA_MODEL_ID}{C.RESET}")
 
-    print("━" * 60)
+    row("voice", "kokoro-onnx  (Kokoro-82M)")
+    print(bar)
     print()
 
 
@@ -203,13 +248,12 @@ class MLXBackend:
             print("  Run: pip install mlx-vlm")
             sys.exit(1)
 
-        print(f"Loading {MLX_MODEL_ID} via mlx-vlm …")
-        print("(First run: ~8 GB download — subsequent runs load in seconds)\n")
-
+        print(f"  {C.DIM}First run: ~8 GB download — subsequent runs load in seconds{C.RESET}\n")
         self._generate       = generate
         self._apply_template = apply_chat_template
-        self.model, self.processor = load(MLX_MODEL_ID)
-        print("Model ready.\n")
+        with spinner(f"Loading  {MLX_MODEL_ID}"):
+            self.model, self.processor = load(MLX_MODEL_ID)
+        print()
 
     def chat(self, user_text: str,
              history: Optional[list] = None,
@@ -399,11 +443,8 @@ class TTSEngine:
 
     def speak(self, text: str) -> None:
         """Print the AI response and speak it aloud."""
-        wrapped = textwrap.fill(
-            text, width=68,
-            initial_indent="  AI  ▶  ", subsequent_indent="          "
-        )
-        print(f"\n{wrapped}\n")
+        wrapped = textwrap.fill(text, width=66, initial_indent="    ", subsequent_indent="    ")
+        print(f"\n  {C.CYAN}{C.BOLD}ai ›{C.RESET}\n{C.YELLOW}{wrapped}{C.RESET}\n")
 
         lang = detect_language(text)
         voice, onnx_lang = KOKORO_VOICES.get(lang, KOKORO_DEFAULT)
@@ -526,42 +567,39 @@ def main() -> None:
         "If the speaker uses a language other than English, reply in that language."
     )
 
-    def _hist_label() -> str:
+    SEP  = f"  {C.CYAN}{'─' * 34}{C.RESET}"
+    HINT = f"{C.GRAY}m · menu   c · clear   q · quit{C.RESET}"
+
+    def _menu():
         n = len(history) // 2
-        return f"{n} turn{'s' if n != 1 else ''} in history"
+        hist_str = f"{C.DIM}{n} turn{'s' if n != 1 else ''} in memory{C.RESET}"
+        print(f"\n{SEP}")
+        print(f"  {C.BCYAN}{C.BOLD}t{C.RESET}  text    "
+              f"{C.BCYAN}{C.BOLD}a{C.RESET}  audio   "
+              f"{C.BCYAN}{C.BOLD}q{C.RESET}  quit    {hist_str}")
+        print(SEP)
 
     # ── Outer menu loop ───────────────────────────────────────────────────────
     while True:
-        print()
-        print("  ┌─────────────────────────────────────────────┐")
-        print(f"  │  {_hist_label():<43}│")
-        print("  │  t  Text mode                               │")
-        print("  │  a  Audio mode  (push-to-talk)              │")
-        print("  │  c  Clear history                           │")
-        print("  │  q  Quit                                    │")
-        print("  └─────────────────────────────────────────────┘")
+        _menu()
         try:
-            cmd = input("  > ").strip().lower()
+            cmd = input(f"  {C.BCYAN}›{C.RESET}  ").strip().lower()
         except (KeyboardInterrupt, EOFError):
-            print("\n  Goodbye!")
+            print(f"\n  {C.DIM}Goodbye!{C.RESET}")
             return
 
         if cmd == "q":
-            print("  Goodbye!")
+            print(f"\n  {C.DIM}Goodbye!{C.RESET}\n")
             return
         elif cmd == "c":
             history.clear()
-            print("  History cleared.")
+            print(f"  {C.DIM}History cleared.{C.RESET}")
             continue
         elif cmd not in ("t", "a"):
             continue
 
         mode = cmd
-
-        if mode == "t":
-            print("  Text mode  —  m = menu · c = clear · q = quit\n")
-        else:
-            print("  Audio mode  —  ENTER = record · ENTER = stop · m = menu · q = quit\n")
+        print(f"\n  {C.DIM}{'text' if mode == 't' else 'audio'} mode  ·  {HINT}{C.RESET}\n")
 
         # ── Inner conversation loop ───────────────────────────────────────────
         while True:
@@ -569,47 +607,53 @@ def main() -> None:
 
             if mode == "t":
                 try:
-                    user_text = input(f"  [{turn}] You  ▶  ").strip()
+                    raw = input(
+                        f"  {C.GRAY}[{turn}]{C.RESET}  {C.BGREEN}you ›{C.RESET}  "
+                    ).strip()
                 except (KeyboardInterrupt, EOFError):
-                    print("\n  Goodbye!")
+                    print(f"\n  {C.DIM}Goodbye!{C.RESET}")
                     return
-                if user_text.lower() == "q":
-                    print("  Goodbye!")
+                if raw.lower() == "q":
+                    print(f"\n  {C.DIM}Goodbye!{C.RESET}\n")
                     return
-                if user_text.lower() == "m":
-                    break          # back to outer menu
-                if user_text.lower() == "c":
+                if raw.lower() == "m":
+                    break
+                if raw.lower() == "c":
                     history.clear()
-                    print(f"  History cleared.\n")
+                    print(f"  {C.DIM}History cleared.{C.RESET}\n")
                     continue
-                if not user_text:
+                if not raw:
                     continue
-                print("  …  thinking")
-                response = llm.chat(user_text, history=history)
+                with spinner("thinking"):
+                    response = llm.chat(raw, history=history)
                 tts.speak(response)
-                history.append({"role": "user",      "content": user_text})
+                history.append({"role": "user",      "content": raw})
                 history.append({"role": "assistant", "content": response})
 
             else:  # audio
                 try:
-                    pre = input(f"  [{turn}] ↵ record  ·  m menu  ·  q quit › ").strip().lower()
+                    pre = input(
+                        f"  {C.GRAY}[{turn}]{C.RESET}  "
+                        f"{C.RED}↵{C.RESET} {C.DIM}record{C.RESET}  "
+                        f"{C.GRAY}·  m  q › {C.RESET}"
+                    ).strip().lower()
                 except (KeyboardInterrupt, EOFError):
-                    print("\n  Goodbye!")
+                    print(f"\n  {C.DIM}Goodbye!{C.RESET}")
                     return
                 if pre == "q":
-                    print("  Goodbye!")
+                    print(f"\n  {C.DIM}Goodbye!{C.RESET}\n")
                     return
                 if pre == "m":
-                    break          # back to outer menu
+                    break
                 if pre == "c":
                     history.clear()
-                    print(f"  History cleared.\n")
+                    print(f"  {C.DIM}History cleared.{C.RESET}\n")
                     continue
                 wav_path = record_push_to_talk(skip_start_prompt=True)
                 if wav_path is None:
                     continue
-                print("  …  processing audio")
-                response = llm.chat(AUDIO_PROMPT, history=history, audio_path=wav_path)
+                with spinner("processing audio"):
+                    response = llm.chat(AUDIO_PROMPT, history=history, audio_path=wav_path)
                 os.unlink(wav_path)
                 tts.speak(response)
                 history.append({"role": "user",      "content": "[voice message]"})
