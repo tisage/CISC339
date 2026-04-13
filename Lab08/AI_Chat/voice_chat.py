@@ -156,7 +156,7 @@ def print_hardware_info(plat: str) -> None:
         print(f"  Chip     : {chip}")
         try:
             import mlx.core as mx
-            mem_gb = mx.metal.device_info()["memory_size"] / 1024 ** 3
+            mem_gb = mx.device_info()["memory_size"] / 1024 ** 3
             print(f"  GPU Mem  : {mem_gb:.0f} GB unified memory (MLX)")
         except Exception:
             print(f"  GPU Mem  : (mlx not installed yet)")
