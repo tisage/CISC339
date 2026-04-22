@@ -1,0 +1,42 @@
+{
+    "menu": [
+        {
+            "nm": "COFFEE",
+            "discountprice": "-",
+            "price": "-",
+            "sub": [
+                {
+                    "nm": "Order # 23",
+                    "price": "Dine In"
+                },
+                {
+                    "nm": "Date: 06/01/2024"
+                }
+            ]
+        },
+        {
+            "nm": "Latte",
+            "cnt": "1",
+            "price": "5.25"
+        },
+        {
+            "nm": "Iced Americano",
+            "cnt": "1",
+            "price": "4.25"
+        },
+        {
+            "nm": "Blueberry Muffin",
+            "cnt": "1",
+            "price": "3.75"
+        }
+    ],
+    "sub_total": {
+        "subtotal_price": "13.25",
+        "tax_price": "1.06"
+    },
+    "total": {
+        "total_price": "14.31",
+        "cashprice": "085716",
+        "changeprice": "14.31"
+    }
+}

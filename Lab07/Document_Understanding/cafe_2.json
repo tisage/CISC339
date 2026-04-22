@@ -1,0 +1,54 @@
+{
+    "menu": [
+        {
+            "nm": "- COFFEE co. -",
+            "cnt": "1",
+            "price": "Dine In"
+        },
+        {
+            "nm": "Date: May Date: May 21, 2024",
+            "cnt": "1",
+            "price": "$3.50"
+        },
+        {
+            "nm": "Iced Americano",
+            "unitprice": "$4.25",
+            "cnt": "1",
+            "price": "$4.75"
+        },
+        {
+            "nm": "Avocado Toast",
+            "cnt": "1",
+            "price": "$7.50"
+        },
+        {
+            "nm": "Ham & Cheese Croissant",
+            "cnt": "1",
+            "price": "$5.75"
+        },
+        {
+            "nm": "Blueberry Muffin",
+            "cnt": "1",
+            "price": "$3.25"
+        },
+        {
+            "nm": "Add Oat Milk",
+            "cnt": "1",
+            "price": "$0.75"
+        },
+        {
+            "nm": "Extra Shot",
+            "cnt": "2",
+            "price": "$1.50"
+        }
+    ],
+    "sub_total": {
+        "subtotal_price": "$31.25",
+        "tax_price": "$2.77"
+    },
+    "total": {
+        "total_price": "$34.02",
+        "cashprice": "$34.02",
+        "changeprice": "Ref: 00047"
+    }
+}
