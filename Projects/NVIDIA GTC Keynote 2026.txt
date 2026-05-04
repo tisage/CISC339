@@ -1,0 +1,8470 @@
+00:10 This is how intelligence is made.
+00:14 
+
+00:14 A new kind of factory,
+00:17 
+
+00:17 generator of tokens, the building blocks
+00:20 
+
+00:20 of AI.
+00:26 
+
+00:26 Tokens have opened a new frontier,
+00:29 
+
+00:29 turning data into knowledge and drawing
+00:33 
+
+00:33 on all we have learned.
+00:37 
+
+00:37 Tokens are harnessing a new wave of
+00:40 
+
+00:40 clean energy
+00:46 
+
+00:46 and unlocking the secrets of the stars.
+00:53 
+
+00:53 In virtual worlds, they help robots
+00:56 
+
+00:56 learn.
+00:57 
+
+00:57 And in the physical world, perfect,
+01:04 
+
+01:04 forging new paths
+01:13 
+
+01:13 and clearing the way for a bountiful
+01:15 
+
+01:15 harvest.
+01:19 
+
+01:19 In the moments that matter, tokens are
+01:22 
+
+01:22 already there.
+01:26 
+
+01:26 And in the miles between, they never
+01:29 
+
+01:29 stop.
+01:33 
+
+01:33 They work where human hands cannot.
+01:40 
+
+01:40 So we may all breathe easier.
+01:47 
+
+01:47 And the smallest hearts be stronger.
+02:06 
+
+02:06 Tokens are helping us break new ground.
+02:13 
+
+02:13 scale never attempted
+02:15 
+
+02:15 to empower the world.
+02:27 
+
+02:27 So we can reach star cloud one
+02:30 
+
+02:30 separation confirmed well beyond it.
+02:40 
+
+02:40 Together,
+02:42 
+
+02:42 we take the next great leap into a
+02:45 
+
+02:45 bright new future
+02:51 
+
+02:51 built for all mankind.
+03:00 
+
+03:00 And here
+03:03 
+
+03:03 is where it all begins.
+03:15 
+
+03:15 Welcome to the stage, Nvidia founder and
+03:18 
+
+03:18 CEO, Jensen Wong.
+03:30 
+
+03:30 Welcome to GTC.
+03:38 
+
+03:38 I just want to remind you this is a tech
+03:40 
+
+03:40 conference.
+03:44 
+
+03:44 All these people lining up so early in
+03:46 
+
+03:46 the morning. All of you in here, it's
+03:49 
+
+03:49 great to see you.
+03:51 
+
+03:51 GTC
+03:53 
+
+03:53 GTC, we're going to talk about
+03:55 
+
+03:55 technology. We're going to talk about
+03:58 
+
+03:58 platforms. Nvidia has three platforms.
+04:01 
+
+04:01 You think that we mostly talk about one
+04:03 
+
+04:03 of them. It's related to CUDA X. Our
+04:07 
+
+04:07 systems is another platform. And now we
+04:10 
+
+04:10 have a new platform called AI factories.
+04:12 
+
+04:12 We're going to talk about all of them.
+04:13 
+
+04:13 And most importantly, we're going to
+04:14 
+
+04:14 talk about ecosystems. But before I
+04:16 
+
+04:16 start,
+04:19 
+
+04:19 let me thank our pregame show hosts. I
+04:23 
+
+04:23 thought they did a great job.
+04:25 
+
+04:25 Sarah Go of Conviction.
+04:29 
+
+04:29 Alfred Lynn Sequoia Capital, Nvidia's
+04:32 
+
+04:32 first venture capitalist, Gavin Baker,
+04:37 
+
+04:37 Nvidia's first major institutional
+04:39 
+
+04:39 investor. These three people are deep in
+04:43 
+
+04:43 technology, deep in what's going on, and
+04:46 
+
+04:46 of course, they have just a really broad
+04:48 
+
+04:48 reach of technology ecosystem. And then
+04:50 
+
+04:50 of course all of the VIPs that I hand
+04:53 
+
+04:53 selected to join us today, Allstar team.
+04:56 
+
+04:56 I want to thank all of you for that.
+05:04 
+
+05:04 I also want to thank all the companies
+05:05 
+
+05:05 that are here.
+05:08 
+
+05:08 Nvidia as you know is a platform
+05:11 
+
+05:11 company. We have technology, we have our
+05:13 
+
+05:13 platforms, we have re rich ecosystem.
+05:17 
+
+05:17 And today there are probably 100% of the
+05:22 
+
+05:22 hundred trillion dollars of industry
+05:24 
+
+05:24 here. 450 companies sponsored this
+05:27 
+
+05:27 event. I want to thank you. A thousand
+05:32 
+
+05:32 technical sessions, 2,000 speakers. This
+05:36 
+
+05:36 is this conference is going to cover
+05:38 
+
+05:38 every single layer of the five layer
+05:41 
+
+05:41 cake of artificial intelligence from
+05:43 
+
+05:43 land power and shell the infrastructure
+05:45 
+
+05:45 to chips to the platforms the models and
+05:49 
+
+05:49 of course the most important and
+05:51 
+
+05:51 ultimately what's going to take get this
+05:53 
+
+05:53 industry taken off is all of the
+05:56 
+
+05:56 applications.
+05:58 
+
+05:58 What it all began it all began here.
+06:02 
+
+06:02 This is the 20th anniversary of CUDA.
+06:06 
+
+06:06 We've been working on CUDA for 20 years.
+06:14 
+
+06:14 For 20 years, we've been dedicated to
+06:16 
+
+06:16 this architecture. This revolutionary
+06:18 
+
+06:18 invention, SIMT, single instruction,
+06:22 
+
+06:22 multi-threaded, writing scalar code
+06:26 
+
+06:26 could spawn off into multi-threaded
+06:28 
+
+06:28 application. much much easier to program
+06:31 
+
+06:31 than SIMDI. We recently added tiles so
+06:35 
+
+06:35 that we could help people program tensor
+06:38 
+
+06:38 cores and the structures of mathematics
+06:40 
+
+06:40 that are so foundational to artificial
+06:43 
+
+06:43 intelligence today.
+06:46 
+
+06:46 Thousands of tools and compilers and
+06:49 
+
+06:49 frameworks and libraries
+06:51 
+
+06:51 in open source. There's a couple of
+06:53 
+
+06:53 hundred thousand public projects. CUDA
+06:57 
+
+06:57 literally is integrated into every
+06:59 
+
+06:59 single ecosystem.
+07:01 
+
+07:01 This chart
+07:04 
+
+07:04 basically describes a 100% of Nvidia's
+07:07 
+
+07:07 strategies. You've been watching me talk
+07:10 
+
+07:10 about this slide from the very
+07:12 
+
+07:12 beginning. And ultimately, the single
+07:14 
+
+07:14 hardest thing to achieve is the thing on
+07:17 
+
+07:17 the bottom, installed base.
+07:20 
+
+07:20 It has taken us 20 years to now have
+07:24 
+
+07:24 built up hundreds of millions of GPUs
+07:26 
+
+07:26 and computing systems around the world
+07:28 
+
+07:28 that run CUDA. We are in every cloud.
+07:31 
+
+07:31 We're in every computer company.
+07:34 
+
+07:34 We serve just about every single
+07:35 
+
+07:35 industry. The install base of CUDA is
+07:40 
+
+07:40 the reason why the flywheel is
+07:43 
+
+07:43 accelerating. The install base is what
+07:45 
+
+07:45 attracts developers who then creates new
+07:47 
+
+07:47 algorithms that achieves a breakthrough.
+07:49 
+
+07:49 For example, deep learning. There are so
+07:52 
+
+07:52 many others. Those breakthroughs leads
+07:56 
+
+07:56 to entirely new markets which builds new
+07:58 
+
+07:58 ecosystems around them with other
+08:00 
+
+08:00 companies that join which creates a
+08:03 
+
+08:03 larger installed base. This flywheel,
+08:06 
+
+08:06 this flywheel is now accelerating. The
+08:08 
+
+08:08 number of downloads of Nvidia libraries
+08:11 
+
+08:11 is incredibly accelerating. is at a very
+08:13 
+
+08:13 large scale and growing faster than
+08:15 
+
+08:15 ever. This flywheel is what makes this
+08:19 
+
+08:19 computing platform able to sustain so
+08:22 
+
+08:22 much applications, so many new
+08:25 
+
+08:25 breakthroughs. But most importantly,
+08:29 
+
+08:29 it also enables
+08:31 
+
+08:31 these infrastructures to have
+08:33 
+
+08:33 extraordinarily useful life. And the
+08:35 
+
+08:35 reason for that is very obvious. There's
+08:37 
+
+08:37 so many applications that you can run on
+08:39 
+
+08:39 Nvidia CUDA. We support the entire every
+08:42 
+
+08:42 single phase of the AI life cycle. We
+08:45 
+
+08:45 address every single data processing
+08:47 
+
+08:47 platform. We accelerate scientific
+08:50 
+
+08:50 principled solvers of all different
+08:52 
+
+08:52 kinds. And so the application reach is
+08:55 
+
+08:55 so great that once you install Nvidia
+08:59 
+
+08:59 GPUs, the useful life of it is
+09:01 
+
+09:01 incredibly high. It is also one of the
+09:04 
+
+09:04 reasons why
+09:05 
+
+09:05 Ampier that we shipped them some six
+09:07 
+
+09:07 years ago, the pricing of Ampear in the
+09:10 
+
+09:10 cloud is going up. And so all of that is
+09:13 
+
+09:13 made possible fundamentally because the
+09:15 
+
+09:15 install base is high, the flywheel is
+09:17 
+
+09:17 high, the developer reach is great. And
+09:20 
+
+09:20 when all of that happens and we
+09:22 
+
+09:22 continuously update our software, the
+09:25 
+
+09:25 computing cost
+09:28 
+
+09:28 declines. The combination of accelerated
+09:30 
+
+09:30 computing speeding up applications
+09:33 
+
+09:33 tremendously. Meanwhile, as we continue
+09:36 
+
+09:36 to nurture and continue to update
+09:37 
+
+09:37 software over its life, not only do you
+09:40 
+
+09:40 get the first time pop, you get the
+09:42 
+
+09:42 continuous cost reduction of accelerated
+09:44 
+
+09:44 computing over time. And we're willing
+09:47 
+
+09:47 to nurture, willing to support every
+09:50 
+
+09:50 single one of these GPUs in the world
+09:52 
+
+09:52 because they're all architecturally
+09:53 
+
+09:53 compatible. We're willing to do so
+09:55 
+
+09:55 because the install base is so large. If
+09:57 
+
+09:57 we release a new optimization, it
+09:60 
+
+09:60 benefits millions.
+10:02 
+
+10:02 This applies to everybody in the world.
+10:05 
+
+10:05 This combination of dynamics is what
+10:08 
+
+10:08 makes the Nvidia architecture expand its
+10:12 
+
+10:12 reach, accelerating its growth, at the
+10:15 
+
+10:15 same time driving down computing cost,
+10:17 
+
+10:17 which ultimately
+10:19 
+
+10:19 encourages new growth. So, CUDA is at
+10:23 
+
+10:23 the center of it. But our journey that
+10:25 
+
+10:25 could actually started 25 years ago.
+10:28 
+
+10:28 GeForce.
+10:36 
+
+10:36 I know how many of you grew up with
+10:38 
+
+10:38 GeForce.
+10:40 
+
+10:40 GeForce is Nvidia's greatest marketing
+10:43 
+
+10:43 campaign.
+10:45 
+
+10:45 We attract future customers starting
+10:49 
+
+10:49 long before you could afford to pay for
+10:51 
+
+10:51 it yourself. Your parents paid
+10:54 
+
+10:54 Your parents paid your par your parents
+10:58 
+
+10:58 paid for you to be Nvidia customers. And
+10:60 
+
+10:60 every single year they paid up year
+11:03 
+
+11:03 after year after year until someday you
+11:06 
+
+11:06 became an amazing computer scientist and
+11:08 
+
+11:08 became a proper customer, a proper
+11:11 
+
+11:11 developer. But this is this is the house
+11:15 
+
+11:15 that GeForce made 25 years ago. We
+11:19 
+
+11:19 started our journey which led to CUDA.
+11:21 
+
+11:21 25 years ago, we invented the
+11:23 
+
+11:23 programmable shader. A perfectly
+11:28 
+
+11:28 unobvious invention to make an
+11:30 
+
+11:30 accelerator programmable. The world's
+11:33 
+
+11:33 first programmable accelerator, the
+11:35 
+
+11:35 pixel shader 25 years ago. That led us
+11:39 
+
+11:39 to explore further and further 20 years
+11:42 
+
+11:42 later, 5 years later, the invention of
+11:45 
+
+11:45 CUDA. One of the biggest investments
+11:47 
+
+11:47 that we made and we couldn't afford it
+11:49 
+
+11:49 at the time. and it consumed the vast
+11:52 
+
+11:52 majority of our company's profits was to
+11:55 
+
+11:55 take CUDA on the backs of GeForce to
+11:58 
+
+11:58 every single computer. We dedicated
+12:01 
+
+12:01 ourselves to creating this platform
+12:03 
+
+12:03 because we felt so much we felt so
+12:05 
+
+12:05 strongly about its potential. But
+12:07 
+
+12:07 ultimately the company's dedication to
+12:10 
+
+12:10 it despite the hardships in the
+12:13 
+
+12:13 beginning believing it every single day
+12:16 
+
+12:16 for third for 13 generations or 20 years
+12:20 
+
+12:20 we now have CUDA installed everywhere.
+12:22 
+
+12:22 The pixel shader
+12:24 
+
+12:24 led to of course the revolution of
+12:27 
+
+12:27 GeForce.
+12:28 
+
+12:28 And then 10 years ago we introduced
+12:31 
+
+12:31 about 10 years ago, what is it eight
+12:33 
+
+12:33 years ago? We introduced RTX,
+12:36 
+
+12:36 a complete redesign of our architecture
+12:39 
+
+12:39 for the modern era of computer graphics.
+12:42 
+
+12:42 GeForce brought CUDA to the world.
+12:44 
+
+12:44 GeForce
+12:46 
+
+12:46 therefore enabled Alex Kuscheki and Ilas
+12:49 
+
+12:49 Suscover and Jeff Hinton, Andrew Ang and
+12:52 
+
+12:52 so many others to discover that the GPU
+12:56 
+
+12:56 could be their friend in accelerating
+12:58 
+
+12:58 deep learning. It started the big bang
+13:00 
+
+13:00 of AI. 10 years ago, we decided that we
+13:04 
+
+13:04 would fuse
+13:07 
+
+13:07 programmable shading and introduce two
+13:10 
+
+13:10 new ideas. ray tracing, hardware ray
+13:13 
+
+13:13 tracing, which is incredibly hard to do.
+13:15 
+
+13:15 And a new idea at the time, imagine
+13:18 
+
+13:18 about 10 years ago, we thought that AI
+13:20 
+
+13:20 would revolutionize computer graphics.
+13:23 
+
+13:23 Just as GeForce brought AI to the world,
+13:26 
+
+13:26 AI is now going to go back and
+13:28 
+
+13:28 revolutionize how computer graphics is
+13:31 
+
+13:31 done all together. Well, today I'm going
+13:33 
+
+13:33 to show you something of the future.
+13:35 
+
+13:35 This is our next generation of graphics
+13:38 
+
+13:38 technology. We call it neuro rendering.
+13:41 
+
+13:41 The fusion
+13:43 
+
+13:43 the fusion of 3D graphics and artificial
+13:47 
+
+13:47 intelligence. This is DLSS5. Take a look
+13:49 
+
+13:49 at it.
+14:20 
+
+14:20 Heat. Heat.
+14:37 
+
+14:37 Heat.
+14:39 
+
+14:39 Heat.
+14:59 
+
+14:59 Is that incredible?
+15:05 
+
+15:05 Computer graphics comes to life. Now,
+15:07 
+
+15:07 what did we do? We fused
+15:10 
+
+15:10 controllable 3D graphics, the ground
+15:13 
+
+15:13 truth of virtual worlds, the structured
+15:16 
+
+15:16 data. Remember this word the structured
+15:18 
+
+15:18 data of virtual worlds of gener
+15:22 
+
+15:22 generated worlds. We combine 3D graphics
+15:25 
+
+15:25 structured data with generative AI
+15:29 
+
+15:29 probabilistic computing. One of them is
+15:31 
+
+15:31 completely predictive the other one
+15:34 
+
+15:34 probabilistic yet highly realistic. We
+15:37 
+
+15:37 combine these two ideas. Combine these
+15:40 
+
+15:40 two ideas controlled through structured
+15:42 
+
+15:42 data controlled perfectly and yet
+15:46 
+
+15:46 generating at the same time and as a
+15:48 
+
+15:48 result
+15:50 
+
+15:50 the content is beautiful amazing as well
+15:54 
+
+15:54 as controllable. This concept of fusing
+15:57 
+
+15:57 structured information and generative AI
+16:01 
+
+16:01 will repeat itself in one industry after
+16:03 
+
+16:03 another industry after another industry.
+16:06 
+
+16:06 structured data is the foundation of
+16:09 
+
+16:09 trustworthy AI. Well,
+16:14 
+
+16:14 this is going to scare you a little bit.
+16:15 
+
+16:15 I'm going to flip the slide and don't
+16:17 
+
+16:17 gasp.
+16:20 
+
+16:20 So, we're going to go through this
+16:22 
+
+16:22 schematic for the rest of the time.
+16:27 
+
+16:27 This is my best slide. Every time I I
+16:30 
+
+16:30 asked my I asked the team, "What's my
+16:31 
+
+16:31 best slide?" Repeatedly, this was it.
+16:34 
+
+16:34 They say, "Don't do it, Jensen. Don't do
+16:36 
+
+16:36 it." I said, "No, this these seats are
+16:40 
+
+16:40 free
+16:43 
+
+16:43 for some of you."
+16:46 
+
+16:46 So, this is your price of admission. So,
+16:48 
+
+16:48 this is this is structured data. You've
+16:51 
+
+16:51 heard of it. SQL, Spark, Pandas, Velox,
+16:56 
+
+16:56 some of these really really important
+16:58 
+
+16:58 very large platforms. Snow, snow, uh,
+17:02 
+
+17:02 snowflake, data bricks, EMR, Amazon EMR,
+17:07 
+
+17:07 um, Azure, Fabric,
+17:10 
+
+17:10 Google Cloud, BigQuery. All of these
+17:14 
+
+17:14 platforms are processing data frames.
+17:17 
+
+17:17 These data frames are giant spreadsheets
+17:19 
+
+17:19 and they hold all of life's information.
+17:22 
+
+17:22 This is the structured data, the ground
+17:26 
+
+17:26 truth of business. This is the ground
+17:28 
+
+17:28 truth of enterprise computing. Well, now
+17:32 
+
+17:32 we're going to have AI use structured
+17:34 
+
+17:34 data and we better accelerate the living
+17:37 
+
+17:37 daylights out of it. It used to be okay
+17:39 
+
+17:39 and we would, you know, of course we
+17:42 
+
+17:42 would accelerate uh structured data so
+17:44 
+
+17:44 that we could do more. We could do it
+17:47 
+
+17:47 more cheaply. We could do it more
+17:48 
+
+17:48 frequently per day and keep the company
+17:51 
+
+17:51 running at a much more synchronized way.
+17:53 
+
+17:53 However, in the future, what's going to
+17:55 
+
+17:55 happen is these data structures are
+17:57 
+
+17:57 going to be used by AI and AI is going
+17:59 
+
+17:59 to be much much faster than us. Future
+18:02 
+
+18:02 agents are going to use structured
+18:04 
+
+18:04 databases as well. And then of course
+18:06 
+
+18:06 the unstructured database, the
+18:09 
+
+18:09 generative database, this database is
+18:12 
+
+18:12 represents the vast majority of the
+18:14 
+
+18:14 world. Vector databases, unstructured
+18:17 
+
+18:17 data, PDFs, videos, speeches, all of the
+18:21 
+
+18:21 world's information. About 90% of what's
+18:23 
+
+18:23 generated every single year is
+18:25 
+
+18:25 unstructured data. Until now, this data
+18:28 
+
+18:28 has been completely useless to the
+18:30 
+
+18:30 world. We read it, we put it into our
+18:32 
+
+18:32 file system, and that's it.
+18:34 
+
+18:34 Unfortunately, we can't query it. We
+18:36 
+
+18:36 can't search for it. It's hard to do
+18:37 
+
+18:37 that. And the reason for that is because
+18:40 
+
+18:40 there's no easy indexing of unstructured
+18:43 
+
+18:43 data. You have to understand its
+18:44 
+
+18:44 meaning, its purpose. And so now we have
+18:47 
+
+18:47 AI do that just as AI was able to solve
+18:50 
+
+18:50 multi-modality
+18:53 
+
+18:53 perception you can and understanding you
+18:55 
+
+18:55 can use that same technology
+18:57 
+
+18:57 multimodality perception and
+18:59 
+
+18:59 understanding to go read a PDF to
+19:02 
+
+19:02 understand its meaning and from that
+19:04 
+
+19:04 meaning embedded into a larger structure
+19:08 
+
+19:08 that we can search into we can query
+19:10 
+
+19:10 into. NVIDIA created two foundational
+19:14 
+
+19:14 libraries. Just like we created RTX for
+19:16 
+
+19:16 3D graphics, we created QDF for data
+19:19 
+
+19:19 frames, structured data. We created QVS
+19:22 
+
+19:22 for vector stores, semantic data,
+19:26 
+
+19:26 unstructured data, AI data. These two
+19:29 
+
+19:29 platforms are going to be two of the
+19:32 
+
+19:32 most important platforms in the future.
+19:34 
+
+19:34 super excited to see its adoption
+19:36 
+
+19:36 throughout the network, this complicated
+19:38 
+
+19:38 network of the world's data processing
+19:40 
+
+19:40 systems. And the reason for that is
+19:41 
+
+19:41 because data processing has been around
+19:43 
+
+19:43 a long time and therefore so many
+19:47 
+
+19:47 different companies and platforms and
+19:49 
+
+19:49 services. It has taken us a long time to
+19:52 
+
+19:52 integrate deeply into this ecosystem.
+19:55 
+
+19:55 I'm super proud of the work that we're
+19:57 
+
+19:57 doing here. And then today we're
+19:59 
+
+19:59 announcing several of them. IBM
+20:03 
+
+20:03 the inventor of SQL
+20:06 
+
+20:06 one of the most important domain
+20:07 
+
+20:07 specific languages of all kind of all
+20:09 
+
+20:09 time is accelerating Watson X data with
+20:13 
+
+20:13 KUDF let's take a look at it
+20:19 
+
+20:19 60 years ago IBM introduced the system
+20:22 
+
+20:22 360
+20:24 
+
+20:24 the first modern platform for
+20:26 
+
+20:26 generalpurpose computing launching the
+20:28 
+
+20:28 computing era then SQL a declarative
+20:32 
+
+20:32 language to query data without requiring
+20:34 
+
+20:34 the computer to be instructed step by
+20:36 
+
+20:36 step and the data warehouse. Each the
+20:40 
+
+20:40 foundations of modern enterprise
+20:42 
+
+20:42 computing. Today, IBM and NVIDIA are
+20:46 
+
+20:46 reinventing data processing for the era
+20:48 
+
+20:48 of AI by accelerating IBM Watsonx. Data
+20:52 
+
+20:52 SQL engines with NVIDIA GPU computing
+20:55 
+
+20:55 libraries.
+20:57 
+
+20:57 Data is the ground truth that gives AI
+20:60 
+
+20:60 context and meaning. AI needs rapid
+21:02 
+
+21:02 access to massive data sets. Today's CPU
+21:06 
+
+21:06 data processing systems can't keep up.
+21:09 
+
+21:09 Nestle makes thousands of supply chain
+21:12 
+
+21:12 decisions every day. Their order to
+21:14 
+
+21:14 cache data mart aggregates every supply
+21:17 
+
+21:17 order and delivery event across global
+21:20 
+
+21:20 operations in 185 countries.
+21:24 
+
+21:24 On CPUs, Nestle refreshed the data mart
+21:26 
+
+21:26 a few times a day. With accelerated
+21:29 
+
+21:29 Watson X dot data running on Nvidia
+21:32 
+
+21:32 GPUs, Nestle can run the same workload
+21:35 
+
+21:35 five times faster at 83% lower cost.
+21:40 
+
+21:40 The next computing platform has arrived.
+21:42 
+
+21:42 Accelerated computing for the era of AI.
+21:54 
+
+21:54 Nvidia accelerates data processing in
+21:56 
+
+21:56 the cloud. We also accelerate data
+21:58 
+
+21:58 processing on prem. As you know, Dell is
+22:02 
+
+22:02 the worldleading computer systems maker
+22:04 
+
+22:04 and they also are one of the world's
+22:07 
+
+22:07 leading storage providers and they
+22:09 
+
+22:09 worked with us to create the Dell AI
+22:11 
+
+22:11 data platform that integrates QUDF and
+22:14 
+
+22:14 QVS to create an accelerated data
+22:17 
+
+22:17 platform. well for the era of AI and uh
+22:21 
+
+22:21 this is an example of what they did with
+22:23 
+
+22:23 NT data huge speed up this is cloud
+22:27 
+
+22:27 Google cloud and Google cloud as you
+22:29 
+
+22:29 know we've been working with Google
+22:30 
+
+22:30 cloud for a very long time we accelerate
+22:34 
+
+22:34 Google's vertex AI we now accelerate
+22:37 
+
+22:37 bigquery really important uh framework
+22:40 
+
+22:40 and really important platform and this
+22:42 
+
+22:42 is an example of our work together with
+22:44 
+
+22:44 Snapchat where we reduce their cost of
+22:47 
+
+22:47 computing by nearly 80%.
+22:51 
+
+22:51 When you accelerate data processing,
+22:53 
+
+22:53 when you accelerate computing, you get
+22:56 
+
+22:56 the benefit of speed, you get the
+22:58 
+
+22:58 benefit of scale, but most importantly,
+23:01 
+
+23:01 you also get the benefit of cost. And so
+23:04 
+
+23:04 all of those come together as one. It
+23:07 
+
+23:07 was originally called Moore's law.
+23:09 
+
+23:09 Moore's law was about getting
+23:10 
+
+23:10 performance doubling every couple of
+23:12 
+
+23:12 years. It's another way of saying so
+23:15 
+
+23:15 long as the price remains about the same
+23:17 
+
+23:17 and most computers remained about the
+23:19 
+
+23:19 same, you're also getting twice the
+23:21 
+
+23:21 performance every year or you're
+23:24 
+
+23:24 reducing the cost of computing every
+23:25 
+
+23:25 single year. Well, Moore's law has run
+23:28 
+
+23:28 out of steam. We need a new approach.
+23:31 
+
+23:31 Accelerated computing allows us to take
+23:33 
+
+23:33 these giant leaps forward. And as you
+23:36 
+
+23:36 will see later, because we continue to
+23:38 
+
+23:38 optimize the algorithms
+23:40 
+
+23:40 and NVIDIA is an algorithm company. As
+23:43 
+
+23:43 we continue to optimize the algorithms
+23:45 
+
+23:45 and because our our reach is so large
+23:47 
+
+23:47 and our install base is so large, we can
+23:50 
+
+23:50 reduce the computing cost, increasing
+23:52 
+
+23:52 the scale, increasing the speed for
+23:54 
+
+23:54 everybody continuously. This is Google
+23:57 
+
+23:57 Cloud. You could see this pattern I just
+23:59 
+
+23:59 mentioned. I just wanted to show you
+24:01 
+
+24:01 three versions of it. NVIDIA built the
+24:05 
+
+24:05 accelerated computing platform has a
+24:08 
+
+24:08 bunch of libraries on top. I gave you
+24:10 
+
+24:10 three examples. RTX is one of them. QDF
+24:12 
+
+24:12 is another. KVS and we'll show you a few
+24:15 
+
+24:15 more. These libraries sit on top of our
+24:18 
+
+24:18 platform. But ultimately
+24:21 
+
+24:21 we integrate into the world's cloud
+24:24 
+
+24:24 services into the world's OEMs and
+24:27 
+
+24:27 together and other platforms that I'll
+24:30 
+
+24:30 show you. together we're able to reach
+24:32 
+
+24:32 the world. This pattern, Nvidia, Google
+24:36 
+
+24:36 Cloud, Snapchat will repeat over and
+24:39 
+
+24:39 over again. And it kind of looks like
+24:40 
+
+24:40 this. And so this is one example. Nvidia
+24:43 
+
+24:43 with Google Cloud. We accelerate Vert.ex
+24:46 
+
+24:46 AI. We accelerate BigQuery. We
+24:48 
+
+24:48 accelerate. We're I'm super proud of the
+24:50 
+
+24:50 work that we've done with Jackson XLA.
+24:53 
+
+24:53 We are incredible on PyTorch. We're the
+24:55 
+
+24:55 only accelerator in the world that's
+24:57 
+
+24:57 incredible on PyTorch and incredible on
+24:60 
+
+24:60 Jackson XLA. And the customers that we
+25:02 
+
+25:02 support, the base 10s, the Crowd
+25:04 
+
+25:04 Strikes, Puma, Salesforce, they're not
+25:08 
+
+25:08 our customers, but they're customers,
+25:11 
+
+25:11 developers of ours that we've integrated
+25:12 
+
+25:12 the NVIDIA technologies into that we can
+25:16 
+
+25:16 then land on the clouds. Our
+25:19 
+
+25:19 relationship with cloud service
+25:20 
+
+25:20 providers are essentially us bringing
+25:23 
+
+25:23 customers to them. We integrate our
+25:26 
+
+25:26 libraries, we accelerate workloads, and
+25:29 
+
+25:29 we land those customers in the clouds.
+25:32 
+
+25:32 And so, as you could see, most of our
+25:35 
+
+25:35 cloud service providers love working
+25:37 
+
+25:37 with us. And um they're always asking us
+25:40 
+
+25:40 to land the next customer on their
+25:42 
+
+25:42 cloud. And I just want to let you know
+25:45 
+
+25:45 there are a lot of customers.
+25:47 
+
+25:47 We're going to accelerate everybody and
+25:50 
+
+25:50 so there'll be lots and lots of
+25:51 
+
+25:51 customers will be able to land in your
+25:52 
+
+25:52 cloud. Just be patient with us. And so
+25:55 
+
+25:55 this is Google Cloud. This is AWS. We've
+25:58 
+
+25:58 been working with AWS a long time. And
+25:60 
+
+25:60 one of the areas, one of the one of the
+26:02 
+
+26:02 things I'm super excited about this year
+26:04 
+
+26:04 is we're going to bring open AI to AWS.
+26:07 
+
+26:07 And so it's going to drive enormous
+26:09 
+
+26:09 consumption of cloud computing at AWS.
+26:11 
+
+26:11 is going to expand the reach and expand
+26:13 
+
+26:13 the compute of open AI and as you know
+26:16 
+
+26:16 they are completely compute constrained
+26:19 
+
+26:19 and so AWS we accelerate EMR we
+26:22 
+
+26:22 accelerate SageMaker we accelerate
+26:24 
+
+26:24 Bedrock Nvidia's integrated really
+26:27 
+
+26:27 deeply into AWS they were our first
+26:30 
+
+26:30 cloud partner
+26:32 
+
+26:32 Microsoft Azure
+26:34 
+
+26:34 Nvidia's A100 supercomputer
+26:38 
+
+26:38 um was the the first one we built was
+26:41 
+
+26:41 for Nvidia. The first one we installed
+26:44 
+
+26:44 was at Azure and that led to the inter
+26:48 
+
+26:48 the uh the big successful partnership
+26:50 
+
+26:50 with OpenAI but we've been working with
+26:52 
+
+26:52 Azure for quite a long time. We
+26:54 
+
+26:54 accelerate Azure cloud. Now it's uh
+26:57 
+
+26:57 their AI foundry we partner deeply with.
+26:60 
+
+27:00 We accelerate Bing search. We work with
+27:03 
+
+27:03 them on Azure regions. This is one of
+27:07 
+
+27:07 the areas that is incredibly important
+27:10 
+
+27:10 as we continue to expand AI throughout
+27:13 
+
+27:13 the world. One of the capabilities that
+27:15 
+
+27:15 we offer is confidential computing.
+27:20 
+
+27:20 that in confidential computing you want
+27:22 
+
+27:22 to make sure that even the operator
+27:25 
+
+27:25 cannot see your data even the operator
+27:29 
+
+27:29 cannot touch or see your models
+27:32 
+
+27:32 confidential computing and vidia's GPUs
+27:34 
+
+27:34 is the first ones in the world to do
+27:36 
+
+27:36 that is now able to support confidential
+27:39 
+
+27:39 computing and protected deployment of
+27:41 
+
+27:41 these very valuable open AI models and
+27:44 
+
+27:44 and anthropic models throughout clouds
+27:46 
+
+27:46 and different regions and all because of
+27:49 
+
+27:49 our confidential computing. Confidential
+27:52 
+
+27:52 computing is super important. And here's
+27:54 
+
+27:54 an example where we have different
+27:56 
+
+27:56 customers that we work with. Synopsis, a
+27:58 
+
+27:58 great partner of ours. We're
+27:59 
+
+27:59 accelerating all of their EDA and CA
+28:01 
+
+28:01 workflows. And then we landed at
+28:04 
+
+28:04 Microsoft Azure.
+28:06 
+
+28:06 We were Oracle's first AI customer.
+28:10 
+
+28:10 Most people would have thought we were
+28:12 
+
+28:12 their first supplier. We were their
+28:14 
+
+28:14 first supplier also, but we were their
+28:16 
+
+28:16 first AI customer. I'm quite proud of
+28:18 
+
+28:18 the fact that I explained AI clouds to
+28:22 
+
+28:22 Oracle for the first time and we were
+28:24 
+
+28:24 their first customer. Since then they've
+28:27 
+
+28:27 really taken off. We've landed a whole
+28:29 
+
+28:29 bunch of our partners there core cohhere
+28:32 
+
+28:32 and fireworks and of course very
+28:33 
+
+28:33 famously open AAI
+28:37 
+
+28:37 a great partnership with Core
+28:40 
+
+28:40 Core. They're the world's first AI
+28:44 
+
+28:44 native cloud. a company that was built
+28:47 
+
+28:47 with only one singular purpose to
+28:50 
+
+28:50 provision to host GPUs as the era of
+28:53 
+
+28:53 accelerated computing showed up and to
+28:55 
+
+28:55 host for AI clouds. They've got some
+28:58 
+
+28:58 fantastic customers and they're growing
+28:60 
+
+28:60 incredibly. One of the platforms that
+29:02 
+
+29:02 I'm quite excited about is Palunteer and
+29:05 
+
+29:05 Dell. The three of our companies have
+29:07 
+
+29:07 made it possible to stand up a brand new
+29:10 
+
+29:10 type of AI platform, the Palunteer
+29:12 
+
+29:12 ontology platform and AI platform. And
+29:15 
+
+29:15 we could stand up these platforms in any
+29:17 
+
+29:17 country in any airgapped region
+29:20 
+
+29:20 completely on prem completely on site
+29:23 
+
+29:23 completely in the field. AI could be
+29:25 
+
+29:25 deployed literally everywhere without
+29:27 
+
+29:27 our confidential computing capability,
+29:29 
+
+29:29 without our ability to build the
+29:32 
+
+29:32 endtoend system as well as offer the
+29:34 
+
+29:34 entire
+29:36 
+
+29:36 accelerated computing and AI stack from
+29:39 
+
+29:39 data processing whether it's vectors or
+29:41 
+
+29:41 structures all the way to AI, it
+29:43 
+
+29:43 wouldn't have been possible. I wanted to
+29:46 
+
+29:46 show you these examples.
+29:48 
+
+29:48 This is our special working relationship
+29:52 
+
+29:52 with the world's cloud service providers
+29:54 
+
+29:54 and many well all of them are here and I
+29:57 
+
+29:57 get the benefit of seeing them during
+29:58 
+
+29:58 boot tour and it's just so incredibly
+30:00 
+
+30:00 exciting. I just want to thank all of
+30:02 
+
+30:02 you for the hard work. What Nvidia has
+30:04 
+
+30:04 done is this and you're going to see
+30:06 
+
+30:06 this theme over and over again.
+30:10 
+
+30:10 Nvidia is vertically integrated. The
+30:12 
+
+30:12 world's first vertically integrated
+30:16 
+
+30:16 but horizontally open company.
+30:20 
+
+30:20 And the reason that's necessary is very
+30:22 
+
+30:22 simple.
+30:24 
+
+30:24 Accelerated computing is not a chip
+30:26 
+
+30:26 problem. Accelerated computing is not a
+30:30 
+
+30:30 systems problem. Accelerated computing
+30:33 
+
+30:33 has a missing word. We just never say it
+30:36 
+
+30:36 anymore. application acceleration.
+30:40 
+
+30:40 You if I could make a computer run
+30:42 
+
+30:42 everything faster, that's called a CPU.
+30:45 
+
+30:45 But that's run out of steam. The only
+30:48 
+
+30:48 way for us to accelerate applications
+30:50 
+
+30:50 going forward and continue to bring
+30:53 
+
+30:53 tremendous speed up, tremendous cost
+30:55 
+
+30:55 reduction is through application or
+30:58 
+
+30:58 domain specific acceleration. I dropped
+31:01 
+
+31:01 that phrase in the in the front and
+31:03 
+
+31:03 therefore it just became applica
+31:05 
+
+31:05 accelerated computing and that is the
+31:07 
+
+31:07 reason why Nvidia has to be library
+31:09 
+
+31:09 after library, domain after domain,
+31:11 
+
+31:11 vertical after vertical.
+31:14 
+
+31:14 We are a vertically integrated computing
+31:16 
+
+31:16 company. There is no other way. We have
+31:20 
+
+31:20 to understand the applications. We have
+31:21 
+
+31:21 to understand the domain. We have to
+31:23 
+
+31:23 understand fundamentally the algorithms
+31:25 
+
+31:25 and we have to figure out how to deploy
+31:28 
+
+31:28 the algorithm
+31:29 
+
+31:29 in whatever scenario it wants to be
+31:31 
+
+31:31 deployed whether it's a data center
+31:34 
+
+31:34 cloud on prem at the edge or in a
+31:36 
+
+31:36 robotic system all of those computing
+31:39 
+
+31:39 systems are different and finally the
+31:41 
+
+31:41 systems and chips we are vertically
+31:44 
+
+31:44 integrated what makes it incredibly
+31:47 
+
+31:47 powerful and the reason why you saw all
+31:48 
+
+31:48 the slides is because Nvidia is
+31:50 
+
+31:50 horizontally open. We'll work and
+31:53 
+
+31:53 integrate Nvidia's technology into
+31:55 
+
+31:55 whatever platform you would like us to
+31:56 
+
+31:56 integrate into. We offer you the
+31:58 
+
+31:58 software, we offer you libraries, we
+32:01 
+
+32:01 integrate with your technology so that
+32:03 
+
+32:03 we can bring accelerated computing to
+32:06 
+
+32:06 everybody in the world.
+32:08 
+
+32:08 Well,
+32:10 
+
+32:10 this GTC is really a great demonstration
+32:13 
+
+32:13 of that. You know, most of the time,
+32:15 
+
+32:15 most of the time, you'll see me talk
+32:17 
+
+32:17 about these verticals and I'll use some
+32:18 
+
+32:18 examples, but in every single case,
+32:22 
+
+32:22 whether it's automotive, by the way,
+32:24 
+
+32:24 financial services, the largest
+32:26 
+
+32:26 percentage of attendees at this GTC is
+32:29 
+
+32:29 from the financial services industry.
+32:32 
+
+32:32 I know I I'm hoping it's developers, not
+32:35 
+
+32:35 traders.
+32:37 
+
+32:37 Guys,
+32:39 
+
+32:39 here's here's
+32:41 
+
+32:41 here's one thing I wanted to say. And so
+32:46 
+
+32:46 in the audience represents Nvidia's
+32:48 
+
+32:48 ecosystem upstream of our supply chain
+32:52 
+
+32:52 and downstream of our supply chain and
+32:54 
+
+32:54 we work we think about our supply chain
+32:56 
+
+32:56 upstream and downstream and it's just so
+32:59 
+
+32:59 exciting that
+33:02 
+
+33:02 our entire upstream supply chain this
+33:05 
+
+33:05 last year
+33:07 
+
+33:07 irrespective of whether you're a 50 year
+33:08 
+
+33:08 old company we have 70 year old
+33:10 
+
+33:10 companies we have 50-year-old company
+33:15 
+
+33:15 who are now part of Nvidia supply chain
+33:17 
+
+33:17 and partnering with us either upstream
+33:18 
+
+33:18 or downstream. And last year,
+33:22 
+
+33:22 you had your record year, did you not?
+33:26 
+
+33:26 Congratulations.
+33:32 
+
+33:32 We're on to something here. This is the
+33:34 
+
+33:34 beginning of something very, very big.
+33:36 
+
+33:36 And so if you look at accelerated
+33:38 
+
+33:38 computing, we've now set the computing
+33:40 
+
+33:40 platform. But in order for us to
+33:44 
+
+33:44 activate those computing platforms, we
+33:46 
+
+33:46 need to have domain specific libraries
+33:48 
+
+33:48 that solve very important problems in
+33:51 
+
+33:51 each one of the verticals that we
+33:53 
+
+33:53 address. You see us addressing every
+33:55 
+
+33:55 single one of this. Autonomous vehicles,
+33:58 
+
+33:58 our reach, our breadth, our impact.
+34:02 
+
+34:02 Incredible. We have a track on that.
+34:04 
+
+34:04 Financial services. I just mentioned
+34:06 
+
+34:06 algorithmic trading is going from
+34:08 
+
+34:08 classical machine learning with human
+34:11 
+
+34:11 feature engineering called quant the
+34:14 
+
+34:14 quants did that to now supercomputers
+34:17 
+
+34:17 studying massive amounts of data
+34:19 
+
+34:19 discovering insight and discovering
+34:21 
+
+34:21 patterns by itself and so this is going
+34:24 
+
+34:24 through its deep learning and its
+34:26 
+
+34:26 transformer moment healthcare is going
+34:29 
+
+34:29 is going through their chap GPT moment
+34:31 
+
+34:31 some really exciting work that we're
+34:32 
+
+34:32 there we have we have a great keynote
+34:35 
+
+34:35 track here. We have a great keynote
+34:36 
+
+34:36 track. Kimberly Pal's doing a great
+34:38 
+
+34:38 keynote track um for healthcare. We're
+34:40 
+
+34:40 talking about AI physics or AI biology
+34:45 
+
+34:45 for drug discovery, AI agents for
+34:48 
+
+34:48 customer service and support of diagnos
+34:52 
+
+34:52 diagnosis and of course physical AI,
+34:55 
+
+34:55 robotic systems. All these different
+34:57 
+
+34:57 vectors of AI have different platforms
+34:60 
+
+34:60 that Nvidia provides. industrial we are
+35:03 
+
+35:03 completely resetting and starting the
+35:06 
+
+35:06 largest buildout of human history and
+35:10 
+
+35:10 most of the world's industries building
+35:12 
+
+35:12 AI factories building chip plants
+35:14 
+
+35:14 building computer plants are represented
+35:17 
+
+35:17 here today media and entertainment
+35:19 
+
+35:19 gaming of course real time AI platform
+35:23 
+
+35:23 so that we could translation and
+35:26 
+
+35:26 broadcast support and live live games
+35:30 
+
+35:30 and live video
+35:31 
+
+35:31 enormous amount of it will be augmented
+35:34 
+
+35:34 with AI. We have a we have a platform
+35:36 
+
+35:36 called hollowcan quantum there are 35
+35:39 
+
+35:39 different companies here building with
+35:41 
+
+35:41 us the next generation of quantum GPU
+35:44 
+
+35:44 hybrid systems uh retail and CPG using
+35:48 
+
+35:48 Nvidia for supply chain using creating a
+35:51 
+
+35:51 gentic shopping systems
+35:54 
+
+35:54 AI agents for customer support a lot of
+35:57 
+
+35:57 work being done here $35 trillion
+35:60 
+
+35:60 industry robotics $50 trillion industry
+36:03 
+
+36:03 in manufacturing Nvidia has been working
+36:05 
+
+36:05 in this area for a decade now building
+36:08 
+
+36:08 three computers, the fundamental
+36:09 
+
+36:09 computers necessary to build robotic
+36:11 
+
+36:11 systems. We are integrated with working
+36:14 
+
+36:14 with literally every single company that
+36:17 
+
+36:17 we know of building robots. We have 110
+36:20 
+
+36:20 robots here at the show and then
+36:22 
+
+36:22 telecommunications
+36:24 
+
+36:24 about as large as the world's IT
+36:26 
+
+36:26 industry about $2 trillion. We see of
+36:29 
+
+36:29 course base stations everywhere. It's
+36:32 
+
+36:32 one of the world's infrastructures. It
+36:34 
+
+36:34 was the infrastructure of the last
+36:36 
+
+36:36 generation of computing. That
+36:38 
+
+36:38 infrastructure is going to get
+36:39 
+
+36:39 completely reinvented. And the reason
+36:41 
+
+36:41 for that is very simple. That base
+36:44 
+
+36:44 station which is
+36:47 
+
+36:47 it does one thing which is base station
+36:50 
+
+36:50 is going to be an AI infrastructure
+36:53 
+
+36:53 platform in the future. AI will run at
+36:55 
+
+36:55 the edge. And so lots of lots of great
+36:58 
+
+36:58 um uh great uh discussion there. And our
+37:01 
+
+37:01 platform there is called Aerial, our AI
+37:03 
+
+37:03 RAM. Big partnership with Nokia, big
+37:06 
+
+37:06 partnership with T-Mobile and many
+37:07 
+
+37:07 others.
+37:09 
+
+37:09 At the core of our business,
+37:12 
+
+37:12 everything that I just mentioned,
+37:14 
+
+37:14 computing platforms, but very
+37:17 
+
+37:17 importantly, our CUDA X libraries, our
+37:20 
+
+37:20 CUDA X libraries is the algorithm, the
+37:23 
+
+37:23 algorithms that Nvidia invents. We are
+37:25 
+
+37:25 an algorithm company. That's what makes
+37:27 
+
+37:27 us special. That what that's what makes
+37:29 
+
+37:29 it possible for me to be able to go into
+37:31 
+
+37:31 every single one of these industries,
+37:33 
+
+37:33 imagine the future and have the world's
+37:35 
+
+37:35 best computer scientists describe and
+37:38 
+
+37:38 solve problems, refactor it, reexpress
+37:40 
+
+37:40 it, and turn it into a library. We have
+37:44 
+
+37:44 so many I think we have at this show
+37:47 
+
+37:47 we're announcing 100
+37:50 
+
+37:50 libraries
+37:51 
+
+37:51 something 70 libraries maybe 40 models
+37:54 
+
+37:54 and that's just at the show. We're
+37:56 
+
+37:56 updating these all the time. We're
+37:59 
+
+37:59 updating them all the time. The
+38:00 
+
+38:00 libraries is the crown jewels of our
+38:03 
+
+38:03 company. It is what makes it possible
+38:05 
+
+38:05 for that platform, the computing
+38:07 
+
+38:07 platform to be activated in service of
+38:11 
+
+38:11 solving a problem, making impact. One of
+38:13 
+
+38:13 the biggest, one of the most important
+38:15 
+
+38:15 libraries that we ever created coup DNN
+38:19 
+
+38:19 CUDA deep neural networks. It completely
+38:22 
+
+38:22 revolutionized artificial intelligence.
+38:25 
+
+38:25 caused the big bang of modern AI. Let me
+38:27 
+
+38:27 show you a short video about CUDA X.
+38:33 
+
+38:33 20 years ago, we built CUDA, a single
+38:36 
+
+38:36 architecture for accelerated computing.
+38:39 
+
+38:39 Today, we've reinvented computing. A
+38:42 
+
+38:42 thousand CUDA X libraries help
+38:44 
+
+38:44 developers make breakthroughs in every
+38:47 
+
+38:47 field of science and engineering.
+38:49 
+
+38:49 CUPT for decision optimization.
+38:54 
+
+38:54 CU litho for computational lithography.
+38:58 
+
+38:58 CDSS for direct sparse solvers.
+39:02 
+
+39:02 CU equivariance for geometryaware neural
+39:05 
+
+39:05 networks.
+39:08 
+
+39:08 Aerial for AI RAM.
+39:12 
+
+39:12 Warp for differentiable physics.
+39:16 
+
+39:16 Parabrics for genomics.
+39:19 
+
+39:19 At their foundation are algorithms and
+39:22 
+
+39:22 they are beautiful.
+39:41 
+
+39:41 Heat. Heat.
+40:02 
+
+40:02 Heat.
+40:26 
+
+40:26 Heat.
+40:29 
+
+40:29 Heat
+40:47 
+
+40:47 up
+40:48 
+
+40:48 here.
+40:54 
+
+40:54 Heat
+41:10 
+
+41:10 up
+41:12 
+
+41:12 here.
+41:36 
+
+41:36 Heat up here.
+41:57 
+
+41:57 Everything you saw was a simulation.
+41:59 
+
+41:59 Some of it was principled solvers,
+42:02 
+
+42:02 fundamental physics solvers. Some of it
+42:04 
+
+42:04 was AI surrogates, AI physical models,
+42:08 
+
+42:08 and some of it was physical AI robotics
+42:11 
+
+42:11 models. Everything was simulated.
+42:15 
+
+42:15 Nothing was animated, nothing was
+42:17 
+
+42:17 articulated, everything was completely
+42:20 
+
+42:20 simulated. That is what fundamentally
+42:24 
+
+42:24 Nvidia does. It is through the
+42:27 
+
+42:27 connection of understanding of the
+42:29 
+
+42:29 algorithms with our computing platforms
+42:32 
+
+42:32 that we're able to open up to unlock
+42:34 
+
+42:34 these opportunities. Nvidia is a
+42:37 
+
+42:37 vertically integrated computing company
+42:40 
+
+42:40 with open
+42:42 
+
+42:42 horizontal integration with the world.
+42:46 
+
+42:46 So that's CUDA X. Well, just now you saw
+42:49 
+
+42:49 a whole bunch of companies. You saw
+42:52 
+
+42:52 Walmart and you know there's L'Oreal and
+42:55 
+
+42:55 incredible companies, established
+42:57 
+
+42:57 companies, JP Morgan and Ro. And these
+42:60 
+
+42:60 are companies in companies that have
+43:02 
+
+43:02 defined society to today. Toyota is
+43:06 
+
+43:06 here. These are some of the largest
+43:08 
+
+43:08 companies in the world.
+43:10 
+
+43:10 It is also true
+43:13 
+
+43:13 that there's a whole bunch of companies
+43:14 
+
+43:14 you've never heard of. These are
+43:17 
+
+43:17 companies we call them AI natives. A
+43:20 
+
+43:20 whole bunch of small companies. This the
+43:22 
+
+43:22 list is gigantic. I can't I couldn't
+43:24 
+
+43:24 this is just a little tiny tiny bit of
+43:26 
+
+43:26 it. And um I I couldn't decide whether
+43:29 
+
+43:29 to show you more or show you less. And
+43:31 
+
+43:31 so I I made it so that you couldn't see
+43:33 
+
+43:33 any
+43:36 
+
+43:36 and and nobody's feelings are hurt.
+43:38 
+
+43:38 However, inside this list are a bunch of
+43:41 
+
+43:41 brand new companies. They're companies
+43:43 
+
+43:43 like for example, you might have heard a
+43:45 
+
+43:45 couple of them, OpenAI, Anthropic, but
+43:48 
+
+43:48 there's a whole bunch of others. There's
+43:50 
+
+43:50 a whole bunch of others and they serve
+43:51 
+
+43:51 different verticals.
+43:53 
+
+43:53 Something happened in the last two
+43:55 
+
+43:55 years, particularly this last year.
+43:57 
+
+43:57 We've been working with the AI natives
+43:59 
+
+43:59 for a long time and this last year it
+44:01 
+
+44:01 just skyrocketed. I'll explain to you
+44:04 
+
+44:04 why it happened. These this industry has
+44:06 
+
+44:06 skyrocketed. $150 billion of investment
+44:09 
+
+44:09 into venture investment into startups,
+44:12 
+
+44:12 the largest in human history.
+44:16 
+
+44:16 This is also the first time that the
+44:19 
+
+44:19 scale of the investments went from
+44:21 
+
+44:21 millions of dollars, tens of millions of
+44:23 
+
+44:23 dollars to hundreds of millions of
+44:25 
+
+44:25 dollars and billions of dollars. And the
+44:27 
+
+44:27 reason for that is this is the first
+44:30 
+
+44:30 time in history that every single one of
+44:33 
+
+44:33 these companies
+44:35 
+
+44:35 needs compute and lots and lots of it.
+44:38 
+
+44:38 They need tokens, lots and lots of it.
+44:40 
+
+44:40 They're either need they're either going
+44:42 
+
+44:42 to create and build and create tokens
+44:45 
+
+44:45 and generate tokens or they're going to
+44:48 
+
+44:48 integrate
+44:50 
+
+44:50 add value tokens
+44:52 
+
+44:52 that are available created by anthropic
+44:54 
+
+44:54 and open AAI and others. And so this
+44:57 
+
+44:57 industry is different in so many
+44:59 
+
+44:59 different ways, but the one thing that
+45:01 
+
+45:01 is very clear, the impact that they're
+45:03 
+
+45:03 making, this the incredible value that
+45:05 
+
+45:05 they're delivering already is quite
+45:08 
+
+45:08 tangible. AI natives
+45:11 
+
+45:11 all because we reinvented computing.
+45:14 
+
+45:14 Just like during the PC revolution, a
+45:17 
+
+45:17 whole bunch of new companies were
+45:18 
+
+45:18 created just as just as uh during the
+45:21 
+
+45:21 internet revolution, a whole bunch of
+45:22 
+
+45:22 companies were created. in a mobile
+45:24 
+
+45:24 cloud. A whole bunch of companies were
+45:25 
+
+45:25 created. Each one of them had their own
+45:27 
+
+45:27 standards. And all we're talk about one
+45:28 
+
+45:28 of the major standards is that just
+45:31 
+
+45:31 happened. Incredibly important. And this
+45:34 
+
+45:34 generation, we also have our own large
+45:37 
+
+45:37 number of very very special companies.
+45:39 
+
+45:39 We reinvented computing. It stands to
+45:42 
+
+45:42 reason there's going to be a whole new
+45:44 
+
+45:44 crop of really important companies,
+45:47 
+
+45:47 consequential companies for the future
+45:49 
+
+45:49 of the world. the the Googles, the
+45:52 
+
+45:52 Amazons, the Metas, consequential
+45:54 
+
+45:54 companies that have come as a result of
+45:56 
+
+45:56 the last computing platform shift. We
+45:59 
+
+45:59 are now at the beginning of a new
+46:00 
+
+46:00 platform shift. But what happened in the
+46:02 
+
+46:02 last couple of years? Well, we've been
+46:05 
+
+46:05 watching, as you know, we've been
+46:06 
+
+46:06 working on deep learning and working on
+46:07 
+
+46:07 AI, the big bang of modern AI. We were
+46:10 
+
+46:10 right there at the spot and we've been
+46:12 
+
+46:12 advancing this field for quite some
+46:14 
+
+46:14 time. But why the last two years? What
+46:17 
+
+46:17 happened in the last two years? Well,
+46:18 
+
+46:18 three things.
+46:20 
+
+46:20 Chat GPT of course started the
+46:23 
+
+46:23 generative AI era. It's able to not just
+46:27 
+
+46:27 understand, perceive and understand.
+46:30 
+
+46:30 It's able to also translate and generate
+46:33 
+
+46:33 generation of unique content. I showed
+46:35 
+
+46:35 you the fusion of generative AI with
+46:38 
+
+46:38 computer graphics. And it brought
+46:40 
+
+46:40 computer graphics to life. You guys,
+46:42 
+
+46:42 just everybody in the world should be
+46:44 
+
+46:44 using Chad GPT. I know I use it every
+46:46 
+
+46:46 single morning. Used it plenty this
+46:47 
+
+46:47 morning. And so Chad GBT was the
+46:49 
+
+46:49 generative AI the era. The second by the
+46:53 
+
+46:53 way generative generative computing
+46:57 
+
+46:57 versus the way we used to do computing.
+46:59 
+
+46:59 It's not it's generative AI is a
+47:01 
+
+47:01 capability of software but it has
+47:03 
+
+47:03 profoundly changed how computing is
+47:06 
+
+47:06 done.
+47:07 
+
+47:07 Computing used to be retrievalbased. Now
+47:10 
+
+47:10 it's generative. Keep that thought in
+47:12 
+
+47:12 mind when I talk about certain things
+47:14 
+
+47:14 and you'll realize why it is that
+47:17 
+
+47:17 everything that we do is going to change
+47:19 
+
+47:19 how computers are architected, how
+47:21 
+
+47:21 computers are provided, how computers
+47:23 
+
+47:23 are going to be built out and what is
+47:25 
+
+47:25 the meaning of computing altogether
+47:28 
+
+47:28 generative AI 2023 end of 22 2023 the
+47:33 
+
+47:33 next reasoning AI 01
+47:37 
+
+47:37 which and then took off with 03
+47:40 
+
+47:40 reasoning allowed it reflect, allows it
+47:43 
+
+47:43 to think to itself, allowed it to plan,
+47:46 
+
+47:46 break down, break down problems and
+47:48 
+
+47:48 decompose a problem it couldn't
+47:51 
+
+47:51 understand into steps or parts that it
+47:53 
+
+47:53 could understand. It could ground itself
+47:56 
+
+47:56 on research. 01 made generative AI
+48:00 
+
+48:00 trustworthy and grounded on truth.
+48:04 
+
+48:04 That caused Chad GPT to simply took off.
+48:08 
+
+48:08 And that was a very, very big moment.
+48:10 
+
+48:10 the amount of input tokens that was
+48:13 
+
+48:13 necessary in order to produce and the
+48:16 
+
+48:16 amount of output tokens it generated in
+48:18 
+
+48:18 order to reason the model was a little
+48:21 
+
+48:21 bit larger. It you know of course you
+48:23 
+
+48:23 could have much larger models the model
+48:25 
+
+48:25 01 was a little bit larger not much
+48:27 
+
+48:27 larger but its input token usage for
+48:30 
+
+48:30 context
+48:32 
+
+48:32 and its output token for thinking
+48:35 
+
+48:35 increased the amount of computation
+48:36 
+
+48:36 tremendously. Then came quad code the
+48:40 
+
+48:40 first agentic model. It was able to read
+48:43 
+
+48:43 files, code, compile it, test it,
+48:47 
+
+48:47 evaluate it, go back and iterate on it.
+48:50 
+
+48:50 Cloud code has revolutionized software
+48:52 
+
+48:52 engineering. As all of you know, 100% of
+48:55 
+
+48:55 NVIDIA is using a combination of CL or
+48:59 
+
+48:59 oftentimes all three of them. Cloud
+49:01 
+
+49:01 code, codeex, and cursor all over
+49:04 
+
+49:04 Nvidia. There's not one software
+49:06 
+
+49:06 engineer today who is not assisted by
+49:09 
+
+49:09 one or many AI agents helping them code.
+49:12 
+
+49:12 Cloud code completely revolutionizes the
+49:15 
+
+49:15 the new inflection and the for the first
+49:18 
+
+49:18 time.
+49:20 
+
+49:20 You don't ask a AI what,
+49:24 
+
+49:24 where, when, how.
+49:28 
+
+49:28 You ask it
+49:30 
+
+49:30 create, do, build.
+49:34 
+
+49:34 You ask it to use tools,
+49:37 
+
+49:37 take your context, read files. It's able
+49:41 
+
+49:41 to agentically break down a problem,
+49:43 
+
+49:43 reason about it, reflect on it. It's
+49:46 
+
+49:46 able to solve problems, and actually
+49:48 
+
+49:48 perform tasks. An AI that was able to
+49:52 
+
+49:52 perceive became an AI that could
+49:55 
+
+49:55 generate. An AI that could generate
+49:57 
+
+49:57 became an AI that could reason. An AI
+49:59 
+
+49:59 that could reason now became an AI that
+50:01 
+
+50:01 can actually do work. Very productive
+50:04 
+
+50:04 work. The amount of computation in the
+50:07 
+
+50:07 last two years, we know that everybody
+50:09 
+
+50:09 in this room knows the computing demand
+50:12 
+
+50:12 for Nvidia GPU is off the charts. Spot
+50:16 
+
+50:16 pricing is skyrocketing. You couldn't
+50:19 
+
+50:19 find a GPU if you tried. And yet, in the
+50:21 
+
+50:21 meantime, we're shipping GPUs out,
+50:24 
+
+50:24 incredible amounts of it, and demand
+50:26 
+
+50:26 just keeps on going up. There's a reason
+50:28 
+
+50:28 for that. This fundamental inflection.
+50:33 
+
+50:33 Finally, AI is able to do productive
+50:36 
+
+50:36 work and therefore the inflection point
+50:40 
+
+50:40 of inference has arrived.
+50:44 
+
+50:44 AI now has to think. In order to think,
+50:47 
+
+50:47 it has to inference. AI now has to do.
+50:50 
+
+50:50 In order to do, it has to inference. AI
+50:52 
+
+50:52 has to read. In order to do so, it has
+50:54 
+
+50:54 to inference. It has to reason. It has
+50:56 
+
+50:56 to inference. Every part of AI,
+51:01 
+
+51:01 every time it has to think, it has to
+51:03 
+
+51:03 reason, it has to do, it has to generate
+51:06 
+
+51:06 tokens, it has to inference. It's way
+51:09 
+
+51:09 past training now. It's in the in the
+51:11 
+
+51:11 field of inference. So the in the
+51:14 
+
+51:14 inference inflection has arrived
+51:17 
+
+51:17 at the time when the amount of tokens,
+51:19 
+
+51:19 the amount of compute necessary
+51:22 
+
+51:22 increased by roughly 10,000 times. Now
+51:25 
+
+51:25 when I combine these two the fact that
+51:28 
+
+51:28 since in the last two years the
+51:30 
+
+51:30 computing demand computing demand of the
+51:32 
+
+51:32 work has gone up by 10,000 times and the
+51:35 
+
+51:35 amount of usage
+51:38 
+
+51:38 the amount of usage has probably gone up
+51:40 
+
+51:40 by a hundred times.
+51:45 
+
+51:45 People have heard me say I believe that
+51:48 
+
+51:48 computing demand has increased by 1
+51:51 
+
+51:51 million times in the last two years. It
+51:54 
+
+51:54 is the feeling that we all have. It is
+51:57 
+
+51:57 the feeling every startup has. It's the
+51:59 
+
+51:59 feeling that OpenAI has. It's the
+52:01 
+
+52:01 feeling that Anthropic has. If they
+52:03 
+
+52:03 could just get more capacity, they could
+52:05 
+
+52:05 generate more tokens. Their revenues
+52:07 
+
+52:07 would go up. More people could use it.
+52:09 
+
+52:09 The more advanced, the smarter the AI
+52:11 
+
+52:11 could become. We are now at that
+52:15 
+
+52:15 positive flywheel system. We have we
+52:18 
+
+52:18 have reached that moment. The
+52:19 
+
+52:19 inflection, the inference inflection has
+52:22 
+
+52:22 arrived. Last year at this time, I said
+52:29 
+
+52:29 that
+52:30 
+
+52:30 where I stood at that moment in time, we
+52:35 
+
+52:35 saw about
+52:38 
+
+52:38 500
+52:39 
+
+52:39 billion dollars.
+52:42 
+
+52:42 We saw $500 billion dollars
+52:45 
+
+52:45 of very high confidence demand and
+52:48 
+
+52:48 purchase orders
+52:50 
+
+52:50 for Blackwell and Reuben through 2026.
+52:56 
+
+52:56 I said that last year.
+52:60 
+
+52:60 Now, I don't know if you guys feel the
+53:02 
+
+53:02 same way, but $500 billion is an
+53:05 
+
+53:05 enormous amount of revenue.
+53:10 
+
+53:10 Not one impressed.
+53:19 
+
+53:19 I know why you're not impressed. Because
+53:21 
+
+53:21 all of you had record years.
+53:26 
+
+53:26 Well, I'm here to tell you
+53:30 
+
+53:30 that right now where I stand, a few
+53:33 
+
+53:33 short months after GTCDC,
+53:37 
+
+53:37 one year after last GTC, right here
+53:40 
+
+53:40 where I stand,
+53:42 
+
+53:42 I see through 2027
+53:48 
+
+53:48 at least $1 trillion
+54:00 
+
+54:00 Now, does it make any sense?
+54:04 
+
+54:04 And that's what I'm going to spend the
+54:05 
+
+54:05 rest of the time talking about. In fact,
+54:08 
+
+54:08 we are going to be short. I am certain
+54:12 
+
+54:12 computing demand will be much higher
+54:14 
+
+54:14 than that. And there's a reason for
+54:16 
+
+54:16 that. So, the first thing is
+54:20 
+
+54:20 um we did a lot of work in the last
+54:21 
+
+54:21 year. Of course, as you know, 2025 was
+54:24 
+
+54:24 NVIDIA's year of inference. We wanted to
+54:27 
+
+54:27 make sure that not only were we good at
+54:28 
+
+54:28 training and post-training, that we were
+54:30 
+
+54:30 incredibly good at every single phase of
+54:33 
+
+54:33 AI, so that the investments that were
+54:35 
+
+54:35 made, investments made in our
+54:37 
+
+54:37 infrastructure could scale out for as
+54:40 
+
+54:40 long as they would like to use it. And
+54:42 
+
+54:42 the useful life of Nvidia's
+54:44 
+
+54:44 infrastructure would be long. And
+54:45 
+
+54:45 therefore, the cost would be incredibly
+54:47 
+
+54:47 low. The longer you could use it, the
+54:49 
+
+54:49 lower the cost. There's no question in
+54:51 
+
+54:51 my mind Nvidia systems are the lowest
+54:54 
+
+54:54 cost infrastructure you could get for AI
+54:57 
+
+54:57 infrastructure in the world. And so the
+54:59 
+
+54:59 first part was last year was all about
+55:01 
+
+55:01 AI for inference and it drove this
+55:04 
+
+55:04 inflection point. Simultaneously
+55:08 
+
+55:08 we were very pleased last year that
+55:10 
+
+55:10 Anthropic has come to Nvidia that MSL
+55:13 
+
+55:13 Meta SL has chosen Nvidia and meanwhile
+55:17 
+
+55:17 meanwhile and as a collection as a group
+55:21 
+
+55:21 this represents
+55:23 
+
+55:23 onethird of the world's AI compute
+55:27 
+
+55:27 open- source models open-source models
+55:30 
+
+55:30 have reached near the frontier and it is
+55:32 
+
+55:32 literally everywhere and Nvidia as you
+55:35 
+
+55:35 Today, we're the only platform in the
+55:37 
+
+55:37 world today that runs every single
+55:40 
+
+55:40 domain of AI
+55:43 
+
+55:43 across every single one of these AI
+55:45 
+
+55:45 models
+55:47 
+
+55:47 in language and biology and computer
+55:49 
+
+55:49 graphics, computer vision, and speech,
+55:54 
+
+55:54 proteins and chemicals, robotics and
+55:56 
+
+55:56 otherwise, edge or cloud, any language.
+56:00 
+
+56:00 NVIDIA's architecture is funible for all
+56:03 
+
+56:03 of that. And we're incredible for all of
+56:05 
+
+56:05 that. That allows us to be the lowest
+56:08 
+
+56:08 cost, the highest confidence platform
+56:11 
+
+56:11 because when you're building these
+56:12 
+
+56:12 systems, as I mentioned, a trillion
+56:15 
+
+56:15 dollars is an enormous amount of
+56:17 
+
+56:17 infrastructure. You have to have
+56:19 
+
+56:19 complete confidence that the trillion
+56:21 
+
+56:21 dollars you're putting down will be you
+56:23 
+
+56:23 utilized, would be performant, would be
+56:26 
+
+56:26 incredibly cost-effective, and have
+56:28 
+
+56:28 useful life for as long as you could see
+56:31 
+
+56:31 that infrastructure investment. you
+56:34 
+
+56:34 could make on Nvidia, you could make
+56:35 
+
+56:35 with complete confidence.
+56:38 
+
+56:38 We have now proven that it is the only
+56:41 
+
+56:41 infrastructure in the world that you
+56:43 
+
+56:43 could go anywhere in the world and build
+56:45 
+
+56:45 with complete confidence. You want to
+56:47 
+
+56:47 put it in any of the clouds, we're
+56:49 
+
+56:49 delighted by that. You want to put it on
+56:51 
+
+56:51 prem, we're happy about that. You want
+56:53 
+
+56:53 to put it in any country, anywhere,
+56:54 
+
+56:54 we're delighted to support you. We are
+56:57 
+
+56:57 now
+56:59 
+
+56:59 a computing platform that runs all of
+57:02 
+
+57:02 AI. Now our business
+57:06 
+
+57:06 already starting to show that 60% of our
+57:09 
+
+57:09 business is hyperscalers. The top five
+57:13 
+
+57:13 hyperscalers.
+57:14 
+
+57:14 However, even within that top five
+57:16 
+
+57:16 hyperscalers, some of it is internal AI
+57:20 
+
+57:20 consumption. The internal AI consumption
+57:22 
+
+57:22 really important work like Rexus is
+57:24 
+
+57:24 moving from recommener systems of tables
+57:26 
+
+57:26 and collaborative filtering and content
+57:29 
+
+57:29 filtering. It's moving towards deep
+57:31 
+
+57:31 learning and large language models.
+57:33 
+
+57:33 Search moving to deep learning large
+57:36 
+
+57:36 language models. Almost all of these
+57:38 
+
+57:38 different hypers scale workloads are now
+57:40 
+
+57:40 moving shifting towards a workload that
+57:42 
+
+57:42 Nvidia GPUs are incredibly good at. But
+57:45 
+
+57:45 on top of that, because we work with
+57:47 
+
+57:47 every AI lab, because we work with every
+57:50 
+
+57:50 we accelerate a every AI model and
+57:52 
+
+57:52 because we have a large ecosystem of AI
+57:55 
+
+57:55 natives that we work with that we can
+57:56 
+
+57:56 bring to the clouds that investment no
+57:60 
+
+57:60 matter how large, no matter how quick
+58:03 
+
+58:03 that compute will be consumed and that
+58:06 
+
+58:06 represents 60% of our business. The
+58:08 
+
+58:08 other 40% is just everywhere. Regional
+58:11 
+
+58:11 clouds, sovereign clouds, enterprise,
+58:14 
+
+58:14 industrial, robotics, edge, big systems,
+58:18 
+
+58:18 supercomputing systems, small servers,
+58:21 
+
+58:21 enterprise servers.
+58:23 
+
+58:23 The number of systems, incredible.
+58:27 
+
+58:27 The diversity of AI
+58:30 
+
+58:30 is also its resilience.
+58:33 
+
+58:33 The span of reach of AI is its
+58:37 
+
+58:37 resilience. There is no question this is
+58:39 
+
+58:39 not a oneapp technology. This is now
+58:42 
+
+58:42 fundamental. This is absolutely a new
+58:46 
+
+58:46 computing platform shift. Well, our job
+58:50 
+
+58:50 is to continue to advance the technology
+58:52 
+
+58:52 and one of the most important things
+58:54 
+
+58:54 that I mentioned last year was last year
+58:56 
+
+58:56 was our year of inference. We dedicated
+58:60 
+
+58:60 everything. We took a giant chance and
+59:03 
+
+59:03 reinvented while Hopper was at its
+59:06 
+
+59:06 prime. and it was just cooking. We
+59:09 
+
+59:09 decided that the hopper architecture the
+59:12 
+
+59:12 MVLink by 8 had to be taken to the next
+59:16 
+
+59:16 level. We completely rearchitected the
+59:18 
+
+59:18 system, disagregated the computing
+59:20 
+
+59:20 system altogether and created MVLink 72.
+59:24 
+
+59:24 The way that it's built, the way it's
+59:26 
+
+59:26 manufactured, the way it's programmed
+59:28 
+
+59:28 completely changed. Grace Blackwell Envy
+59:31 
+
+59:31 Link72 was a giant bet and it wasn't
+59:34 
+
+59:34 easy for anybody and many of my partners
+59:36 
+
+59:36 here in the room. I want to thank all of
+59:38 
+
+59:38 you for the hard work that you guys did.
+59:39 
+
+59:39 Thank you.
+59:45 
+
+59:45 MVLink72
+59:47 
+
+59:47 MV FP4 not just FP4 precision FP4 is a
+59:52 
+
+59:52 whole different type of tensor core and
+59:54 
+
+59:54 computational unit. We've demonstrated
+59:56 
+
+59:56 now that we can inference NVFP4
+60:00 
+
+60:00 without loss of precision but gigantic
+60:04 
+
+60:04 boost in performance and energy
+60:05 
+
+60:05 efficiency. We've also been able to use
+60:07 
+
+60:07 MVFP4 for training. So MVLink72, MVFP4,
+60:12 
+
+60:12 the invention of Dynamo, Tensor RTLM, a
+60:16 
+
+60:16 whole bunch of new algorithms. We even
+60:18 
+
+60:18 built a supercomput to help us optimize
+60:21 
+
+60:21 kernels and help us optimize our
+60:23 
+
+60:23 complete stack. We call it DGX cloud. We
+60:25 
+
+60:25 invested billions of dollars of
+60:28 
+
+60:28 supercomputing capability help us create
+60:31 
+
+60:31 the kernels, the software that made
+60:33 
+
+60:33 inference possible. Well,
+60:37 
+
+60:37 the results all came together and people
+60:41 
+
+60:41 told people used to tell me but Jensen
+60:43 
+
+60:43 inference is so easy. Inference is the
+60:46 
+
+60:46 ultimate hard. Inference is ultimate
+60:48 
+
+60:48 hard. It is also ultimate important
+60:50 
+
+60:50 because it drives your revenues. And so
+60:52 
+
+60:52 this is the outcome. This is from semi
+60:55 
+
+60:55 analysis. This is the largest most
+60:57 
+
+60:57 comprehensive sweep of AI that has AI
+61:01 
+
+61:01 inference that has ever been done. And
+61:03 
+
+61:03 what you see here on the left on on this
+61:06 
+
+61:06 side on this side is tokens per watt.
+61:11 
+
+61:11 Tokens per watt is important because
+61:13 
+
+61:13 every data center every single factory
+61:16 
+
+61:16 by definition is power constrained. A
+61:18 
+
+61:18 one gawatt factory will never become
+61:20 
+
+61:20 two. It's physically constrained the
+61:22 
+
+61:22 laws of atoms, the laws of physicality.
+61:25 
+
+61:25 And so that one gigawatt of data center
+61:29 
+
+61:29 you want to drive the maximum number of
+61:32 
+
+61:32 tokens which is the production the
+61:35 
+
+61:35 product of that factory. So you want
+61:37 
+
+61:37 that you want to be on top of that curve
+61:39 
+
+61:39 as high as you want. This the x- axis
+61:43 
+
+61:43 is the interactivity the speed of
+61:46 
+
+61:46 inference the speed of each inference.
+61:49 
+
+61:49 The faster you can inference,
+61:51 
+
+61:51 the faster you could of course respond.
+61:54 
+
+61:54 But very importantly, the faster you can
+61:56 
+
+61:56 inference, the larger the models, the
+61:59 
+
+61:59 more context you could process, the more
+62:01 
+
+62:01 tokens you can think through. This axis
+62:04 
+
+62:04 is the same as smartness of the AI. And
+62:09 
+
+62:09 so this is the throughput of the AI.
+62:11 
+
+62:11 This is the smartness of the AI. Notice
+62:14 
+
+62:14 the smarter the AI, the lower your
+62:17 
+
+62:17 throughput. Makes sense. You're thinking
+62:19 
+
+62:19 longer. Okay? And so this axis is the
+62:23 
+
+62:23 speed. And I'm going to come back to
+62:24 
+
+62:24 this. This is important. This is where I
+62:26 
+
+62:26 torture all of you.
+62:28 
+
+62:28 But it's too important. Every CEO in the
+62:31 
+
+62:31 world, you watch. Every CEO in the world
+62:33 
+
+62:33 will study their business from now on in
+62:36 
+
+62:36 the way I'm about to describe
+62:38 
+
+62:38 because this is your token factory. This
+62:42 
+
+62:42 is your AI factory. This is your
+62:45 
+
+62:45 revenues. There's no question about that
+62:47 
+
+62:47 going forward. And so this is the
+62:48 
+
+62:48 throughput. This is the intelligence.
+62:50 
+
+62:50 Better perf per watt for a given power
+62:54 
+
+62:54 of data center. The more throughput, the
+62:56 
+
+62:56 more tokens you could produce. On this
+62:58 
+
+62:58 side is cost. Notice Nvidia is the
+63:02 
+
+63:02 highest performance in the world. Nobody
+63:04 
+
+63:04 would be surprised by that. They would
+63:07 
+
+63:07 be surprised by the fact that in one
+63:10 
+
+63:10 generation whereas Moore's law would
+63:12 
+
+63:12 have given us through transistors 50%
+63:16 
+
+63:16 two times
+63:19 
+
+63:19 Moore's law would probably give us one
+63:21 
+
+63:21 and a half times more performance. You
+63:24 
+
+63:24 would have expected from hopper H200 one
+63:27 
+
+63:27 and a half times higher. Nobody would
+63:29 
+
+63:29 have expected 35 times higher. I said
+63:33 
+
+63:33 last year at this time that Nvidia's
+63:37 
+
+63:37 Grace Blackwell Envy 72 was 35 times
+63:41 
+
+63:41 perf per watt. Nobody believed me.
+63:45 
+
+63:45 And then semi analysis came out and
+63:48 
+
+63:48 Dylan Patel had a quote.
+63:51 
+
+63:51 He accused me of sandbagging.
+63:55 
+
+63:55 He accused me of sandbagging. He says
+63:57 
+
+63:57 Jensen sandbagged. It's actually 50
+64:00 
+
+64:00 times. And he's not wrong. He's not
+64:03 
+
+64:03 wrong. And so our cost per token,
+64:12 
+
+64:12 our cost per token is the lowest in the
+64:15 
+
+64:15 world. You can't beat it.
+64:18 
+
+64:18 I've said before, if you have the wrong
+64:20 
+
+64:20 architecture, even if it's free, it's
+64:23 
+
+64:23 not cheap enough. And the reason for
+64:25 
+
+64:25 that is because no matter what happens,
+64:28 
+
+64:28 you still have to build a gigawatt data
+64:30 
+
+64:30 center. You still have to build build a
+64:32 
+
+64:32 gigawatt factory. And that gigawatt
+64:34 
+
+64:34 factory for 15 years advertised across
+64:37 
+
+64:37 that gigawatt factory is about $40
+64:39 
+
+64:39 billion. Even when you put nothing on
+64:42 
+
+64:42 it, it's $40 billion in. You better make
+64:44 
+
+64:44 for darn sure you put the best computer
+64:46 
+
+64:46 system on that thing so that you could
+64:48 
+
+64:48 have the best token cost. Nvidia's token
+64:52 
+
+64:52 cost is world class.
+64:54 
+
+64:54 basically untouchable at the moment. And
+64:57 
+
+64:57 the reason that's true is because of
+64:59 
+
+64:59 extreme code design. And so I'm very
+65:01 
+
+65:01 happy that he named us.
+65:22 
+
+65:22 There was a monkey king,
+65:24 
+
+65:24 token king.
+65:30 
+
+65:30 Well, we take we take all of our
+65:32 
+
+65:32 software as I as I told you, we
+65:33 
+
+65:33 vertically integrate, but we
+65:35 
+
+65:35 horizontally open. We're vertical
+65:37 
+
+65:37 integration, horizontal open. We
+65:39 
+
+65:39 integrate all of our software and all of
+65:40 
+
+65:40 our technology, however we could package
+65:42 
+
+65:42 it up and integrate it into the world's
+65:45 
+
+65:45 inference service providers. And these
+65:48 
+
+65:48 these companies are growing so fast.
+65:51 
+
+65:51 They're growing so fast. Fireworks. Lynn
+65:54 
+
+65:54 is here together. They're just growing
+65:57 
+
+65:57 so incredibly fast. A hundred times in
+65:60 
+
+65:60 the last year. They are token factories.
+66:04 
+
+66:04 And the effectiveness, the performance
+66:06 
+
+66:06 and the token cost production capability
+66:09 
+
+66:09 for their factories is everything to
+66:11 
+
+66:11 them. And this is what happened. This is
+66:16 
+
+66:16 we updated their software, same system.
+66:20 
+
+66:20 And notice
+66:22 
+
+66:22 their token speeds. Incredible. The
+66:25 
+
+66:25 difference before before Nvidia updated
+66:29 
+
+66:29 everything and all of our algorithms and
+66:31 
+
+66:31 software and all the technology that we
+66:32 
+
+66:32 bring to bear
+66:34 
+
+66:34 about 700 tokens per second average went
+66:38 
+
+66:38 to nearly 5,000 seven times higher. And
+66:42 
+
+66:42 so this is the incredible power of
+66:45 
+
+66:45 extreme code design. I mentioned earlier
+66:48 
+
+66:48 the importance of factories. This is the
+66:51 
+
+66:51 importance of factory. Your data center,
+66:53 
+
+66:53 it used to be a data center for files.
+66:55 
+
+66:55 It's now a factory to generate tokens.
+66:58 
+
+66:58 Your factory is limited no matter what.
+67:00 
+
+67:00 Everybody's looking for land, power, and
+67:02 
+
+67:02 shell. Once you build it, you are power
+67:05 
+
+67:05 limited. Within that power limited
+67:07 
+
+67:07 infrastructure, you better make for darn
+67:10 
+
+67:10 sure that your inference because you
+67:12 
+
+67:12 know inference is your workload and
+67:14 
+
+67:14 tokens is your new commodity. that
+67:16 
+
+67:16 compute is your revenues that you want
+67:19 
+
+67:19 to make sure that the architecture is as
+67:22 
+
+67:22 optimized as you can in the future.
+67:25 
+
+67:25 Every single CSP,
+67:28 
+
+67:28 every single computer company, every
+67:30 
+
+67:30 single cloud company, every single AI
+67:32 
+
+67:32 company, every single
+67:34 
+
+67:34 company period are going to be thinking
+67:37 
+
+67:37 about their token factory effectiveness.
+67:40 
+
+67:40 This is your factory in the future. And
+67:42 
+
+67:42 the reason why I know that is because
+67:44 
+
+67:44 everybody in this room is powered by
+67:46 
+
+67:46 intelligence. And in the future, that
+67:49 
+
+67:49 intelligence will be augmented by
+67:50 
+
+67:50 tokens. So, let me show you how we got
+67:54 
+
+67:54 here.
+67:57 
+
+67:57 On April 6th, 2016, a decade ago, we
+68:01 
+
+68:01 introduced DGX1,
+68:03 
+
+68:03 the world's first computer designed for
+68:05 
+
+68:05 deep learning.
+68:07 
+
+68:07 Eight Pascal GPUs connected with the
+68:10 
+
+68:10 first generation NVLink.
+68:13 
+
+68:13 170 teraflops in one computer. The
+68:16 
+
+68:16 world's first computer designed for AI
+68:18 
+
+68:18 researchers.
+68:21 
+
+68:21 With Volulta, we introduced NVLink
+68:24 
+
+68:24 switch. 16 GPUs connected with full
+68:27 
+
+68:27 allto-all bandwidth operating as one
+68:30 
+
+68:30 giant GPU. A giant step forward, but
+68:33 
+
+68:33 model sizes continued to grow.
+68:36 
+
+68:36 The data center needed to become a
+68:38 
+
+68:38 single unit of computing. So, Melanox
+68:41 
+
+68:41 joined Nvidia.
+68:46 
+
+68:46 In 2020, DGXA Super Pod became the first
+68:50 
+
+68:50 GPU supercomput combining scale up and
+68:53 
+
+68:53 scale out architecture.
+68:56 
+
+68:56 NVL link 3 for scale up, Connect X6, and
+68:59 
+
+68:59 Quantum Infiniban for scale out.
+69:05 
+
+69:05 Then Hopper, the first GPU with the FP8
+69:08 
+
+69:08 Transformer engine that launched the
+69:10 
+
+69:10 generative AI era. MVLink 4, Connect X7,
+69:15 
+
+69:15 Bluefield 3 DPUs, second generation
+69:18 
+
+69:18 quantum infiniban. It revolutionized
+69:21 
+
+69:21 computing.
+69:26 
+
+69:26 Blackwell redefined AI supercomputing
+69:28 
+
+69:28 system architecture with NVLink 72. 72
+69:32 
+
+69:32 GPUs connected by NVLink spine. 130
+69:36 
+
+69:36 terabytes per second of all tool
+69:38 
+
+69:38 bandwidth
+69:40 
+
+69:40 compute trays integrate Blackwell GPUs,
+69:42 
+
+69:42 Grace CPUs, Connect X8, and Bluefield 3.
+69:49 
+
+69:49 Scale out runs over Spectrum 4 Ethernet.
+69:52 
+
+69:52 With three scaling laws in full steam,
+69:54 
+
+69:54 pre-training, post-training and
+69:56 
+
+69:56 inference and now agentic systems,
+69:59 
+
+69:59 compute demand continues to grow
+70:01 
+
+70:01 exponentially.
+70:04 
+
+70:04 And now Vera Rubin architected for every
+70:09 
+
+70:09 phase of Agentic AI advancing every
+70:12 
+
+70:12 pillar of computing including CPU,
+70:15 
+
+70:15 storage, networking, and security.
+70:19 
+
+70:19 Vera Rubin NVLink 72 3.6 Six exoflops of
+70:23 
+
+70:23 compute, 260 tab per second of all toall
+70:28 
+
+70:28 NVLink bandwidth. The engine
+70:30 
+
+70:30 supercharging the era of Agentic AI. The
+70:33 
+
+70:33 Vera CPU rack
+70:36 
+
+70:36 designed for orchestration and Agentic
+70:38 
+
+70:38 workflows. The STX rack AI native
+70:41 
+
+70:41 storage built with Bluefield 4. Scale
+70:44 
+
+70:44 out with Spectrum X co-acked optics
+70:47 
+
+70:47 increasing energy efficiency and
+70:49 
+
+70:49 resiliency. And an incredible new
+70:52 
+
+70:52 addition, the Gro 3 LPX rack. Tightly
+70:56 
+
+70:56 connected to Vera Rubin, Gro's LPU's
+70:58 
+
+70:58 massive onchip SRAMM, a token
+71:01 
+
+71:01 accelerator to the already incredibly
+71:03 
+
+71:03 fast Vera Rubin. Together, 35 times more
+71:07 
+
+71:07 throughput per megawatt. The new Vera
+71:10 
+
+71:10 Rubin platform. Seven chips, five rack
+71:14 
+
+71:14 scale computers, one revolutionary AI
+71:16 
+
+71:16 supercomput for agentic AI.
+71:20 
+
+71:20 40 million times more compute in just 10
+71:23 
+
+71:23 years.
+71:36 
+
+71:36 Now, in the in the good old days when I
+71:40 
+
+71:40 would say hopper, I would hold up a
+71:42 
+
+71:42 chip.
+71:45 
+
+71:45 That's just adorable.
+71:48 
+
+71:48 This is Vera Rubin. When we think ver
+71:57 
+
+71:57 when we when we think Vera Rubin, we
+71:59 
+
+71:59 think the entire system vertically
+72:02 
+
+72:02 integrated
+72:03 
+
+72:03 completely with software extended end to
+72:06 
+
+72:06 end optimized as one giant system. The
+72:11 
+
+72:11 reason why it's designed for agentic
+72:12 
+
+72:12 systems is very clear because agents of
+72:15 
+
+72:15 course the most important workload is
+72:17 
+
+72:17 it's thinking the large language model.
+72:20 
+
+72:20 The large language models are going to
+72:21 
+
+72:21 larger and larger and larger. It's going
+72:23 
+
+72:23 to generate more and more tokens more
+72:25 
+
+72:25 quickly so it could think more quickly.
+72:27 
+
+72:27 But it also has to access memory. It's
+72:30 
+
+72:30 going to pound on memory really hard. KV
+72:33 
+
+72:33 cache
+72:35 
+
+72:35 structured data QDF unstructured data
+72:38 
+
+72:38 QVS. It's going to be pounding on the me
+72:41 
+
+72:41 on the storage system really really hard
+72:43 
+
+72:43 which is the reason why we reinvented
+72:45 
+
+72:45 the storage system. It is also going to
+72:49 
+
+72:49 use tools and unlike humans that are
+72:53 
+
+72:53 more tolerant to slower computers.
+72:56 
+
+72:56 AI wants the tools to be as fast as
+72:59 
+
+72:59 possible. These tools web browsers in
+73:03 
+
+73:03 the future they could also be virtual
+73:05 
+
+73:05 PCs in the cloud. Those PCs have to be
+73:08 
+
+73:08 and those computers have to be as fast
+73:10 
+
+73:10 as possible. We created a brand new CPU.
+73:14 
+
+73:14 A brand new CPU that's designed for
+73:17 
+
+73:17 extremely high singlethreaded
+73:19 
+
+73:19 performance,
+73:22 
+
+73:22 incredibly high data output, incredibly
+73:26 
+
+73:26 good at data processing, and extreme
+73:29 
+
+73:29 energy efficiency. It is the only data
+73:33 
+
+73:33 center CPU in the world that uses
+73:35 
+
+73:35 LPDDR5,
+73:37 
+
+73:37 LPDDR5 and incredible single thread
+73:41 
+
+73:41 performance and performance per watt
+73:43 
+
+73:43 that is unrivaled.
+73:45 
+
+73:45 And so that's we built that so that it
+73:48 
+
+73:48 could go along with the rest of these
+73:50 
+
+73:50 racks for agentic processing. And so
+73:54 
+
+73:54 here it is. This is the Grace Blackwell.
+73:58 
+
+73:58 Oh no, Vera Rubin. Where is it? Here it
+73:60 
+
+73:60 is. Okay, so this is the Vera Rubin
+74:02 
+
+74:02 system. Notice since the last time, 100%
+74:05 
+
+74:05 liquid cooled. All of the cables gone.
+74:09 
+
+74:09 What used to take what used to take
+74:13 
+
+74:13 2 days to install now takes two hours.
+74:17 
+
+74:17 Incredible. And so the manufacturing
+74:19 
+
+74:19 cycle time going to dramatically reduce.
+74:22 
+
+74:22 This is also a supercomput that is
+74:24 
+
+74:24 cooled by it's cooled by hot water 45°
+74:30 
+
+74:30 which takes the pressure off of the data
+74:32 
+
+74:32 center takes all of that cost and all of
+74:34 
+
+74:34 that energy that's used to cool the data
+74:36 
+
+74:36 center and makes it available for the
+74:39 
+
+74:39 system. This is the secret sauce. It is
+74:43 
+
+74:43 the only we're the only company in the
+74:45 
+
+74:45 world that has today built the sixth
+74:48 
+
+74:48 sixth generation scaleup switching
+74:51 
+
+74:51 system. This is not Ethernet. This is
+74:54 
+
+74:54 not Infiniban. This is MVLink. This is
+74:57 
+
+74:57 the sixth generation MVLink. This is
+74:59 
+
+74:59 insanely hard to do. Well, it is
+75:02 
+
+75:02 insanely hard to do. Period. And I'm
+75:04 
+
+75:04 just super proud of the team. MVLink.
+75:06 
+
+75:06 Completely cooled. This is the brand new
+75:10 
+
+75:10 Gro system. And I'll show you a little
+75:11 
+
+75:11 bit more about it. this system.
+75:14 
+
+75:14 Eight Gro chips. This is the LP30. The
+75:18 
+
+75:18 world's never seen it. Anything that the
+75:20 
+
+75:20 world's ever seen is V1. This is third
+75:22 
+
+75:22 generation. And we're in volume
+75:26 
+
+75:26 production now. And I'll show you more
+75:28 
+
+75:28 about that in just a second. The world's
+75:30 
+
+75:30 first
+75:32 
+
+75:32 CPO
+75:34 
+
+75:34 Spectrum X switch. This is also in full
+75:38 
+
+75:38 production. Co-packaged optics. Optics
+75:42 
+
+75:42 comes directly onto this chip,
+75:44 
+
+75:44 interfaces directly to silicon,
+75:47 
+
+75:47 electrons gets translated to photons and
+75:50 
+
+75:50 it gets directly directly connected to
+75:53 
+
+75:53 this chip. We invented the process
+75:55 
+
+75:55 technology with TSMC. We're the only one
+75:57 
+
+75:57 in production with it today. It's called
+75:59 
+
+75:59 coupe. It's completely revolutionary.
+76:02 
+
+76:02 Nvidia is in full production with
+76:04 
+
+76:04 Spectrum X.
+76:09 
+
+76:09 This is the Vera system. Twice the
+76:11 
+
+76:11 performance per watt of any any CPUs in
+76:15 
+
+76:15 the world today. It is also in
+76:17 
+
+76:17 production. Well, you know, we never we
+76:20 
+
+76:20 never thought we would be selling CPUs
+76:23 
+
+76:23 standalone. Um, we are selling a lot of
+76:26 
+
+76:26 CPU standalone. This is already for sure
+76:29 
+
+76:29 going to be a multi-billion dollar
+76:30 
+
+76:30 business for us. So, I'm very very
+76:32 
+
+76:32 pleased with our CPU architects. We've
+76:34 
+
+76:34 designed a revolutionary CPU and this is
+76:37 
+
+76:37 the CX9 powered with Vera CPU, the Blue
+76:43 
+
+76:43 Field 4 STX, our new storage platform.
+76:46 
+
+76:46 Okay, so these are the four these are
+76:48 
+
+76:48 the the the racks and it's connected
+76:53 
+
+76:53 each one of these racks, the MVL link
+76:55 
+
+76:55 rack.
+76:58 
+
+76:58 This is I've shown you guys this before.
+77:00 
+
+77:00 It's a super heavy and seems to get
+77:02 
+
+77:02 heavier every year.
+77:05 
+
+77:05 because I think there's just more cables
+77:06 
+
+77:06 in there every year. And so, so this is
+77:08 
+
+77:08 the MVLink rack. We've also taken this
+77:12 
+
+77:12 technology because it it is so
+77:16 
+
+77:16 efficient to create a data center with
+77:19 
+
+77:19 these cabling systems, structured
+77:21 
+
+77:21 cables. So, we decided to do that for
+77:23 
+
+77:23 Ethernet. So, this is Ethernet, 256
+77:28 
+
+77:28 liquid cooled nodes in one rack. And it
+77:32 
+
+77:32 is also connected with these incredible
+77:37 
+
+77:37 connectors.
+77:40 
+
+77:40 You guys want to see um
+77:43 
+
+77:43 Reuben Ultra.
+77:59 
+
+77:59 So this is the Reuben Ultra compute
+78:01 
+
+78:01 node. Unlike Reuben that slides in
+78:05 
+
+78:05 horizontally, Ruben Ultra goes into a
+78:09 
+
+78:09 whole new rack. It's called Kyber. That
+78:12 
+
+78:12 enables us to connect 144 GPUs in one
+78:17 
+
+78:17 MVLink domain. And so the Kyber rack,
+78:21 
+
+78:21 this I I could lift it, I'm sure, but I
+78:25 
+
+78:25 won't.
+78:27 
+
+78:27 It's quite heavy. This this is one
+78:31 
+
+78:31 compute node and it slides into the
+78:33 
+
+78:33 kyber rack vertically.
+78:36 
+
+78:36 This is where it connects into. This is
+78:38 
+
+78:38 the midplane. The kyber racks, those
+78:42 
+
+78:42 four top MVLink connectors slide in and
+78:45 
+
+78:45 connect into this. And this becomes one
+78:49 
+
+78:49 of the nodes.
+78:51 
+
+78:51 And each one of these DAXs is a
+78:52 
+
+78:52 different compute node. And this is the
+78:55 
+
+78:55 amazing part. This is the midplane
+78:58 
+
+78:58 and the back of the midplane. Instead of
+79:01 
+
+79:01 the cabling system
+79:03 
+
+79:03 which has its limits in terms of how far
+79:06 
+
+79:06 we could drive cables, copper cables, we
+79:09 
+
+79:09 now have this system to connect 144
+79:12 
+
+79:12 GPUs. This is the new MVL link. This
+79:17 
+
+79:17 sits also vertically and it connects
+79:20 
+
+79:20 into the midplanes on the back. compute
+79:24 
+
+79:24 in the front, MVLink switches in the
+79:27 
+
+79:27 back, one giant computer. Okay, so that
+79:31 
+
+79:31 is
+79:34 
+
+79:34 Reuben Ultra.
+79:43 
+
+79:43 You saw you saw this slide, you know,
+79:46 
+
+79:46 only at Nvidia's keynote will you see
+79:48 
+
+79:48 last year's slide presented again. And
+79:51 
+
+79:51 the reason for that is I just want to
+79:53 
+
+79:53 let you know that last year I told you
+79:54 
+
+79:54 something very very important and it's
+79:56 
+
+79:56 so important it's worthwhile to tell you
+79:58 
+
+79:58 again
+79:60 
+
+79:60 this is probably the single most
+80:02 
+
+80:02 important chart for the future of AI
+80:04 
+
+80:04 factories and every CEO every CEO in the
+80:07 
+
+80:07 world will be tracking it we'll be
+80:09 
+
+80:09 studying it very deeply it's much much
+80:12 
+
+80:12 more complicated than this is
+80:13 
+
+80:13 multi-dimensional but you will be
+80:15 
+
+80:15 studying the throughput and the token
+80:19 
+
+80:19 speed of your AI factories, the
+80:22 
+
+80:22 throughput, token speed at ISO power
+80:25 
+
+80:25 because that's all the power you have
+80:28 
+
+80:28 throughput and token speed for your
+80:30 
+
+80:30 factories forever. And that that
+80:34 
+
+80:34 analysis is going to lead directly to
+80:36 
+
+80:36 your revenues. What you do this year
+80:39 
+
+80:39 will show up precisely next year as your
+80:42 
+
+80:42 revenues. And this chart is what it's
+80:45 
+
+80:45 all about. And I said on the vertical
+80:47 
+
+80:47 axis, on the vertical axis, thank you
+80:49 
+
+80:49 guys. On the vertical axis is
+80:51 
+
+80:51 throughput. On the horizontal axis is
+80:54 
+
+80:54 token rate. Today I'm going to show you
+80:56 
+
+80:56 this
+80:58 
+
+80:58 because we're able because we're now
+81:00 
+
+81:00 able to increase the token speed and
+81:04 
+
+81:04 because model sizes are increasing
+81:06 
+
+81:06 because the token length the context
+81:09 
+
+81:09 length depending on the different grades
+81:11 
+
+81:11 of a different application use case
+81:14 
+
+81:14 continues to grow from maybe a 100,000
+81:17 
+
+81:17 tokens input length to maybe millions.
+81:21 
+
+81:21 the token input length is growing and
+81:24 
+
+81:24 also the output token length is growing.
+81:27 
+
+81:27 And so all of these play into ultimately
+81:32 
+
+81:32 the marketing and the pricing of future
+81:35 
+
+81:35 tokens. Tokens are the new commodity and
+81:38 
+
+81:38 like all commodities once it reaches an
+81:41 
+
+81:41 inflection once it becomes mature or
+81:43 
+
+81:43 becomes maturing it will segment into
+81:45 
+
+81:45 different parts. The high throughput,
+81:50 
+
+81:50 low speed could be used for the free
+81:52 
+
+81:52 tier. The next tier could be the medium
+81:55 
+
+81:55 tier. Larger model, maybe higher speed
+81:58 
+
+81:58 for sure, larger input context length.
+82:02 
+
+82:02 That translates to a different price
+82:05 
+
+82:05 point. You could see from all the
+82:07 
+
+82:07 different services, this one is free.
+82:09 
+
+82:09 It's a free tier. The first tier could
+82:10 
+
+82:10 be $3 per million tokens. The next tier
+82:13 
+
+82:13 could be $6 per million tokens. You
+82:16 
+
+82:16 would like to be able to keep pushing
+82:17 
+
+82:17 this boundary because the larger the
+82:20 
+
+82:20 model smarter the more input token
+82:24 
+
+82:24 context length more relevant
+82:27 
+
+82:27 the higher the speed the long the more
+82:30 
+
+82:30 you can think and iterate smarter AI
+82:32 
+
+82:32 models. So this is about smarter AI
+82:35 
+
+82:35 models and when you have smarter AI
+82:37 
+
+82:37 models each one of these clicks allows
+82:39 
+
+82:39 you to increase the price. So, this is
+82:41 
+
+82:41 $45. And maybe one day there'll be a
+82:44 
+
+82:44 premium model that allows you a premium
+82:47 
+
+82:47 service that allows you to generate
+82:50 
+
+82:50 token speeds that are incredibly high
+82:52 
+
+82:52 because you're in a critical path or
+82:54 
+
+82:54 maybe you're doing really long research
+82:56 
+
+82:56 and $150 per million tokens is just not
+82:60 
+
+82:60 a thing. So, let's translate that.
+83:03 
+
+83:03 Suppose you were to use 50 million
+83:05 
+
+83:05 tokens per day as a researcher at $150
+83:08 
+
+83:08 per million tokens. As it turns out, as
+83:10 
+
+83:10 a research team, that's not even a
+83:12 
+
+83:12 thing. So, we believe that this is the
+83:15 
+
+83:15 future. This is where AI wants to go.
+83:18 
+
+83:18 This is where it is today.
+83:20 
+
+83:20 It had to start here to establish the
+83:23 
+
+83:23 value and establish its usefulness and
+83:25 
+
+83:25 get better and better and better. In the
+83:27 
+
+83:27 future, you're going to see most
+83:28 
+
+83:28 services encompass encompass all of
+83:31 
+
+83:31 that. This is Hopper.
+83:33 
+
+83:33 Hopper started and I moved it moved the
+83:36 
+
+83:36 chart. This is 50. This is 100. Hopper
+83:39 
+
+83:39 looks like this. And you would have
+83:40 
+
+83:40 expected Hopper the next generation to
+83:43 
+
+83:43 be higher, but nobody would have
+83:45 
+
+83:45 expected it to be that much higher. This
+83:47 
+
+83:47 is Grace Blackwell. What Grace Blackwell
+83:49 
+
+83:49 did is at your free tier increase your
+83:52 
+
+83:52 throughput tremendously.
+83:54 
+
+83:54 However,
+83:56 
+
+83:56 where you mostly monetize your service,
+83:60 
+
+83:60 it increased your throughput by 35
+84:02 
+
+84:02 times. This is no different than any
+84:05 
+
+84:05 product that every company makes. The
+84:07 
+
+84:07 higher the tier, the higher the quality,
+84:09 
+
+84:09 the higher the performance, the lower
+84:12 
+
+84:12 the volume, the lower the capacity. And
+84:14 
+
+84:14 so it is no different than any other
+84:16 
+
+84:16 business in the world. And so now we're
+84:19 
+
+84:19 able to increase this tier by 35x.
+84:23 
+
+84:23 And we introduced a whole new tier.
+84:27 
+
+84:27 This this is the benefit of Grace
+84:30 
+
+84:30 Blackwell. A huge jump over Hopper.
+84:33 
+
+84:33 Well, this is what we're doing with
+84:38 
+
+84:38 Okay. So, this is Grace Blackwell.
+84:41 
+
+84:41 Okay. Let me just reset reset this.
+84:45 
+
+84:45 And this is Vera Rubin.
+84:48 
+
+84:48 Okay.
+84:54 
+
+84:54 Now, just think just think what just
+84:56 
+
+84:56 happened at every single tier. At every
+84:59 
+
+84:59 single tier, at every single tier, we
+85:01 
+
+85:01 increase the throughput. And at the tier
+85:04 
+
+85:04 that where your highest ASP and your
+85:07 
+
+85:07 most valuable segment, we increased it
+85:10 
+
+85:10 by 10x.
+85:12 
+
+85:12 That is the hard work. This is
+85:15 
+
+85:15 incredibly hard to do out here. This is
+85:17 
+
+85:17 the benefit of MVLink 72. This is the
+85:19 
+
+85:19 benefit of extremely low latency. This
+85:21 
+
+85:21 is the benefit of extreme code design
+85:23 
+
+85:23 that we could shift the entire area up.
+85:26 
+
+85:26 Now, what does it mean from a customer
+85:28 
+
+85:28 perspective in the end? Suppose I were
+85:30 
+
+85:30 to take all of that and I just, you
+85:32 
+
+85:32 know, multiply it against, suppose I
+85:34 
+
+85:34 took 25% of my power, used it in a free
+85:37 
+
+85:37 tier, 25% of my power in the medium
+85:38 
+
+85:38 tier, 25% of my power in the high tier,
+85:41 
+
+85:41 and 25% of my power in the premium tier.
+85:44 
+
+85:44 My data center only has a gigawatt.
+85:46 
+
+85:46 And so I get to decide how I want to
+85:49 
+
+85:49 distribute. The free tier allows me to
+85:51 
+
+85:51 attract more customers.
+85:53 
+
+85:53 This allows me to serve my most valuable
+85:55 
+
+85:55 customers. And the combination, the
+85:58 
+
+85:58 product of all that allows you basically
+86:01 
+
+86:01 your revenues, the revenues you can
+86:04 
+
+86:04 generate, assuming this simplistic
+86:06 
+
+86:06 example, allows Blackwell to generate
+86:10 
+
+86:10 five times more revenues.
+86:14 
+
+86:14 Vera Rubin to generate five times. Yeah.
+86:23 
+
+86:23 So Vera Rubin, you should get there as
+86:25 
+
+86:25 soon as you can. And the reason for that
+86:28 
+
+86:28 is because your your cost of tokens goes
+86:31 
+
+86:31 down and your throughput goes up. Now,
+86:33 
+
+86:33 but we want even more. We want even
+86:36 
+
+86:36 more. And so let me just show you back
+86:38 
+
+86:38 to this. This is as you as I as I told
+86:41 
+
+86:41 you this throughput requires a ton of
+86:43 
+
+86:43 flops. This latency, this interactivity
+86:48 
+
+86:48 requires enormous amount of bandwidth.
+86:50 
+
+86:50 Computers don't like extreme amount of
+86:53 
+
+86:53 flops, extreme amount of bandwidth
+86:55 
+
+86:55 because there's only so much surface
+86:57 
+
+86:57 area for chips that any systems has. And
+86:60 
+
+87:00 so optimizing for high throughput and
+87:02 
+
+87:02 optimizing for low latency are in fact
+87:06 
+
+87:06 enemies of each other. And so this is
+87:08 
+
+87:08 what happened when we combined with
+87:10 
+
+87:10 Grock. Okay. And so we we acquired the
+87:13 
+
+87:13 team that worked on the Grock chips and
+87:15 
+
+87:15 licensed the technology and we've been
+87:16 
+
+87:16 working together now to integrate the
+87:19 
+
+87:19 system. This is what that looks like. So
+87:22 
+
+87:22 at the most valuable tier at the most
+87:25 
+
+87:25 valuable tier we're now going to
+87:27 
+
+87:27 increase performance by 35x. Now this
+87:31 
+
+87:31 very simple chart revealed to you
+87:34 
+
+87:34 exactly the reason why Nvidia is so
+87:37 
+
+87:37 strong in the vast majority of the
+87:40 
+
+87:40 workloads so far. And the reason for
+87:42 
+
+87:42 that is because up in this area
+87:45 
+
+87:45 throughput matters so much. MVLink72 is
+87:49 
+
+87:49 so gamechanging. It is exactly the right
+87:51 
+
+87:51 architecture and it's even hard to beat
+87:54 
+
+87:54 even as you add Gro to it. However,
+87:58 
+
+87:58 if you extended this chart way out here
+88:01 
+
+88:01 and you said you wanted to have services
+88:04 
+
+88:04 that delivers not 400 tokens per second
+88:06 
+
+88:06 but a thousand tokens per second, all of
+88:09 
+
+88:09 a sudden MVLink72 runs out of steam and
+88:12 
+
+88:12 simply can't get there. We just don't
+88:14 
+
+88:14 have enough bandwidth. And so this is
+88:16 
+
+88:16 where Grock comes in. And this is what
+88:18 
+
+88:18 happens when we push that out. So it
+88:22 
+
+88:22 goes out beyond Thank you.
+88:28 
+
+88:28 goes out beyond even the limits of what
+88:31 
+
+88:31 MVLink72 can do. And if you were to do
+88:33 
+
+88:33 that, translate that into revenues
+88:38 
+
+88:38 relative to Blackwell Vera Rubin is 5x.
+88:42 
+
+88:42 If most of your workload is high
+88:44 
+
+88:44 throughput, I would stick with just 100%
+88:47 
+
+88:47 Vera Rubin. If a lot of your workload
+88:50 
+
+88:50 wants to be coding and very high valued
+88:54 
+
+88:54 engineering token generation, I would
+88:57 
+
+88:57 add Grock to it. I would add Grock to
+88:59 
+
+88:59 maybe 25% of my total data center. The
+89:02 
+
+89:02 rest of my data center is all 100% Vera
+89:04 
+
+89:04 Rubin. And so that gives you a sense of
+89:08 
+
+89:08 how you would add Grock to Vera Rubin
+89:12 
+
+89:12 and extend its performance and extend
+89:14 
+
+89:14 its value even more. This is what
+89:16 
+
+89:16 happens.
+89:18 
+
+89:18 very this is a contrast. The reason why
+89:21 
+
+89:21 the reason why Grock was so attractive
+89:22 
+
+89:22 to me is because their computing system
+89:25 
+
+89:25 a deterministic data flow processor it
+89:29 
+
+89:29 is statically compiled. It is compiler
+89:32 
+
+89:32 scheduled meaning the compiler figures
+89:35 
+
+89:35 out when the data when to do the compute
+89:38 
+
+89:38 the the compute and the data arrives at
+89:40 
+
+89:40 the same time. All of that is done
+89:42 
+
+89:42 statically in advance
+89:45 
+
+89:45 and scheduled completely in software.
+89:48 
+
+89:48 There's no dynamic scheduling.
+89:51 
+
+89:51 The architecture is designed with
+89:53 
+
+89:53 massive amounts of SRAMM. It is designed
+89:56 
+
+89:56 just for inference. This one workload.
+89:59 
+
+89:59 Now, this one workload, as it turns out,
+90:01 
+
+90:01 is the workload of AI factories. And as
+90:04 
+
+90:04 the world continues to increase the
+90:06 
+
+90:06 amount of high-speed tokens it wants to
+90:09 
+
+90:09 generate with super smart tokens it
+90:11 
+
+90:11 wants to generate, the value of this
+90:13 
+
+90:13 integration is going to get even higher.
+90:15 
+
+90:15 And so these are two extreme processors.
+90:17 
+
+90:17 You could see one chip 500 megabytes,
+90:22 
+
+90:22 one Vera Ruben chip, one Ruben chip 288
+90:25 
+
+90:25 gigabytes.
+90:28 
+
+90:28 It would take a lot of gro chips to be
+90:31 
+
+90:31 able to hold the parameter size of
+90:34 
+
+90:34 Reuben as well as all of the context
+90:37 
+
+90:37 that has to go the KV cache that has to
+90:39 
+
+90:39 go along with it. So that limited
+90:41 
+
+90:41 Grock's ability to really reach the
+90:44 
+
+90:44 mainstream to really take off until we
+90:46 
+
+90:46 had a great idea. What if we
+90:48 
+
+90:48 disagregated inference altogether with a
+90:51 
+
+90:51 piece of software called Dynamo? What if
+90:53 
+
+90:53 we rearchitected the way that inference
+90:55 
+
+90:55 is done in the pipeline so that we could
+90:59 
+
+90:59 put the work that makes perfect sense on
+91:01 
+
+91:01 Vera Rubin and then offload the decode
+91:05 
+
+91:05 generation the low latency the bandwidth
+91:09 
+
+91:09 limited challenged part of the workload
+91:11 
+
+91:11 for Grock and so we united unified two
+91:16 
+
+91:16 processors of extreme differences one
+91:18 
+
+91:18 for high throughput one for low latency
+91:21 
+
+91:21 it still doesn't change the fact that we
+91:23 
+
+91:23 need a lot of memory. And so Grock,
+91:26 
+
+91:26 we're just going to add a whole bunch of
+91:28 
+
+91:28 Grock chips, which expands the amount of
+91:31 
+
+91:31 memory it has. And so if you could just
+91:33 
+
+91:33 imagine
+91:35 
+
+91:35 out of a trillion parameter model, we
+91:38 
+
+91:38 have to store all of that in gro chips.
+91:41 
+
+91:41 However, it sits next to Nvidia Vera
+91:44 
+
+91:44 Rubin where we could we could hold the
+91:46 
+
+91:46 massive amounts of KV cache that's
+91:49 
+
+91:49 necessary in processing all of these
+91:51 
+
+91:51 agentic AI systems. It's based upon this
+91:54 
+
+91:54 idea of this aggregated inference. We do
+91:58 
+
+91:58 the prefill that's the easy part but we
+92:01 
+
+92:01 also tightly integrate the decode. So
+92:05 
+
+92:05 the attention part of decode is done on
+92:07 
+
+92:07 Nvidia's Vera Rubin which needs a lot of
+92:10 
+
+92:10 math and the feed forward network part
+92:14 
+
+92:14 of it the decode part is done uh the
+92:16 
+
+92:16 token generation part is done on Vera
+92:18 
+
+92:18 Rubin on the uh on the ground chip the
+92:20 
+
+92:20 two of them working tightly coupled
+92:22 
+
+92:22 together over today Ethernet with a
+92:26 
+
+92:26 special mode to reduce its latency by
+92:28 
+
+92:28 about half and so that capability allows
+92:31 
+
+92:31 us to integrate these two systems we run
+92:33 
+
+92:33 Dynamo this incredible operating system
+92:36 
+
+92:36 for AI factories on top of it and you
+92:38 
+
+92:38 get 35 times increase 35 times increase
+92:44 
+
+92:44 not to mention additional new tiers of
+92:47 
+
+92:47 inference performance for token
+92:49 
+
+92:49 generation the world's never seen so
+92:51 
+
+92:51 this is it this is Gro
+93:01 
+
+93:01 the Vera Rubin systems including
+93:04 
+
+93:04 I want to thank Samsung uh who
+93:07 
+
+93:07 manufactures the Gro LP30 chip for us
+93:10 
+
+93:10 and they're cranking as hard as they
+93:11 
+
+93:11 can. I really appreciate appreciate you
+93:14 
+
+93:14 guys. We're in production with the Grock
+93:16 
+
+93:16 chip and uh you know we'll ship it in
+93:19 
+
+93:19 the second half probably about Q3 time
+93:21 
+
+93:21 frame. Okay,
+93:25 
+
+93:25 Grock LPX
+93:32 
+
+93:32 Vera Rubin, you know, it's kind of hard
+93:35 
+
+93:35 it's kind of hard to imagine any more
+93:38 
+
+93:38 customers,
+93:40 
+
+93:40 you know, and and uh the the really
+93:43 
+
+93:43 great thing is is um Grace Blackwell
+93:46 
+
+93:46 early sampling of it was really
+93:47 
+
+93:47 complicated because of coming together
+93:49 
+
+93:49 of Envy Link72, but the sampling of Vera
+93:52 
+
+93:52 Rubin is just going incredibly well and
+93:54 
+
+93:54 in fact Satia I think texted out already
+93:57 
+
+93:57 that the first Vera Rubin rack is
+93:59 
+
+93:59 already up and running at Microsoft
+94:01 
+
+94:01 Azure and so I'm super excited for them.
+94:03 
+
+94:03 We're just going to keep cranking these
+94:05 
+
+94:05 things out. We have now set up a supply
+94:07 
+
+94:07 chain that could manufacture thousands a
+94:10 
+
+94:10 week of these systems essentially multi-
+94:15 
+
+94:15 gigawatts of AI factories per month
+94:18 
+
+94:18 inside our supply chain. And so we're
+94:21 
+
+94:21 going to crank out these these Vera
+94:22 
+
+94:22 Rubin racks while we're cranking out the
+94:24 
+
+94:24 GB300 racks. We are in full production.
+94:27 
+
+94:27 The Vera CPUs
+94:29 
+
+94:29 incredibly successful. And the reason
+94:31 
+
+94:31 for that is because AI needs CPUs for
+94:34 
+
+94:34 tool use and Vera CPU was designed just
+94:38 
+
+94:38 perfectly for that sweet spot.
+94:40 
+
+94:40 Incredible for the next generation of
+94:42 
+
+94:42 data processing. Vera CPU is ideal. the
+94:46 
+
+94:46 Vera CPU plus blue plus CX9 connected
+94:49 
+
+94:49 into the Bluefield 4 stack. 100%
+94:54 
+
+94:54 100% of the world's storage industry is
+94:58 
+
+94:58 joining us on this system. And the
+95:01 
+
+95:01 reason for that is because they see
+95:03 
+
+95:03 exactly the same thing. The storage
+95:05 
+
+95:05 system is going to get pounded. It's
+95:08 
+
+95:08 going to get pounded because we used to
+95:10 
+
+95:10 have humans using the storage systems.
+95:12 
+
+95:12 We used to have humans using SQL. Now
+95:14 
+
+95:14 we're going to have AIS using these
+95:16 
+
+95:16 storage systems and it's going to store
+95:19 
+
+95:19 QDF accelerated storage, QVS accelerated
+95:22 
+
+95:22 storage as well as very importantly KV
+95:25 
+
+95:25 caching. Okay, so this is the Vera Rubin
+95:28 
+
+95:28 system. Now what's amazing is this. In
+95:31 
+
+95:31 just two years time in a one gigawatt
+95:35 
+
+95:35 factory in just two years time in one
+95:38 
+
+95:38 gigawatt factory using the mathematics
+95:41 
+
+95:41 that I showed you earlier whereas
+95:44 
+
+95:44 Moore's law would have given us a couple
+95:45 
+
+95:45 of steps we would have you know xactored
+95:49 
+
+95:49 the number of transistors. We would x
+95:51 
+
+95:51 factored the number of flops we would
+95:53 
+
+95:53 have x factored the number of amount of
+95:56 
+
+95:56 bandwidth. But with this architecture,
+95:59 
+
+95:59 we're going to take our token generation
+96:01 
+
+96:01 speed, token generation rate from 2
+96:05 
+
+96:05 million to 700 million, 350 times
+96:11 
+
+96:11 increase.
+96:16 
+
+96:16 This is this is the power of extreme
+96:19 
+
+96:19 code design. This is what I mean when we
+96:22 
+
+96:22 integrate and optimize vertically but
+96:25 
+
+96:25 then we open it horizontally for
+96:28 
+
+96:28 everybody to enjoy. This is our road map
+96:30 
+
+96:30 very quickly.
+96:32 
+
+96:32 Blackwell is here. The Oberon system. In
+96:36 
+
+96:36 the case of Reuben, we have the Oberon
+96:38 
+
+96:38 system. We're always backwards
+96:40 
+
+96:40 compatible. So that if you wanted to not
+96:42 
+
+96:42 change anything and just keep on moving
+96:44 
+
+96:44 through with the new architecture, you
+96:45 
+
+96:45 could do so. the old system the the
+96:49 
+
+96:49 standard um rack system Oberon still
+96:52 
+
+96:52 available. Oberon is copper scale up and
+96:55 
+
+96:55 with Oberon we could also use optical
+96:59 
+
+96:59 scale out or excuse me optical scale up
+97:02 
+
+97:02 to expand to MVLink 576.
+97:07 
+
+97:07 Okay. And so there's a lot of
+97:08 
+
+97:08 conversation about is Nvidia going to
+97:10 
+
+97:10 copper scale up or optical scale up?
+97:13 
+
+97:13 We're going to do both.
+97:16 
+
+97:16 So, we're going to have MVLink 144 with
+97:19 
+
+97:19 Kyber and then with Opteron uh Optron
+97:23 
+
+97:23 Oberon, we're going to MVLink72
+97:26 
+
+97:26 plus Optical to get to MVLink 576.
+97:31 
+
+97:31 The next generation of Reuben with
+97:35 
+
+97:35 Reuben Ultra. We have the Reuben Ultra
+97:37 
+
+97:37 chip which is coming which is taping out
+97:40 
+
+97:40 and we have a brand new chip LP35.
+97:43 
+
+97:43 LP35 will for the first time incorporate
+97:47 
+
+97:47 Nvidia's MVFP4 computing structure give
+97:51 
+
+97:51 you another few X factor speed up. Okay.
+97:54 
+
+97:54 And so this is Oberon MVLink72
+97:57 
+
+97:57 optical scale up and it uses Spectrum 6
+98:02 
+
+98:02 the world's first co-packaged optical
+98:05 
+
+98:05 and um all of this is in production. The
+98:09 
+
+98:09 next generation from here
+98:12 
+
+98:12 is Fman. Fineman has a new GPU of
+98:15 
+
+98:15 course. It also has a new LPU
+98:20 
+
+98:20 LP40.
+98:22 
+
+98:22 Big step up. Incredible. Incredible new
+98:25 
+
+98:25 technology. Now
+98:27 
+
+98:27 uniting the scale of Nvidia and the Gro
+98:32 
+
+98:32 team building together LP40. It's going
+98:35 
+
+98:35 to be incredible. a brand new CPU called
+98:37 
+
+98:37 Rosa,
+98:39 
+
+98:39 short for Roslin. Bluefield 5, which
+98:42 
+
+98:42 connects the next CPU with the next
+98:46 
+
+98:46 Superneck
+98:47 
+
+98:47 CX10.
+98:49 
+
+98:49 We will have Kyber
+98:52 
+
+98:52 which is copper scale up. We will also
+98:56 
+
+98:56 have Kyber
+98:59 
+
+98:59 CPO scale up. So for the first time we
+99:03 
+
+99:03 will scale up with both copper and
+99:08 
+
+99:08 co-ackage optics. Okay. And so a lot of
+99:12 
+
+99:12 people have been asking you know Jensen
+99:14 
+
+99:14 are is copper going to still be
+99:16 
+
+99:16 important? The answer is yes.
+99:19 
+
+99:19 Jensen are you going to scale up
+99:22 
+
+99:22 optical? Yes.
+99:25 
+
+99:25 Are you going to scale out optical?
+99:28 
+
+99:28 Yes.
+99:30 
+
+99:30 And so for everybody who is in our
+99:32 
+
+99:32 ecosystem, we need a lot more capacity
+99:36 
+
+99:36 and that's really the key. We need a lot
+99:38 
+
+99:38 more capacity for COP for copper. We
+99:40 
+
+99:40 need a lot more capacity for optics. We
+99:43 
+
+99:43 need a lot more capacity for CPO and
+99:45 
+
+99:45 that's the reason why we've been working
+99:47 
+
+99:47 with all of you to lay the foundation
+99:49 
+
+99:49 for this level of growth. And so Fman
+99:52 
+
+99:52 will have all of that. Let me see if I
+99:54 
+
+99:54 uh missed everything. That's it. every
+99:57 
+
+99:57 single year. Brand new architecture.
+99:60 
+
+99:60 Very quick.
+100:06 
+
+100:06 Very quickly, Nvidia went from a chip
+100:09 
+
+100:09 company to a AI factory company or AI
+100:13 
+
+100:13 infrastructure company, AI computing
+100:15 
+
+100:15 company. These systems
+100:17 
+
+100:17 and now we're building entire AI
+100:20 
+
+100:20 factories. There's so much power
+100:24 
+
+100:24 that is squandered in these AI
+100:26 
+
+100:26 factories. We want to make sure that
+100:28 
+
+100:28 these AI factories come together
+100:31 
+
+100:31 designed in the best possible way. Most
+100:33 
+
+100:33 of these components never meet each
+100:35 
+
+100:35 other. Most of most of us technology
+100:37 
+
+100:37 vendors now we all know each other but
+100:40 
+
+100:40 in the past we never met each other
+100:42 
+
+100:42 until the data center. That can't
+100:44 
+
+100:44 happen. We're building super complex
+100:46 
+
+100:46 systems and so we have to meet each
+100:48 
+
+100:48 other virtually somewhere else and so we
+100:51 
+
+100:51 created Omniverse and the Omniverse DSX
+100:55 
+
+100:55 world a platform where all of us can
+100:57 
+
+100:57 meet and design these gigafactories the
+101:00 
+
+101:00 giga you know gigawatt AI factories
+101:03 
+
+101:03 virtually in system we have simulation
+101:07 
+
+101:07 systems for the racks for mechanical
+101:10 
+
+101:10 thermal electrical networking those
+101:12 
+
+101:12 simulation systems integrated into all
+101:15 
+
+101:15 of our ecosystem partners of incredible
+101:17 
+
+101:17 tools companies. We also operated
+101:21 
+
+101:21 connected to the grid so that we could
+101:24 
+
+101:24 interact with each other, send each
+101:25 
+
+101:25 other information so that we could
+101:28 
+
+101:28 adjust
+101:29 
+
+101:29 grid power and data center power
+101:32 
+
+101:32 accordingly, saving energy. And then
+101:34 
+
+101:34 inside the data center using Max Q so
+101:37 
+
+101:37 that we could adjust the system
+101:39 
+
+101:39 dynamically across power and cooling and
+101:42 
+
+101:42 all of the different technologies we all
+101:44 
+
+101:44 work on together so that we leave no
+101:46 
+
+101:46 power squandered
+101:49 
+
+101:49 so that we run at the most optimal rate
+101:51 
+
+101:51 to deliver enormous amount of token
+101:54 
+
+101:54 throughput. There's no question in my
+101:56 
+
+101:56 mind there's a factor of two in here and
+101:58 
+
+101:58 a factor of two at the scale we're
+102:00 
+
+102:00 talking about is gigantic. We call this
+102:03 
+
+102:03 the Nvidia DXX platform. And just as all
+102:06 
+
+102:06 of our platforms, there's the hardware
+102:08 
+
+102:08 layer, there's the library layer, and
+102:11 
+
+102:11 there's the ecosystem layer. It's
+102:12 
+
+102:12 exactly the same way. Let's show it to
+102:15 
+
+102:15 you.
+102:19 
+
+102:19 The greatest infrastructure buildout in
+102:21 
+
+102:21 history is underway.
+102:23 
+
+102:23 The world is racing to build chip system
+102:26 
+
+102:26 and AI factories. And every month of
+102:28 
+
+102:28 delay costs billions in lost revenues.
+102:32 
+
+102:32 AI factory revenues are equal to tokens
+102:34 
+
+102:34 per watt. So with power constraints,
+102:38 
+
+102:38 every unused watt is revenue lost.
+102:42 
+
+102:42 NVIDIA DSX is an Omniverse digital twin
+102:45 
+
+102:45 blueprint for designing and operating AI
+102:48 
+
+102:48 factories for maximum token throughput,
+102:51 
+
+102:51 resilience, and energy efficiency.
+102:54 
+
+102:54 Developers connect through several APIs.
+102:57 
+
+102:57 DSX SIM for physical, electrical,
+103:00 
+
+103:00 thermal and network simulation. DSX
+103:03 
+
+103:03 Exchange for AI factory operational
+103:06 
+
+103:06 data. DSX Flex for secure dynamic power
+103:10 
+
+103:10 management between the grid and DSX Max
+103:14 
+
+103:14 Q to dynamically maximize token
+103:16 
+
+103:16 throughput.
+103:19 
+
+103:19 It starts with SIM ready assets from
+103:20 
+
+103:20 NVIDIA and equipment manufacturers
+103:24 
+
+103:24 managed by PTC windchill PLM.
+103:28 
+
+103:28 Then modelbased systems engineering is
+103:30 
+
+103:30 done in DASO systems 3D experience.
+103:35 
+
+103:35 Jacobs brings the data into their custom
+103:37 
+
+103:37 Omniverse app to finalize design.
+103:41 
+
+103:41 It's tested with leading simulation
+103:43 
+
+103:43 tools using Seaman's Star CCCM Plus for
+103:47 
+
+103:47 external thermals,
+103:50 
+
+103:50 Cadence Reality for internal,
+103:52 
+
+103:52 EAP for electrical, and NVIDIA's network
+103:55 
+
+103:55 simulator DSX Air
+103:59 
+
+103:59 and virtually commission through Procore
+104:02 
+
+104:02 to ensure accelerated construction time.
+104:05 
+
+104:05 When the site goes live, the digital
+104:08 
+
+104:08 twin becomes the operator. AI agents
+104:12 
+
+104:12 work with DSX Max Q to dynamically
+104:15 
+
+104:15 orchestrate infrastructure.
+104:18 
+
+104:18 Fedra's agent overseas cooling and
+104:20 
+
+104:20 electrical systems, sending signals to
+104:22 
+
+104:22 Max Q, which continuously optimizes
+104:25 
+
+104:25 compute throughput and energy
+104:27 
+
+104:27 efficiency.
+104:28 
+
+104:28 Emerald AI agents interpret live grid
+104:31 
+
+104:31 demand and stress signals and adjust
+104:34 
+
+104:34 power dynamically.
+104:38 
+
+104:38 With DSX, Nvidia and our ecosystem of
+104:41 
+
+104:41 partners are racing to build AI
+104:43 
+
+104:43 infrastructure around the world,
+104:45 
+
+104:45 ensuring extreme resiliency, efficiency,
+104:49 
+
+104:49 and throughput.
+104:54 
+
+104:54 It's incredible, right? Well,
+105:00 
+
+105:00 Omniverse, Omniverse was designed to
+105:03 
+
+105:03 hold the world's digital twin starting
+105:06 
+
+105:06 from the Earth and it's going to hold
+105:08 
+
+105:08 digital twins of all sizes. And so, we
+105:10 
+
+105:10 have just such a great ecosystem of
+105:12 
+
+105:12 partners. I want to thank all of you.
+105:14 
+
+105:14 All of these companies are brand new to
+105:16 
+
+105:16 our world. We didn't know many of you
+105:18 
+
+105:18 just a couple years ago. And now we're
+105:21 
+
+105:21 working so close together to work on and
+105:23 
+
+105:23 build together the largest computer the
+105:26 
+
+105:26 world's ever seen and also to do it at
+105:28 
+
+105:28 planetary scale. So NVIDIA DSX is our
+105:32 
+
+105:32 new AI factory platform.
+105:41 
+
+105:41 I'll spend very little time on this this
+105:42 
+
+105:42 time. However, we're going to space.
+105:44 
+
+105:44 We've already been out in space. Uh THOR
+105:47 
+
+105:47 is radiation approved and uh we're in
+105:49 
+
+105:49 satellites. You do imaging from the from
+105:52 
+
+105:52 satellites in the future. We'll also
+105:53 
+
+105:53 build data centers in the in the in the
+105:56 
+
+105:56 in space. Uh obviously very complicated
+105:58 
+
+105:58 to do. So we have we're working with our
+106:01 
+
+106:01 partners on a new computer called Vera
+106:03 
+
+106:03 Rubin Space One and it's going to go out
+106:06 
+
+106:06 to space and start data centers out out
+106:08 
+
+106:08 in space. Now, of course, in space,
+106:11 
+
+106:11 there's no
+106:13 
+
+106:13 conduction, there's no convection,
+106:15 
+
+106:15 there's just radiation. And so, we have
+106:17 
+
+106:17 to figure out how to um uh cool these
+106:20 
+
+106:20 systems uh out in space. But we've got
+106:22 
+
+106:22 lots of great engineers working on it.
+106:24 
+
+106:24 Let me talk to you about something new.
+106:33 
+
+106:33 So, so um
+106:36 
+
+106:36 uh Peter Steinberger is here and um uh
+106:39 
+
+106:39 he he wrote a piece of software.
+106:42 
+
+106:42 It's called Open Claw and and um I don't
+106:46 
+
+106:46 know if he realized uh how successful it
+106:49 
+
+106:49 was going to be. Um but the importance
+106:51 
+
+106:51 is profound. Open Claw is the number
+106:54 
+
+106:54 one. It's the most popular opensource
+106:57 
+
+106:57 project in the history of humanity and
+106:60 
+
+106:60 it did so in just a few weeks.
+107:07 
+
+107:07 It exceeded it exceeded what Linux did
+107:09 
+
+107:09 in 30 years. And it's that important. It
+107:13 
+
+107:13 is that important. It will do well.
+107:18 
+
+107:18 Uh this is all you do. Okay. We're
+107:21 
+
+107:21 announcing our support of it. Uh let me
+107:23 
+
+107:23 let me just quickly go through this. I
+107:24 
+
+107:24 want to show you a couple things. You
+107:26 
+
+107:26 simply type this, you type it this into
+107:29 
+
+107:29 a into a console and um it goes out, it
+107:33 
+
+107:33 finds open claw, it downloads it, it
+107:36 
+
+107:36 builds you an AI agent,
+107:38 
+
+107:38 and then you could tell it whatever else
+107:40 
+
+107:40 you need to do. Okay, so let's take a
+107:42 
+
+107:42 look.
+109:16 
+
+109:16 An open source project just dropped.
+109:18 
+
+109:18 Andre Carpathy has just launched
+109:19 
+
+109:19 something called research is a huge
+109:21 
+
+109:21 deal.
+109:22 
+
+109:22 >> You give an AI agent a task, go to
+109:24 
+
+109:24 sleep. It runs 100 experiments
+109:25 
+
+109:25 overnight, keeping what works and
+109:27 
+
+109:27 killing what doesn't.
+109:39 
+
+109:39 I really love what my stuff enables that
+109:42 
+
+109:42 person to do. And he had like one guy he
+109:45 
+
+109:45 told me like he installed it as a
+109:46 
+
+109:46 60-year-old dad and like they made beer
+109:48 
+
+109:48 connected the machine via Bluetooth to
+109:50 
+
+109:50 open claw and then we automated
+109:52 
+
+109:52 everything including the whole website
+109:53 
+
+109:53 for people to order
+109:55 
+
+109:55 >> lobster.
+110:02 
+
+110:02 Hundreds of people are queuing up for
+110:04 
+
+110:04 lobsters in San Openaw.
+110:08 
+
+110:08 We want to build openclaw with openclaw.
+110:10 
+
+110:10 Everyone is talking about open claw, but
+110:13 
+
+110:13 what is open claw?
+110:15 
+
+110:15 >> Believe it or not, there's already a
+110:16 
+
+110:16 claw con.
+110:30 
+
+110:30 >> Incredible. Incredible. Now, um I
+110:33 
+
+110:33 illustrated effectively what openclaw is
+110:36 
+
+110:36 in this way and so all of you can
+110:38 
+
+110:38 understand it. Let's just think what
+110:40 
+
+110:40 happened. What is open claw? It connects
+110:42 
+
+110:42 it's an a it's aic system. It calls and
+110:46 
+
+110:46 connects to large language models. So
+110:48 
+
+110:48 the first thing it has it has resources
+110:50 
+
+110:50 that it manages. It man it could access
+110:53 
+
+110:53 tools. It could access file systems. It
+110:55 
+
+110:55 could access large language models. It
+110:57 
+
+110:57 it's able to do scheduling. It's able to
+110:60 
+
+111:00 do cron jobs. is able to um uh decompose
+111:04 
+
+111:04 a problem that a prompt that you gave it
+111:07 
+
+111:07 into step by step by step. It could
+111:09 
+
+111:09 spawn off and call upon other sub aents.
+111:13 
+
+111:13 It has IO. You could talk to it in any
+111:16 
+
+111:16 modality you want. You could wave at it
+111:19 
+
+111:19 and it understands you. You could talk
+111:21 
+
+111:21 to any modality you want. It sends you
+111:24 
+
+111:24 messages. It texts you. Sends you email.
+111:27 
+
+111:27 So, it's got IO.
+111:30 
+
+111:30 Um, what else does it have? Well, based
+111:34 
+
+111:34 on that, you could you could say in fact
+111:38 
+
+111:38 it's an operating system. I've just used
+111:41 
+
+111:41 the same syntax that I would describe an
+111:44 
+
+111:44 operating system. Art
+111:46 
+
+111:46 open claw has open sourced essentially
+111:50 
+
+111:50 the operating system of agent computers.
+111:54 
+
+111:54 It is no different than how Windows made
+111:56 
+
+111:56 it possible for us to create personal
+111:59 
+
+111:59 computers. Now open claw has made it
+112:01 
+
+112:01 possible for us to create personal
+112:04 
+
+112:04 agents.
+112:06 
+
+112:06 The implication is incredible. The
+112:08 
+
+112:08 implication is incredible. First of all,
+112:10 
+
+112:10 the adoption says something in all in
+112:13 
+
+112:13 itself. However, the most important
+112:16 
+
+112:16 thing is this. Every single company now
+112:18 
+
+112:18 realize every single company, every
+112:20 
+
+112:20 single software company, every single
+112:21 
+
+112:21 technology company for the CEOs, the
+112:24 
+
+112:24 question is what's your open claw
+112:25 
+
+112:25 strategy?
+112:27 
+
+112:27 Just as we needed all have a Linux
+112:29 
+
+112:29 strategy, we all needed to have a HTTP
+112:32 
+
+112:32 HTML strategy which started the
+112:35 
+
+112:35 internet. We all needed to have a
+112:37 
+
+112:37 Kubernetes strategy which made it
+112:38 
+
+112:38 possible for mobile cloud to happen.
+112:41 
+
+112:41 Every company in the world today needs
+112:43 
+
+112:43 to have an open claw strategy and a
+112:45 
+
+112:45 gentic system strategy. This is the new
+112:48 
+
+112:48 computer. Now this is just the exciting
+112:51 
+
+112:51 part. This is enterprise IT before
+112:54 
+
+112:54 openclaw, you know, and and I mentioned
+112:57 
+
+112:57 earlier the way enterprise it works and
+112:60 
+
+113:00 the the reason these reason why it's
+113:02 
+
+113:02 called data centers is because these
+113:03 
+
+113:03 large rooms, these large buildings held
+113:06 
+
+113:06 data, held the files of people, the
+113:09 
+
+113:09 structured data of business. And we pass
+113:11 
+
+113:11 through software that has tools and you
+113:14 
+
+113:14 know systems of records and all kinds of
+113:17 
+
+113:17 workflow that's codified into it and
+113:20 
+
+113:20 that turns into tools that humans would
+113:22 
+
+113:22 use
+113:23 
+
+113:23 digital workers would use. That is the
+113:26 
+
+113:26 old IT industry software companies
+113:28 
+
+113:28 creating tools saving files and of
+113:32 
+
+113:32 course gsis consultants that help
+113:34 
+
+113:34 companies figure out how to use these
+113:35 
+
+113:35 tools and integrate these tools. These
+113:37 
+
+113:37 in these tools are incredibly valuable
+113:39 
+
+113:39 for governance and security and privacy
+113:42 
+
+113:42 and compliance and all of that continues
+113:44 
+
+113:44 to be true.
+113:47 
+
+113:47 It's just that post open clock, post
+113:50 
+
+113:50 aentic, this is what it's going to look
+113:51 
+
+113:51 like. This is the extraordinary part.
+113:54 
+
+113:54 Every single IT company, every single
+113:57 
+
+113:57 company, every SAS company,
+114:00 
+
+114:00 every SAS company will become a
+114:05 
+
+114:05 a gas company.
+114:08 
+
+114:08 No question about it. Every single SAS
+114:11 
+
+114:11 company will become a gas company, an
+114:12 
+
+114:12 Aentic as a service company. And what's
+114:16 
+
+114:16 amazing is this. You now open claw gave
+114:19 
+
+114:19 us gave the industry exactly what it
+114:21 
+
+114:21 needed at exactly the time.
+114:25 
+
+114:25 Just as Linux gave the industry exactly
+114:28 
+
+114:28 what it needed at exactly the time just
+114:30 
+
+114:30 as Kubernetes showed up at exactly the
+114:32 
+
+114:32 right time just as HTML showed up it
+114:35 
+
+114:35 made it possible for the entire industry
+114:37 
+
+114:37 to grab onto this open-source stack and
+114:41 
+
+114:41 go do something with it. There's just
+114:43 
+
+114:43 one catch.
+114:44 
+
+114:44 Agentic systems
+114:47 
+
+114:47 in the corporate network can have access
+114:50 
+
+114:50 to sensitive information. It can execute
+114:53 
+
+114:53 code and it can communicate externally.
+114:56 
+
+114:56 Just say that out loud. Okay, think
+114:58 
+
+114:58 about it. Access sensitive information,
+115:01 
+
+115:01 execute code, communicate externally.
+115:04 
+
+115:04 You could of course access employee
+115:06 
+
+115:06 information,
+115:08 
+
+115:08 access supply chain, access finance
+115:10 
+
+115:10 information, sensitive information and
+115:11 
+
+115:11 send it out, communicate externally.
+115:14 
+
+115:14 Obviously,
+115:16 
+
+115:16 this can't possibly be allowed. And so,
+115:18 
+
+115:18 what we did was we worked with Peter. We
+115:20 
+
+115:20 took some of the world's best security
+115:23 
+
+115:23 and computing experts and we worked with
+115:25 
+
+115:25 Peter to make open claw
+115:29 
+
+115:29 open claw enterprise
+115:32 
+
+115:32 secure and enterprise private capable.
+115:36 
+
+115:36 And we call that
+115:39 
+
+115:39 this is our Nvidia open claw reference
+115:42 
+
+115:42 for open nemo claw which is a reference
+115:45 
+
+115:45 for openclaw and it has all these
+115:48 
+
+115:48 agentic AI toolkits and the first part
+115:50 
+
+115:50 of it is technology we call open shell
+115:54 
+
+115:54 that has now been integrated into open
+115:56 
+
+115:56 claw now it's enterprise ready this
+116:01 
+
+116:01 stack this stack with a reference design
+116:04 
+
+116:04 we call Nemo cloud neol claw, okay, with
+116:07 
+
+116:07 a reference stack we call Nemo claw. You
+116:09 
+
+116:09 could download it, play with it, and you
+116:12 
+
+116:12 could connect to it the policy engine of
+116:17 
+
+116:17 all of the SAS companies in the world.
+116:19 
+
+116:19 And your policy engines are super
+116:21 
+
+116:21 important, super valuable. So the policy
+116:24 
+
+116:24 engines could be connected, Nemo claw or
+116:27 
+
+116:27 open claw with open shell would be able
+116:29 
+
+116:29 to execute that policy engine. It has a
+116:32 
+
+116:32 polic
+116:34 
+
+116:34 guard rail. It has a privacy router and
+116:37 
+
+116:37 as a result we could protect and keep
+116:41 
+
+116:41 the the clause from executing inside our
+116:45 
+
+116:45 company and do it safely. We also added
+116:48 
+
+116:48 several things to the agentic system and
+116:51 
+
+116:51 one of the most important things you
+116:52 
+
+116:52 want to do with your own
+116:55 
+
+116:55 claw custom clause is so that you can
+116:58 
+
+116:58 have your custom models and this is
+117:01 
+
+117:01 Nvidia's open model initiative. We are
+117:03 
+
+117:03 now at the frontier of every single
+117:07 
+
+117:07 domain of AI models. Whether it's
+117:10 
+
+117:10 Neotron, Cosmos, World Foundation model,
+117:14 
+
+117:14 Groot, artificial general robotics,
+117:16 
+
+117:16 human or robotics models, Alpamo for
+117:20 
+
+117:20 autonomous vehicle, Bioneo for digital
+117:23 
+
+117:23 biology,
+117:25 
+
+117:25 Earth 2 for AI physics. We are at the
+117:27 
+
+117:27 frontier on every single one. Take a
+117:29 
+
+117:29 look.
+117:33 
+
+117:33 The world is diverse. No single model
+117:35 
+
+117:35 can serve every industry.
+117:38 
+
+117:38 Open Models is one of the largest and
+117:40 
+
+117:40 most diverse AI ecosystems in the world.
+117:43 
+
+117:43 Nearly 3 million open models across
+117:45 
+
+117:45 language, vision, biology, physics, and
+117:49 
+
+117:49 autonomous systems enable AI builds for
+117:52 
+
+117:52 specialized domains. NVIDIA is one of
+117:54 
+
+117:54 the largest contributors to open-source
+117:56 
+
+117:56 AI. We build and release six families of
+117:60 
+
+117:60 open frontier models, plus the training
+118:02 
+
+118:02 data, recipes, and frameworks to help
+118:05 
+
+118:05 developers customize and adopt. New
+118:07 
+
+118:07 leaderboard topping models are launching
+118:09 
+
+118:09 for every family. At the core, Neotron
+118:13 
+
+118:13 reasoning models for language, visual
+118:16 
+
+118:16 understanding, rag,
+118:20 
+
+118:20 safety,
+118:23 
+
+118:23 and speech.
+118:24 
+
+118:24 >> Can you hear me now? Hello? Yes, I can
+118:26 
+
+118:26 hear you now.
+118:28 
+
+118:28 >> Cosmos Frontier models for physical AI
+118:32 
+
+118:32 world generation and understanding.
+118:36 
+
+118:36 Alpayo, the world's first thinking and
+118:39 
+
+118:39 reasoning autonomous vehicle AI
+118:43 
+
+118:43 group foundation models for general
+118:45 
+
+118:45 purpose robots. Bioneo open models for
+118:49 
+
+118:49 biology, chemistry, and molecular
+118:52 
+
+118:52 design.
+118:54 
+
+118:54 Earth 2 models for weather and climate
+118:56 
+
+118:56 forecasting rooted in AI physics.
+119:00 
+
+119:00 NVIDIA open models give researchers and
+119:03 
+
+119:03 developers the foundation to build and
+119:05 
+
+119:05 deploy AI for their own specialized
+119:07 
+
+119:07 domains.
+119:09 
+
+119:09 Our models our mo thank you
+119:15 
+
+119:15 our models are valuable to all of you
+119:17 
+
+119:17 because number one it's on the top of
+119:20 
+
+119:20 the leaderboard. It's world class. But
+119:24 
+
+119:24 most importantly, it's because we are
+119:26 
+
+119:26 not going to give up working on it.
+119:28 
+
+119:28 We're going to keep on working on it
+119:29 
+
+119:29 every single day. Neotron 3 is going to
+119:31 
+
+119:31 be followed by Neotron 4. Cosmos one was
+119:34 
+
+119:34 followed by Cosmos 2. Groot Groot at
+119:37 
+
+119:37 generation 2. Each and one of these
+119:39 
+
+119:39 we're going to continue to advance these
+119:41 
+
+119:41 models. vertical integration,
+119:45 
+
+119:45 horizontal openness, so that we can
+119:47 
+
+119:47 enable everybody to join the AI
+119:50 
+
+119:50 revolution, number one on leaderboard
+119:52 
+
+119:52 across research and voice and world
+119:55 
+
+119:55 models and artificial general robotics
+119:57 
+
+119:57 and self-driving cars and reasoning and
+120:01 
+
+120:01 of course one of the most important one.
+120:04 
+
+120:04 This is Neotron 3 in
+120:08 
+
+120:08 open claw. This is Neimotron 3 and Open
+120:10 
+
+120:10 Claw. And look at the top three. There
+120:13 
+
+120:13 are the three best models in the world.
+120:16 
+
+120:16 Okay. So, we are at the frontier.
+120:24 
+
+120:24 It is also true. It is also true that we
+120:27 
+
+120:27 want to create the foundation model so
+120:28 
+
+120:28 that all of you could fine-tune it and
+120:30 
+
+120:30 post-train it into exactly the
+120:33 
+
+120:33 intelligence you need. This is Neotron 3
+120:36 
+
+120:36 Ultra. It is going to be the best base
+120:39 
+
+120:39 model the world's ever created. This
+120:41 
+
+120:41 allows us to help every country build
+120:45 
+
+120:45 their sovereign AI. And we're working
+120:48 
+
+120:48 with so many different companies out
+120:49 
+
+120:49 there. And one of the most exciting
+120:51 
+
+120:51 things that we're doing today, I'm
+120:53 
+
+120:53 announcing today is a Neotron coalition.
+120:58 
+
+120:58 We are so dedicated to this. We have
+121:00 
+
+121:00 invested billions of dollars of AI
+121:02 
+
+121:02 infrastructure so that we could develop
+121:04 
+
+121:04 the core engines for AI that's necessary
+121:06 
+
+121:06 for all the libraries of inference and
+121:08 
+
+121:08 so on. But also to create the AI models
+121:12 
+
+121:12 to activate every single industry in the
+121:16 
+
+121:16 world. Large language models is really
+121:18 
+
+121:18 important. Of course, it's important.
+121:19 
+
+121:19 How could how could human intelligence
+121:21 
+
+121:21 not be? However, in different industries
+121:24 
+
+121:24 around the world, in different countries
+121:26 
+
+121:26 around the world, you need to have the
+121:28 
+
+121:28 ability to customize your own models.
+121:31 
+
+121:31 And the domains, the domain of the the
+121:33 
+
+121:33 domain of the models is radically
+121:35 
+
+121:35 different from biology to physics to
+121:37 
+
+121:37 self-driving cars to general robotics to
+121:39 
+
+121:39 of course human language. And we have
+121:41 
+
+121:41 the ability to work with every single
+121:43 
+
+121:43 region to create their domain specific
+121:46 
+
+121:46 their sovereign AI. Today we're
+121:48 
+
+121:48 announcing a coalition to partner with
+121:51 
+
+121:51 us to make Neotron 4 even more amazing.
+121:55 
+
+121:55 And that coalition has some amazing
+121:58 
+
+121:58 companies in it. Black Forest Labs
+122:01 
+
+122:01 imaging company, Cursor, the famous
+122:03 
+
+122:03 coding company. We use lots of it. Lang
+122:05 
+
+122:05 chain billion downloads for creating
+122:09 
+
+122:09 custom agents. Mistrol the Arthur Arthur
+122:12 
+
+122:12 mentioned I think he's here. Incredible
+122:15 
+
+122:15 incredible company. Perplexity.
+122:16 
+
+122:16 Perplexes computer. Absolutely use it.
+122:19 
+
+122:19 Everybody use it. It is so good. A
+122:22 
+
+122:22 multimodal agentic system. Reflection.
+122:26 
+
+122:26 Sarv from India. Thinking machine.
+122:28 
+
+122:28 Mirror Morardi's lab. Incredible
+122:30 
+
+122:30 companies joining us. Thank you.
+122:37 
+
+122:37 I said I said that every single
+122:41 
+
+122:41 enterprise company, every single
+122:42 
+
+122:42 software company in the world needs an
+122:45 
+
+122:45 agentic systems, need an agent strategy.
+122:48 
+
+122:48 you need to have an open claw strategy.
+122:50 
+
+122:50 And they all agree
+122:52 
+
+122:52 and they're all partnering with us to
+122:55 
+
+122:55 integrate Nemo, the Nemo claw reference
+122:59 
+
+122:59 design, the NVIDIA agentic AI toolkit,
+123:03 
+
+123:03 and of course all of our open models.
+123:06 
+
+123:06 One company after another. There's so
+123:08 
+
+123:08 many. And we're partnering with all of
+123:09 
+
+123:09 you. I'm really grateful for that. And
+123:12 
+
+123:12 um this is our moment. This is a
+123:14 
+
+123:14 reinvention. This is this is a
+123:17 
+
+123:17 renaissance
+123:18 
+
+123:18 a renaissance of the enterprise IT from
+123:22 
+
+123:22 what would be a $2 trillion industry.
+123:26 
+
+123:26 This is going to become a multi-
+123:28 
+
+123:28 trillion dollar industry offering not
+123:31 
+
+123:31 just tools for people to use but agents
+123:34 
+
+123:34 that are specialized in very special
+123:36 
+
+123:36 domains that you're expert in that we
+123:38 
+
+123:38 could rent. I could totally imagine in
+123:41 
+
+123:41 the future every single engineer in our
+123:44 
+
+123:44 company will need an annual token
+123:46 
+
+123:46 budget. They're going to make a few
+123:49 
+
+123:49 hundred,000 a year their base pay. I'm
+123:52 
+
+123:52 going to give them probably half of that
+123:54 
+
+123:54 on top of it as tokens so that they
+123:58 
+
+123:58 could be amplify 10x. Of course, we
+124:01 
+
+124:01 would. It is now one of the recruiting
+124:04 
+
+124:04 tools in Silicon Valley. How many tokens
+124:08 
+
+124:08 comes along with my job? And the reason
+124:11 
+
+124:11 for that is very clear because every
+124:13 
+
+124:13 engineer that has access to tokens will
+124:16 
+
+124:16 be more productive and those tokens as
+124:19 
+
+124:19 you know will be produced by AI
+124:21 
+
+124:21 factories that all of you and us we
+124:24 
+
+124:24 partner to build. Okay. So every single
+124:27 
+
+124:27 enterprise company in today sit on top
+124:30 
+
+124:30 of file systems and data centers. Every
+124:33 
+
+124:33 single software company of the future
+124:36 
+
+124:36 will be agentic and they will be token
+124:38 
+
+124:38 manufacturers. They'll be token users
+124:40 
+
+124:40 for their engineers and they'll be token
+124:42 
+
+124:42 manufacturers for all of their
+124:44 
+
+124:44 customers. The open clause in event the
+124:48 
+
+124:48 open claw event cannot be understated.
+124:51 
+
+124:51 This is as big of a deal as HTML. This
+124:54 
+
+124:54 is as big of a deal as Linux. We have
+124:57 
+
+124:57 now a world-class open agentic framework
+125:02 
+
+125:02 that all of us could use to build our
+125:05 
+
+125:05 open claw strategy and we've created a
+125:08 
+
+125:08 reference design we call Nemo cloud
+125:11 
+
+125:11 Nemoclaw that all of you could use that
+125:14 
+
+125:14 is optimized it's performant it is safe
+125:17 
+
+125:17 and secure
+125:27 
+
+125:27 Speaking of agents, agents as you know
+125:30 
+
+125:30 perceive, reason and act. Most of the
+125:33 
+
+125:33 agents in the world today that I've
+125:35 
+
+125:35 spoken about are digital agents. They
+125:37 
+
+125:37 act in the digital world. They reason,
+125:40 
+
+125:40 they write software. It's all digital.
+125:44 
+
+125:44 But we also have been working on
+125:46 
+
+125:46 physically embodied agents for a long
+125:49 
+
+125:49 time. We call them robots. And the AIs
+125:51 
+
+125:51 that they need are physical AIs. We have
+125:54 
+
+125:54 some big announcements here. I'm going
+125:56 
+
+125:56 to just walk through a few of them. 110
+125:59 
+
+125:59 robots here. Almost every single company
+126:02 
+
+126:02 in the world, I can't think of one that
+126:05 
+
+126:05 are building robots is working with
+126:06 
+
+126:06 Nvidia. We have three computers. the
+126:09 
+
+126:09 training computer, the synthetic data
+126:11 
+
+126:11 generation and simulation computer, and
+126:13 
+
+126:13 of course the robotics computer that
+126:15 
+
+126:15 sits inside the robot itself. We have
+126:17 
+
+126:17 all the software stacks necessary to do
+126:19 
+
+126:19 so, the AI models to help you.
+126:23 
+
+126:23 And all of this is integrated into
+126:25 
+
+126:25 ecosystems around the world and all of
+126:27 
+
+126:27 our partners from Seammens to Cadence,
+126:30 
+
+126:30 incredible partners everywhere. And
+126:33 
+
+126:33 today we're announcing a whole bunch of
+126:35 
+
+126:35 new new partners. As you know, we've
+126:38 
+
+126:38 been working on self-driving cars for a
+126:39 
+
+126:39 long time. The chat GPT moment of
+126:41 
+
+126:41 self-driving cars has arrived. We now
+126:43 
+
+126:43 know we could successfully autonomously
+126:46 
+
+126:46 drive cars. And today, we are announcing
+126:49 
+
+126:49 four new partners for Nvidia's robo taxi
+126:54 
+
+126:54 ready platform.
+126:56 
+
+126:56 BYD,
+126:58 
+
+126:58 Hyundai,
+126:60 
+
+126:60 Nissan,
+127:01 
+
+127:01 Ji all together, 18 million cars built
+127:06 
+
+127:06 each year. Joining our partners from
+127:09 
+
+127:09 before, Mercedes, Toyota,
+127:12 
+
+127:12 GM, the number of robo taxi ready cars
+127:16 
+
+127:16 in the future are going to be
+127:18 
+
+127:18 incredible. And we're announcing also a
+127:21 
+
+127:21 big partnership with Uber.
+127:23 
+
+127:23 multiple cities. We're going to be
+127:25 
+
+127:25 deploying and connecting these robo taxi
+127:28 
+
+127:28 ready vehicles into their network. And
+127:31 
+
+127:31 so a whole bunch of new cars. We have uh
+127:34 
+
+127:34 ABB, Universal Robotics, uh CUKA, so
+127:38 
+
+127:38 many robotics companies here and we're
+127:41 
+
+127:41 working with them to implement our
+127:44 
+
+127:44 physical AI models integrated into
+127:46 
+
+127:46 simulation system so that we could
+127:47 
+
+127:47 deploy these robots into manufacturing
+127:50 
+
+127:50 lines all over. We have Caterpillar
+127:52 
+
+127:52 here. We even have T-Mobile here. And
+127:56 
+
+127:56 the reason for that is in the future
+127:58 
+
+127:58 that radio radio tower used to be a
+128:00 
+
+128:00 radio tower is going to be an Nvidia
+128:03 
+
+128:03 aerial AI RAM. And so this is going to
+128:06 
+
+128:06 be a robotics radio tower, meaning it
+128:09 
+
+128:09 can reason about the traffic, figures
+128:11 
+
+128:11 out how to adjust its beam forming so
+128:14 
+
+128:14 that it could save as much energy as
+128:15 
+
+128:15 possible and increase the amount of
+128:18 
+
+128:18 fidelity as possible. There's so many
+128:21 
+
+128:21 humanoid robots here, but one of my
+128:23 
+
+128:23 favorites, one of my favorites is a
+128:27 
+
+128:27 Disney robot. You know what? Tell you
+128:30 
+
+128:30 what, let me just show you some of the
+128:31 
+
+128:31 videos. Let's look at that first.
+128:42 
+
+128:42 The first global rollout of physical AI
+128:44 
+
+128:44 at scale is here. Autonomous vehicles.
+128:48 
+
+128:48 And with NVIDIA Alpamo, vehicles now
+128:51 
+
+128:51 have reasoning, helping them operate
+128:54 
+
+128:54 safely and intelligently across
+128:56 
+
+128:56 scenarios.
+128:58 
+
+128:58 We ask the car to narrate its actions.
+129:01 
+
+129:01 >> I'm changing lanes to the right to
+129:03 
+
+129:03 follow my route.
+129:05 
+
+129:05 Explain its thinking as it makes
+129:07 
+
+129:07 decisions.
+129:09 
+
+129:09 >> There's a double parked vehicle in my
+129:10 
+
+129:10 lane. I'm going around it.
+129:15 
+
+129:15 >> And follow instructions.
+129:16 
+
+129:16 >> Hey, Mercedes. Can we speed up?
+129:20 
+
+129:20 >> Sure, I'll speed up.
+129:25 
+
+129:25 >> This is the age of physical AI and
+129:28 
+
+129:28 robotics.
+129:30 
+
+129:30 Around the world, developers are
+129:32 
+
+129:32 building robots of every kind. But the
+129:34 
+
+129:34 real world is massively diverse,
+129:37 
+
+129:37 unpredictable, full of edge cases. Real
+129:40 
+
+129:40 world data will never be enough to train
+129:42 
+
+129:42 for every scenario.
+129:44 
+
+129:44 We need data generated from AI and
+129:47 
+
+129:47 simulation. For robots, compute is data.
+129:52 
+
+129:52 Developers pre-trained World Foundation
+129:54 
+
+129:54 models on internet scale video and human
+129:56 
+
+129:56 demonstrations and evaluate the model's
+129:59 
+
+129:59 performance to prepare them for
+130:01 
+
+130:01 post-training.
+130:04 
+
+130:04 Using classical and neural simulation,
+130:07 
+
+130:07 they generate massive amounts of
+130:09 
+
+130:09 synthetic data and train policies at
+130:12 
+
+130:12 scale.
+130:14 
+
+130:14 To accelerate developers, NVIDIA built
+130:16 
+
+130:16 open- source Isaac Lab for robot
+130:19 
+
+130:19 training and evaluation and simulation.
+130:22 
+
+130:22 Newton for extensible and GPU
+130:24 
+
+130:24 accelerated differentiable physics
+130:26 
+
+130:26 simulation.
+130:27 
+
+130:27 Cosmos world models for neural
+130:29 
+
+130:29 simulation
+130:31 
+
+130:31 and Groot open robotics foundation
+130:33 
+
+130:33 models for robot reasoning and action
+130:35 
+
+130:35 generation.
+130:38 
+
+130:38 With enough compute, developers
+130:41 
+
+130:41 everywhere are closing the physical AI
+130:43 
+
+130:43 data gap.
+130:45 
+
+130:45 Paratas AI trains their operating room
+130:48 
+
+130:48 assistant robot in NVIDIA Isaac Lab,
+130:50 
+
+130:50 multiplying their data with NVIDIA
+130:52 
+
+130:52 Cosmos World models. Skilled AI uses
+130:56 
+
+130:56 Isaac Lab and Cosmos to generate
+130:58 
+
+130:58 post-training data for their skilled AI
+131:01 
+
+131:01 brain. They use reinforcement learning
+131:03 
+
+131:03 to harden the model across thousands of
+131:06 
+
+131:06 variations.
+131:08 
+
+131:08 Humanoid uses Isaac Lab to train whole
+131:11 
+
+131:11 body control and manipulation policies.
+131:15 
+
+131:15 Hexagon Robotics uses Isaac Lab for
+131:18 
+
+131:18 training and data generation.
+131:20 
+
+131:20 Foxcon fine-tunes group models in Isaac
+131:23 
+
+131:23 Lab,
+131:24 
+
+131:24 as does Noble Machines.
+131:27 
+
+131:27 Disney research uses their chamino
+131:29 
+
+131:29 physics simulator in Newton and Isaac
+131:32 
+
+131:32 lab to train policies across their
+131:34 
+
+131:34 character robots in every universe.
+132:32 
+
+132:32 Hallelujah.
+132:46 
+
+132:46 does.
+132:47 
+
+132:47 >> Ladies and gentlemen, Olaf
+132:53 
+
+132:53 does coming through Newton works.
+132:58 
+
+132:58 >> Omniverse works.
+133:01 
+
+133:01 Olaf,
+133:02 
+
+133:02 how are you?
+133:04 
+
+133:04 >> I'm so happy now that I'm meeting you.
+133:07 
+
+133:07 >> I know because I gave you your computer,
+133:10 
+
+133:10 Jetson.
+133:11 
+
+133:11 >> What's that?
+133:13 
+
+133:13 >> Well, it's in your tummy.
+133:16 
+
+133:16 >> That's going to be amazing.
+133:18 
+
+133:18 >> And you learn how to walk inside
+133:22 
+
+133:22 Omniverse.
+133:23 
+
+133:23 >> I love walking. This is so much better
+133:27 
+
+133:27 than riding on a reindeer gazing up at a
+133:29 
+
+133:29 beautiful sky.
+133:32 
+
+133:32 And
+133:34 
+
+133:34 it was because of physics using this
+133:36 
+
+133:36 Newton solver that runs on top of Nvidia
+133:40 
+
+133:40 Warp that we jointly developed with
+133:42 
+
+133:42 Disney and with Deep Mind that made it
+133:45 
+
+133:45 possible for you to be able to adapt to
+133:48 
+
+133:48 the physical world. Check that out.
+133:50 
+
+133:50 >> Not to say that.
+133:53 
+
+133:53 >> That's how smart you are.
+133:55 
+
+133:55 >> I'm a snowman, not a snowopedia.
+133:59 
+
+133:59 Could
+134:02 
+
+134:02 you imagine this? The future of
+134:04 
+
+134:04 Disneyland. All these all these robots,
+134:07 
+
+134:07 all these characters wandering around.
+134:10 
+
+134:10 >> Oh,
+134:10 
+
+134:10 >> you know, I have to admit though, I
+134:12 
+
+134:12 thought you were going to be taller.
+134:15 
+
+134:15 I've never seen such a short snowman, to
+134:17 
+
+134:17 be honest.
+134:18 
+
+134:18 >> Nope.
+134:20 
+
+134:20 >> Hey, tell you what. You want to help me
+134:23 
+
+134:23 out?
+134:24 
+
+134:24 >> Hooray.
+134:25 
+
+134:25 >> Okay. Usually usually I close the
+134:28 
+
+134:28 keynote by talk telling you what I told
+134:31 
+
+134:31 you. We talked about inference
+134:33 
+
+134:33 inflection. We talked about the AI
+134:35 
+
+134:35 factory. We talked about the open claw
+134:37 
+
+134:37 agent revolution that's happening. And
+134:39 
+
+134:39 of course we talked about physical AI
+134:42 
+
+134:42 and robotics. But tell you what, why
+134:44 
+
+134:44 don't we get some friends to help us
+134:46 
+
+134:46 close it out?
+134:47 
+
+134:47 >> Of course.
+134:49 
+
+134:49 >> All right, play it.
+134:51 
+
+134:51 Come on.
+134:52 
+
+134:52 >> Terminating simulation.
+135:01 
+
+135:01 Hello.
+135:06 
+
+135:06 Anybody here?
+135:32 
+
+135:32 The keynotes over all was said. Jensen
+135:35 
+
+135:35 map the road ahead. AI factories coming
+135:38 
+
+135:38 alive. Agents learning how to drive from
+135:41 
+
+135:41 open models to robots too. Now we'll
+135:44 
+
+135:44 break it all down for you.
+135:49 
+
+135:49 Comput exploded. What we saw from CNN's
+135:53 
+
+135:53 to open claw agents working across the
+135:56 
+
+135:56 land but they need the power to meet
+135:57 
+
+135:57 demand. So we solve the problem. It was
+135:60 
+
+135:60 brilliant. We multiply compute by 40
+136:04 
+
+136:04 million.
+136:14 
+
+136:14 Well once upon AI time training was the
+136:18 
+
+136:18 paradigm. J talk models how in France
+136:22 
+
+136:22 runs the whole world now shows us who's
+136:24 
+
+136:24 the boss at 35 times less the cost like
+136:28 
+
+136:28 makes the token singing video the
+136:31 
+
+136:31 inference king.
+136:36 
+
+136:36 Yeah, our factories once took years.
+136:38 
+
+136:38 Vendors pulling racks and gears. Built
+136:41 
+
+136:41 up slowly, piece by piece. No clear way
+136:43 
+
+136:43 to scale this beast. DSX and Dynamo know
+136:47 
+
+136:47 what to do.
+136:49 
+
+136:49 Turning power
+136:53 
+
+136:53 into revenue.
+136:58 
+
+136:58 Agents used to wait and see, now act
+137:01 
+
+137:01 autonomously. But if they ever try to
+137:04 
+
+137:04 stray, safe cross block and say no way.
+137:07 
+
+137:07 Nemo claws there to guard the course.
+137:10 
+
+137:10 And yes, my friends,
+137:14 
+
+137:14 it's open sorrow.
+137:24 
+
+137:24 Cars that think and droids that run.
+137:26 
+
+137:26 This ain't the movies. It's all begun.
+137:29 
+
+137:29 Alamo calls the shots. It's a GPT moment
+137:32 
+
+137:32 for the bots from sim streets. Now watch
+137:35 
+
+137:35 them drive. Blow your hands up
+137:40 
+
+137:40 full of physical AI.
+137:55 
+
+137:55 Industrial age built what came before.
+137:57 
+
+137:57 Now we built for AI even more. Vera
+137:59 
+
+137:59 Ruben plus Grog make the inference
+138:01 
+
+138:01 splash. Put them together. Now it's
+138:02 
+
+138:02 raining cash. We build new architecture
+138:05 
+
+138:05 every year cuz claws keep yelling more
+138:07 
+
+138:07 tokens here. The AI stacks for all to
+138:09 
+
+138:09 make. So let us all eat five layer cake.
+138:12 
+
+138:12 The moment's bright. The path is clear
+138:14 
+
+138:14 cuz open models led us here. When data's
+138:17 
+
+138:17 missing, there's no dispute. We just
+138:19 
+
+138:19 generate more with compute. Robots
+138:21 
+
+138:21 learning without flaw. Fueling the four
+138:24 
+
+138:24 scaling laws. The future's here. Won't
+138:26 
+
+138:26 you come and see? Welcome all to GTC.
+138:45 
+
+138:45 All right, have a great GTC
+138:50 
+
+138:50 wave.
+138:52 
+
+138:52 Thank you everybody.
