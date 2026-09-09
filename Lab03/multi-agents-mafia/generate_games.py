@@ -5,9 +5,14 @@ Runs one or more complete Mafia games against the fixed 6-model roster
 run ahead of class, at your own pace - see DESIGN.md Section 3.
 
 Usage:
-    uv run python generate_games.py --n 1                       # one game, sanity check
-    uv run python generate_games.py --n 20 --budget-usd 5.0     # batch, with a stop condition
-    uv run python generate_games.py --n 30 --max-games 30       # cap by count instead
+    uv run python generate_games.py --n 1                                  # one game, sanity check
+    uv run python generate_games.py --n 20 --budget-usd 5.0                # batch, with a stop condition
+    uv run python generate_games.py --n 30 --max-games 30                  # cap by count instead
+    uv run python generate_games.py --n 6 --experiment strategic_mafia     # a specific experiment
+
+See prompts/__init__.py for the available --experiment configurations
+(baseline, persona, strategic_mafia) and exactly what prompt text/model
+assignment each one uses.
 
 Run test_models.py first - this script assumes the roster is reachable and
 does not re-verify connectivity itself.
@@ -27,6 +32,7 @@ from openai import OpenAI
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import mafia_engine as me
+from prompts import load_experiment
 
 load_dotenv(find_dotenv(usecwd=True))
 
@@ -58,13 +64,19 @@ def parse_args() -> argparse.Namespace:
         help="If set, games are seeded seed_start, seed_start+1, ... for reproducibility.",
     )
     parser.add_argument(
-        "--personas",
-        action="store_true",
+        "--experiment",
+        choices=["baseline", "persona", "strategic_mafia"],
+        default="baseline",
         help=(
-            "Assign each agent a random flavor persona (voice/temperament, "
-            "not correlated with role) for a more entertaining watch. "
-            "Default is off, which keeps every agent's prompt identical "
-            "except for role - the clean model-vs-model comparison mode."
+            "Which prompts/*.py experiment configuration to use (default: "
+            "baseline). 'baseline': identical prompt wording for every "
+            "agent regardless of model, no personas, no model pinned to "
+            "any role - the clean model-vs-model comparison. 'persona': "
+            "same role prompts as baseline, plus a randomized flavor "
+            "persona per agent per game. 'strategic_mafia': Mafia's model "
+            "pinned to the strongest available model and given a more "
+            "detailed deceptive-tradecraft prompt; Detective/Doctor/"
+            "Villager unchanged from baseline. See prompts/__init__.py."
         ),
     )
     return parser.parse_args()
@@ -80,19 +92,21 @@ def main() -> int:
 
     GAMES_DIR.mkdir(exist_ok=True)
 
-    # A hard per-request timeout matters here: with no timeout, a single slow
-    # or hung upstream model response blocks the whole batch run indefinitely
-    # (observed in practice - one call took well over 10x the typical latency
-    # with no error and no progress). 90s comfortably covers normal reasoning
-    # latency for this roster while still failing fast on a genuine hang.
+    # The OpenAI client's own timeout= is set generously here, but is NOT
+    # the real safety net - see mafia_engine.CALL_HARD_TIMEOUT_SEC and
+    # LLMCallTimeout for why: httpx's read-timeout was observed to never
+    # fire on a request that trickles small amounts of data indefinitely,
+    # so mafia_engine wraps every call in its own wall-clock deadline via a
+    # worker thread, independent of this setting.
     client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key, timeout=90.0)
 
     n_games = args.n
     if args.max_games is not None:
         n_games = min(n_games, args.max_games)
 
+    experiment = load_experiment(args.experiment)
     print(f"Generating up to {n_games} game(s)...")
-    print(f"Personas: {'ON (flavor voices)' if args.personas else 'OFF (clean model comparison)'}")
+    print(f"Experiment: {experiment.name} - {experiment.description}")
     if args.budget_usd is not None:
         print(f"Budget cap: ${args.budget_usd:.2f}")
 
@@ -113,7 +127,7 @@ def main() -> int:
         start = time.monotonic()
 
         try:
-            result = me.run_one_game(client, seed=seed, use_personas=args.personas)
+            result = me.run_one_game(client, seed=seed, experiment=experiment)
         except Exception:
             games_failed += 1
             print("FAILED with exception:")

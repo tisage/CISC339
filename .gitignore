@@ -146,3 +146,7 @@ CLAUDE.md
 # Lab 03 Multi-Agent Mafia demo - discarded/superseded game recordings
 # (kept locally for reference, not meant for the curated teaching library)
 Lab03/multi-agents-mafia/games/test/
+
+# Lab 03 Multi-Agent Mafia demo - raw text dumps of unparseable LLM
+# responses, written for local debugging only (see _dump_parse_failure)
+Lab03/multi-agents-mafia/parse_failures/

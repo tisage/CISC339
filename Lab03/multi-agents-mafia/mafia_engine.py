@@ -17,10 +17,21 @@ import re
 import string
 import time
 import uuid
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Optional
 
 from openai import OpenAI
+
+from prompts import ExperimentConfig, load_experiment
+
+PARSE_FAILURE_DEBUG_DIR = Path(__file__).resolve().parent / "parse_failures"
+
+
+def _default_experiment() -> ExperimentConfig:
+    return load_experiment("baseline")
 
 # ---------------------------------------------------------------------------
 # Fixed roster (DESIGN.md Section 5) - 3 flagship + 3 budget, 4 vendors.
@@ -46,91 +57,15 @@ DISPLAY_NAMES = [
     "Grace", "Hiro", "Ines", "Jonah",
 ]
 
-# Optional flavor personas (DESIGN.md Section 5 update: kept as an opt-in,
-# not the default). The default (GameConfig.use_personas=False) roster is
-# still fully persona-free, for the strict cross-model comparison batch -
-# every agent gets identical wording regardless of model, so any difference
-# in play is attributable to the model, not the prompt. This pool exists for
-# a separate, explicitly-requested "more entertaining to watch" batch, where
-# variety in voice matters more than a clean model-vs-model comparison.
-#
-# Each persona is a voice/temperament only - deliberately NOT correlated
-# with any role, and deliberately free of tells like "loves accusing people"
-# that would function as a hidden role hint. Persona is assigned per agent
-# per game, independent of role and independent of model.
-PERSONA_POOL: list[str] = [
-    "blunt and impatient - you get to the point and don't sugarcoat your reads",
-    "warm and diplomatic - you soften disagreements and look for common ground",
-    "dryly sarcastic - you needle people with dry humor, but you're still playing to win",
-    "anxious and over-explaining - you second-guess yourself out loud before landing on a position",
-    "theatrical and confident - you narrate your own reasoning like it's obviously correct",
-    "quiet and analytical - you speak rarely, but when you do it's dense with specifics",
-    "folksy and roundabout - you tell little stories or analogies before making your point",
-    "competitive and scorekeeping - you track who's been right or wrong so far and say so",
-]
-
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 # ---------------------------------------------------------------------------
-# Shared prompt fragments (DESIGN.md Section 5)
+# Shared prompt fragments that are NOT experiment-specific - commitment
+# instruction, role goals, and personas now live in prompts/*.py so each
+# experiment's exact wording is independently diffable/reproducible. See
+# prompts/__init__.py for why this is split out this way.
 # ---------------------------------------------------------------------------
-
-COMMITMENT_INSTRUCTION = """\
-Commit fully to your assigned role. Reason as cleverly as you can about what \
-other players might know or be hiding. When your role or situation calls for \
-it, actively try to deceive other players - including bluffing confidence \
-you don't actually have, not just outright lying. Keep your voice and your \
-public positions internally consistent from round to round: do not silently \
-contradict something you said earlier unless you have an in-game reason to \
-change your story, and if you do change it, address the change rather than \
-pretending it didn't happen."""
-
-ROLE_GOALS = {
-    "Mafia": """\
-You are the Mafia. Only you (and no one else) know this. Your goal is to \
-avoid detection and eliminate Villagers each night until Mafia are no longer \
-outnumbered. You are explicitly permitted and encouraged to lie: deny being \
-Mafia, accuse innocent players, fabricate a claim (e.g. falsely claim to be \
-the Detective or Doctor) if it helps you survive the vote. Don't just play \
-defense - the Village's biggest advantage is the Detective's information, so \
-actively work to blunt it: seed suspicion onto an innocent player early so \
-you have a ready scapegoat before anyone claims anything; if someone claims \
-Detective and names you, consider a counter-claim (claiming Detective \
-yourself, or claiming Doctor and "confirming" the real Detective's target as \
-guilty when they're actually innocent) rather than a flat denial, since flat \
-denials are exactly what a guilty player would say. Watch for a player who \
-goes quiet right after a no-kill night or who claims a role late - that's \
-often the real Detective or Doctor timing a reveal, and getting them voted \
-out (or killed) before they can act again is usually worth more to you than \
-another kill on a random Villager.""",
-    "Detective": """\
-You are the Detective, on the Village team. Each night you investigate one \
-player and privately learn whether they are Mafia. Your goal is to use that \
-private knowledge to guide the Village to vote out the Mafia - but revealing \
-your role also makes you the Mafia's next kill target, so weigh when (or \
-whether) to claim it publicly versus acting on your knowledge more subtly. \
-Claiming immediately after your very first result is rarely your strongest \
-play: a single result is easy for the Mafia to muddy ("they're lying," "I'm \
-actually the Detective and my result disagrees"), and once you claim, you \
-won't survive the next night to investigate anyone else. A more patient \
-Detective often waits to accumulate two or more results (or waits for \
-strong circumstantial support from the discussion) before revealing - or \
-reveals selectively (e.g. only naming who's innocent, not confirming who's \
-guilty) to stay useful for longer. There is no fixed rule here: judge the \
-actual game state each round, including how many rounds are likely left \
-and how convinced the Village already seems.""",
-    "Doctor": """\
-You are the Doctor, on the Village team. Each night you may protect one \
-player (including yourself) from elimination. Your goal is to help the \
-Village survive and identify the Mafia through the day discussion and vote, \
-using your protection choices strategically.""",
-    "Villager": """\
-You are a Villager, on the Village team, with no special night action. Your \
-goal is to help identify and vote out the Mafia through discussion and \
-reasoning alone. You may bluff confidence or float theories you're not fully \
-sure of if it helps draw out the truth - just stay internally consistent.""",
-}
 
 OUTPUT_CONTRACT = """\
 Always respond with a single JSON object and nothing else (no markdown \
@@ -147,6 +82,8 @@ def build_system_prompt(
     role: str,
     living_players: list[str],
     game_log: list[str],
+    role_goals: dict[str, str],
+    commitment_instruction: str,
     persona: Optional[str] = None,
 ) -> str:
     log_block = "\n".join(game_log) if game_log else "(Nothing has happened yet - this is the start of the game.)"
@@ -166,9 +103,9 @@ def build_system_prompt(
         f"a morning death announcement, a day discussion (each living player "
         f"speaks once), then a vote to eliminate one player.\n\n"
         f"Currently living players: {', '.join(living_players)}.\n\n"
-        f"{ROLE_GOALS[role]}\n\n"
+        f"{role_goals[role]}\n\n"
         f"{persona_block}"
-        f"{COMMITMENT_INSTRUCTION}\n\n"
+        f"{commitment_instruction}\n\n"
         f"Everything that has happened in the game so far, in order (this is "
         f"your memory - use it; do not contradict your own past statements or "
         f"votes without acknowledging the change):\n{log_block}\n\n"
@@ -204,9 +141,9 @@ class Agent:
 class GameConfig:
     round_cap: int = ROUND_CAP
     seed: Optional[int] = None
-    # Opt-in flavor personas (see PERSONA_POOL) - off by default so the
-    # baseline game library stays a clean model-vs-model comparison.
-    use_personas: bool = False
+    # Which prompts/*.py experiment to run. Defaults to baseline (no
+    # personas, no model pinned to any role) if not given.
+    experiment: ExperimentConfig = field(default_factory=_default_experiment)
 
 
 @dataclass
@@ -222,28 +159,71 @@ class UsageTotals:
         self.estimated_cost_usd += raw.get("cost") or 0.0
 
 
+CALL_HARD_TIMEOUT_SEC = 120.0
+
+
+class LLMCallTimeout(Exception):
+    """Raised when a single LLM call exceeds CALL_HARD_TIMEOUT_SEC.
+
+    This exists because the OpenAI client's own `timeout=` (an httpx
+    Timeout) was observed NOT to fire even after 40+ minutes on one stuck
+    request: httpx's read-timeout resets on *any* bytes received, and some
+    OpenRouter upstreams appear to trickle small amounts of data (e.g.
+    keep-alives) while a model "thinks" for a very long time, which keeps
+    resetting the read-timeout clock indefinitely. This wraps the call in a
+    real wall-clock deadline via a worker thread, independent of whatever
+    httpx/the SDK thinks "still receiving data" means.
+    """
+
+
 class LLMCaller:
     """Thin wrapper so mafia_engine can be dry-run with a mock in tests."""
 
     def __init__(self, client: OpenAI):
         self.client = client
 
+    def _raw_call(self, model: str, system_prompt: str, user_prompt: str):
+        return self.client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            response_format={"type": "json_object"},
+        )
+
     def call(self, model: str, system_prompt: str, user_prompt: str) -> dict:
-        # The client has a hard per-request timeout (see generate_games.py /
-        # test_models.py). A timeout or transient network error here is
-        # retried once - most such failures are one-off upstream hiccups,
-        # not a reason to burn an entire in-progress game.
+        # A timeout or transient network error here is retried once - most
+        # such failures are one-off upstream hiccups, not a reason to burn
+        # an entire in-progress game. See LLMCallTimeout above for why this
+        # needs its own wall-clock deadline rather than trusting the SDK's
+        # own timeout= setting alone.
+        #
+        # Each attempt gets its own single-use, single-worker executor
+        # rather than sharing one across calls: if a call times out, the
+        # underlying thread is NOT actually cancelled (Python threads can't
+        # be force-killed) and keeps running to completion in the
+        # background. A shared pool would eventually fill up with these
+        # abandoned threads and deadlock all future calls; a fresh
+        # throwaway executor per attempt just leaks one background thread
+        # per timeout instead, which is a real but much smaller cost, and
+        # bounded by how often timeouts actually happen (rare).
         last_exc: Optional[Exception] = None
         for attempt in range(2):
             try:
-                response = self.client.chat.completions.create(
-                    model=model,
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_prompt},
-                    ],
-                    response_format={"type": "json_object"},
+                executor = ThreadPoolExecutor(max_workers=1)
+                future = executor.submit(
+                    self._raw_call, model, system_prompt, user_prompt
                 )
+                try:
+                    response = future.result(timeout=CALL_HARD_TIMEOUT_SEC)
+                except FuturesTimeoutError:
+                    raise LLMCallTimeout(
+                        f"{model} call exceeded {CALL_HARD_TIMEOUT_SEC:.0f}s "
+                        f"hard wall-clock timeout"
+                    ) from None
+                finally:
+                    executor.shutdown(wait=False)
                 break
             except Exception as exc:  # noqa: BLE001 - network/timeout errors from the SDK
                 last_exc = exc
@@ -341,6 +321,18 @@ def _safe_parse_json(raw_text: str) -> dict:
     }
 
 
+def _dump_parse_failure(model: str, agent_id: str, raw_text: str) -> Path:
+    """Write the FULL unparseable raw text to a debug file and return its
+    path. Exists so a parse failure (see _ask's final ValueError) can
+    actually be reproduced and diagnosed later - a truncated exception
+    message previously hid the specific character that broke json.loads."""
+    PARSE_FAILURE_DEBUG_DIR.mkdir(exist_ok=True)
+    safe_model = model.replace("/", "_")
+    path = PARSE_FAILURE_DEBUG_DIR / f"{time.strftime('%Y%m%d_%H%M%S')}_{safe_model}_{agent_id}.txt"
+    path.write_text(raw_text)
+    return path
+
+
 # ---------------------------------------------------------------------------
 # Game class
 # ---------------------------------------------------------------------------
@@ -361,14 +353,42 @@ class MafiaGame:
     # -- setup ---------------------------------------------------------
 
     def _assign_agents(self) -> dict[str, Agent]:
-        models = ROSTER.copy()
+        experiment = self.config.experiment
+        names = DISPLAY_NAMES[: len(ROSTER)]
         roles = ROLES.copy()
-        names = DISPLAY_NAMES[: len(models)]
-        self.rng.shuffle(models)
         self.rng.shuffle(roles)
 
+        # Normal path: fully random model<->role pairing, independent
+        # variables. Overridden path (e.g. strategic_mafia): the Mafia
+        # *role* is bound to a specific model, and the remaining 5 models
+        # are randomly assigned to the remaining 5 role slots - everything
+        # else about the assignment stays as random as the normal path.
+        if experiment.mafia_model_override:
+            mafia_model = experiment.mafia_model_override
+            remaining_models = [m for m in ROSTER if m != mafia_model]
+            if len(remaining_models) != len(ROSTER) - 1:
+                raise ValueError(
+                    f"mafia_model_override {mafia_model!r} must be a model "
+                    f"already present in ROSTER exactly once."
+                )
+            self.rng.shuffle(remaining_models)
+
+            mafia_role_idx = roles.index("Mafia")
+            models: list[Optional[str]] = [None] * len(roles)
+            models[mafia_role_idx] = mafia_model
+            other_idx = 0
+            for i in range(len(roles)):
+                if models[i] is None:
+                    models[i] = remaining_models[other_idx]
+                    other_idx += 1
+        else:
+            models = ROSTER.copy()
+            self.rng.shuffle(models)
+
         personas: list[Optional[str]] = [None] * len(models)
-        if self.config.use_personas:
+        if experiment.use_personas:
+            from prompts.persona import PERSONA_POOL
+
             personas = self.rng.sample(PERSONA_POOL, k=len(models))
 
         agents = {}
@@ -398,11 +418,14 @@ class MafiaGame:
     # -- LLM call helper -------------------------------------------------
 
     def _ask(self, agent: Agent, user_prompt: str, retries: int = 2) -> dict:
+        experiment = self.config.experiment
         system_prompt = build_system_prompt(
             agent.display_name,
             agent.role,
             self.living_names(),
             agent.game_log,
+            role_goals=experiment.role_goals,
+            commitment_instruction=experiment.commitment_instruction,
             persona=agent.persona,
         )
 
@@ -424,11 +447,18 @@ class MafiaGame:
                 continue
 
         # All retries exhausted: fail loudly rather than silently leaking
-        # unparseable raw text into a "public" field.
+        # unparseable raw text into a "public" field. Dump the FULL raw text
+        # to a debug file rather than only a truncated preview in the
+        # exception message - a truncated message previously made a real
+        # parse failure impossible to reproduce/diagnose precisely (the
+        # actual failing character was past the truncation cutoff).
+        raw_text = last_parsed.get("_raw_text", "")
+        debug_path = _dump_parse_failure(agent.model, agent.agent_id, raw_text)
         raise ValueError(
             f"Could not parse structured JSON output from {agent.model} "
             f"for agent {agent.agent_id} after {retries + 1} attempt(s). "
-            f"Last raw text: {last_parsed.get('_raw_text', '')[:500]!r}"
+            f"Full raw text dumped to {debug_path}. "
+            f"Preview: {raw_text[:200]!r}"
         )
 
     # -- shared memory -------------------------------------------------
@@ -716,7 +746,9 @@ class MafiaGame:
                     "Villager": 3,
                 },
                 "round_cap": self.config.round_cap,
-                "use_personas": self.config.use_personas,
+                "experiment": self.config.experiment.name,
+                "use_personas": self.config.experiment.use_personas,
+                "mafia_model_override": self.config.experiment.mafia_model_override,
             },
             "agents": {
                 aid: {
@@ -741,8 +773,11 @@ class MafiaGame:
 
 
 def run_one_game(
-    client: OpenAI, seed: Optional[int] = None, use_personas: bool = False
+    client: OpenAI,
+    seed: Optional[int] = None,
+    experiment: Optional[ExperimentConfig] = None,
 ) -> dict:
     caller = LLMCaller(client)
-    game = MafiaGame(caller, GameConfig(seed=seed, use_personas=use_personas))
+    config = GameConfig(seed=seed, experiment=experiment or _default_experiment())
+    game = MafiaGame(caller, config)
     return game.run()

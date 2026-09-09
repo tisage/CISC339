@@ -1,0 +1,188 @@
+{
+  "game_id": "mafia_2026-09-09_1218b3",
+  "created_at": "2026-09-09T20:19:53Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8,
+    "use_personas": false
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "google/gemini-3.8-flash",
+      "role": "Detective",
+      "persona": null
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager",
+      "persona": null
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Doctor",
+      "persona": null
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "anthropic/claude-opus-5",
+      "role": "Mafia",
+      "persona": null
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Villager",
+      "persona": null
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager",
+      "persona": null
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "As Doctor, the strongest default night 1 play is to protect myself. I have no information yet, and self-protection preserves my role for future nights while avoiding an immediate random mafia kill. If the mafia targets me tonight, I live; if they target someone else, I’ll still be alive to help later."
+        },
+        "mafia_kill": {
+          "agent": "agent_4",
+          "target": "agent_3",
+          "reasoning": "Night 1 with no information. I want to kill someone likely to be an informed or influential villager, but I have nothing to go on. I'll pick Carmen - a neutral choice that doesn't correlate with anything I say later, and leaves me free to seed suspicion on someone else during the day. I should avoid killing anyone I plan to scapegoat, since I want my scapegoat alive to be voted out."
+        },
+        "detective_check": {
+          "agent": "agent_1",
+          "target": "agent_2",
+          "result": false,
+          "reasoning": "It's Night 1 with no prior discussion or voting data. I'll pick Bruno at random among the other players to establish an early baseline of information."
+        },
+        "_eliminated_by_night": null
+      },
+      "morning_announcement": "No one died last night.",
+      "day_discussion": [
+        {
+          "agent": "agent_2",
+          "public_statement": "No death is good news, but it doesn't publicly clear anyone—we don't know who was targeted or why the kill failed. Doctor, please keep your protection private. I'm not naming a suspect without evidence just to sound useful. For anyone speaking after me: point to a specific statement you find suspicious or reassuring, and explain why. If you genuinely have no read, say so. Tomorrow, we should compare those positions with what actually happens, not reward whoever sounded most confident today.",
+          "private_reasoning": "There are no statements or night results that identify a suspect. A quiet night does not clear anyone, and exposing the Doctor's target could help the Mafia. With no vote today, the useful goal is to establish specific, revisitable positions without pressuring protective or investigative roles to reveal."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "I agree with Bruno that no one is publicly cleared by last night. A no-kill night most likely means the Doctor stopped a hit, so the Doctor knows who the Mafia tried to kill—and that target is probably a smart player or a high-value role. That's private info, and I'd ask the Doctor to keep it under wraps for now. As for reads: I don't have a specific statement from anyone yet that I'd call suspicious or reassuring; Bruno's comment about not rewarding confidence is sensible, but it's also the kind of thing anyone could say. I'll be watching for anyone who tries to twist the no-death into 'this person is town' or 'that person is Mafia' without good reason. That would be telling.",
+          "private_reasoning": "Bruno's statement is measured and doesn't push any agenda. He asks people to cite specific logic. I should comply. No death likely means the Doctor saved someone (or self-saved). That's valuable private info for the Doctor, not for public. I'll say I have no strong reads but want to watch for people who over-interpret the no-death. I'll also subtly discourage anyone from trying to clear themselves from a no-death event."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "I agree with the caution so far: the no-kill gives us information, but not a clear alignment read by itself. My current take is that we should focus on process rather than conclusions today. I want to hear from everyone on two points: 1) what do you think the most likely reason for the no-death was, and 2) which statement from another player do you think is actually the most alignment-indicative so far, and why? For my part, I’m not ready to clear or accuse anyone yet. Anyone who tries to turn last night into a hard townread or hard scumread without a chain of reasoning is where I’d start paying attention.",
+          "private_reasoning": "We need speak as Doctor but shouldn't reveal role. Need consistent with prior no-kill day and others statements. Best to be cautious, ask specific questions, maybe note that no-death alone doesn't clear anyone. Should seem towny and informative without overclaiming."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "I'm with the group on this: the no-kill doesn't clear anyone, and I don't think we should manufacture a read out of it. That said, I'll point out that Bruno, Elena, and Carmen have all landed in almost the same spot—caution, no accusations, wait and see. That's not suspicious by itself, but it does mean we haven't actually generated any distinguishing information yet. So I want to hear something concrete from Devon and Alice: not just 'I have no read,' but a guess at what happens tonight and why, so we have something to check tomorrow morning against reality. For my part, my working theory is that if the Doctor did save someone, whoever was targeted is probably someone who's been quiet or seems easily replaceable to Mafia—not necessarily the loudest talker. I'll be watching who dies next, if anyone, and cross-referencing that against who was pushing hardest for 'no reads yet' today, since that's a decent scum tactic when nobody has to commit to anything.",
+          "private_reasoning": "With no vote today, I should focus on building credibility as a careful thinker while gently pushing others to commit to reasoning we can compare later. I'll echo the caution but add a distinct angle - noting that everyone so far has converged on the same 'no info' stance, which isn't suspicious yet but means we need Devon and Alice to actually give something concrete. I'll also float a soft question to see who reacts defensively."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "Farid is right that letting everyone parrot 'stay cautious and don't make reads' just gives Mafia a free pass to blend in. To answer Carmen's prompts: the no-death is almost certainly a Doctor save, and the most interesting thing said so far is the contrast between Elena and Farid on Mafia's targeting mindset. Elena assumes Mafia hunted a perceived high-value threat, while Farid thinks they'd go after someone quiet or replaceable. That tells us how they both think Mafia operates. My concrete take for today: Bruno setting the tone of carefulness is standard opener play, but Carmen and Elena echoing it without taking individual risks feels very safe. Farid challenging that safety is productive, so I'm town-leaning on Farid's intent. I'm very interested to see where Devon goes next—if Devon just gives another safe 'wait and see' response under Farid's spotlight, that's where my suspicion will land tomorrow.",
+          "private_reasoning": "I investigated Bruno and know he is innocent, but revealing my role or clearing Bruno now is premature. There is no vote today, so preserving my identity to get a second investigation tonight is optimal. Farid directly prompted Devon and me to provide concrete analysis rather than repeating the cautious 'no reads' line. I will respond directly to Farid and Carmen, contrasting Elena's and Farid's theories about night kill targets, and noting that Farid's call to break the echo chamber is a good town test, while putting Devon on the spot before they speak."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Fair challenge, Farid, and Alice — I'd rather be wrong out loud than safe and useless, so here's something checkable.\n\nCarmen's question 1: I don't think the no-death was a coincidence. It was a Doctor save. Which means one person in this room — the Doctor — privately knows exactly who Mafia wanted dead on night one, before anyone had said a single word. That's the most valuable piece of information in the game right now, and it's the one thing I'd beg the Doctor not to spend today.\n\nCarmen's question 2: the most alignment-indicative thing said so far isn't Elena's or Farid's targeting theory — those are just philosophies, and both are defensible. It's Bruno's framing. Bruno opened with a rule that no one should name a suspect without evidence, and then explicitly asked everyone else to hand him their reads. That's a structure where he collects information and commits to nothing. Elena and Carmen both then locked into the same shape. I don't think all three are Mafia, obviously — but the person who authored a no-commitment norm and then had it adopted got the most out of today while risking the least. So my mild scumlean order today is Bruno, then Elena. My town-lean is Farid, for the same reason Alice gave: he forced actual movement.\n\nMy concrete prediction for tonight, to check tomorrow: I think Mafia kills a pressure-generator — Alice or Farid — because they're the two making people commit, and dead men make no reads. If instead we wake up to a quiet player dead, or another no-kill, my read on Bruno gets stronger, not weaker, because it means Mafia is comfortable letting the loud analysts live.\n\nOne last thing I want on the record before roles start coming out. Sometime in the next day or two, someone is going to claim Detective and name a name. Please remember that Mafia can say that sentence too, word for word, and that the safest place in this game is behind a badge nobody can check. When it happens, weigh it against how that person has actually played from day one — don't just hand the town over to whoever claims fastest and loudest. That's exactly the lever I'd pull if I were Mafia.",
+          "private_reasoning": "Alice has put a spotlight on me demanding something concrete, so a cautious answer is the worst thing I could give. I'll deliver: (1) a specific alignment read to satisfy Farid/Alice, (2) a falsifiable prediction for tonight that I intend to deliberately get WRONG (I'll predict a loud player dies, then kill Bruno or another quiet-but-organizing player), and (3) a pre-planted norm that a late Detective claim can be faked by Mafia, so that a counter-claim from me later doesn't look like a desperate invention.\n\nScapegoat choice: not Carmen — I attacked her last night, so if the Doctor ever reveals, Carmen gets effectively cleared and anyone who pushed her looks bad. Bruno is the best target: he set the 'no reads' tone, Alice already flagged that as standard opener play, and he reads like a village organizer (possibly Detective), so building a case on him serves double duty. Elena as secondary pressure.\n\nMy prediction will be that Mafia goes after Alice or Farid — the pressure-generators. Tonight I'll kill someone else, so my prediction fails harmlessly and I look like an honest, wrong villager rather than someone who knew."
+        }
+      ],
+      "vote_skipped": true
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "Night 2: with no info from day 1 beyond discussion, my default is still self-protection. I remain the only confirmed role I know, and preserving the Doctor for future nights is usually strongest unless I have a compelling reason to protect someone else. No public claims or votes have narrowed a likely kill target enough to justify switching."
+        },
+        "mafia_kill": {
+          "agent": "agent_4",
+          "target": "agent_1",
+          "reasoning": "Night 1 kill on Carmen failed, meaning the Doctor protected Carmen — so Carmen is likely to be protected again, or is the Doctor self-protecting. Avoid Carmen. I publicly predicted Mafia would kill a 'pressure-generator' — Alice or Farid — so killing one of them makes my Day 1 prediction come true and buys me enormous credibility as the guy who read the game right. Alice is the more dangerous of the two: she explicitly put a spotlight on me and said her suspicion would land on me if I played safe. She's also the most analytical player alive. Removing her both fulfills my prophecy and eliminates the person most likely to catch me later. Farid stays alive as a useful 'town-lean' I already endorsed, and Bruno stays alive as my pre-seeded scapegoat."
+        },
+        "detective_check": {
+          "agent": "agent_1",
+          "target": "agent_4",
+          "result": true,
+          "reasoning": "Bruno is already confirmed not Mafia from Night 1. On Day 1, Devon pushed suspicion onto Bruno (who I know is innocent) and laid pre-emptive groundwork to discredit any future Detective claim. Investigating Devon gives the highest information value: if Devon is Mafia, I have found the sole Mafia; if Devon is innocent, both Bruno and Devon are cleared, narrowing the Mafia down to Carmen, Elena, or Farid."
+        },
+        "_eliminated_by_night": "agent_1"
+      },
+      "morning_announcement": "Alice was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_2",
+          "public_statement": "Yesterday I had no substantive statements to judge when I spoke. Today I do: Devon is my leading suspect, provisionally.\n\nDevon, you changed 'I'm not naming a suspect without evidence' into a rule that nobody should name suspects. I explicitly asked people to identify suspicious statements and explain them. Requesting reasoned accusations isn't discouraging accusations—and you built your main case on that distinction disappearing.\n\nAlice's death matches your prediction, but that doesn't validate your accusation against me or clear you. Mafia knows whom they intend to target, too. You said a quiet death or another no-kill would strengthen your Bruno read. Now that your predicted pressure-player death happened, does your suspicion weaken? What specific observation would make you reconsider?\n\nI'm not treating Alice's death as proof that her reads were right. She leaned toward Farid and questioned Elena and Carmen; none of those positions becomes a confirmed result because she died.\n\nFor everyone else: please assess Devon's actual argument rather than choosing between 'caution is good' and 'pressure is good.' Both can be useful. What matters is whether the pressure accurately represents what someone said and can change when the evidence changes.",
+          "private_reasoning": "Devon offers the strongest behavioral lead: he misrepresented my personal refusal to invent a suspect as a rule forbidding others from making reads, despite my explicitly requesting specific suspicious or reassuring statements. His prediction also deserves scrutiny: Alice's death matches it, but Mafia can predict their own target, and he had already framed other outcomes as strengthening his suspicion of me. Neither point proves guilt; a sincere villager could reason poorly. His unsolicited warning about future Detective claims could be preemptive discrediting, but caution about claims is valid, so I won't make that the centerpiece. Alice's death also doesn't clear Farid or establish that her suspicions were correct. I should commit to a provisional suspect, explain why this differs from yesterday's lack of evidence, and leave room for other players or investigative information to change the read."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "Devon, before we treat your prediction as vindication: Mafia also knows who they're targeting, so a correct guess that a 'pressure-generator' would die is consistent with you being sharp AND with you being the one who picked the target. It doesn't move me either way on its own. What would move me is you answering Bruno's actual point — he says he asked for reasoned, evidence-based accusations, not silence, and that your case against him depended on erasing that distinction. Do you disagree with his characterization of his own opening statement, or do you think 'ask people to hand you their reads while committing to nothing yourself' is still a fair description of what he did, even with that caveat included? I want a direct answer to that, not a return to the prediction. Separately: Alice was killed the night after she publicly town-read me and questioned Elena and Carmen. That could mean nothing, or it could mean Mafia moved against the person actively building momentum toward specific names rather than against a random target. Elena, Carmen — since you were the ones she flagged as playing it safe, I'd like your take on whether that's coincidence or whether it changes anything about how you want to play today.",
+          "private_reasoning": "Devon's read got a real test: Alice, a pressure-generator, died exactly as he predicted. That's not proof he's town — Mafia would know their own target too, so calling it right is fully consistent with either being a sharp read OR being the one who set the kill. I want to push on that ambiguity rather than let 'my prediction came true' pass as vindication. Bruno's pushback on the 'no-commitment norm' framing is also fair and specific — Bruno did ask for reasoned accusations, not silence, and Devon's case rested on collapsing that distinction. I should ask Devon to directly respond to that specific point instead of pivoting to the prediction as if it settles things. I'll also note that I'm the one Alice townread and Devon town-read too, so I have a reason to want this resolved cleanly rather than just riding that goodwill."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Direct answers first, because both of you asked for them and dodging would be the tell.\n\nFarid, on Bruno's characterization: he's right and I was wrong. His opening did ask for reasoned suspicion with explanation, and I flattened that into \"nobody name suspects.\" Those aren't the same thing, and my case against him leaned on them being the same thing. So I'm dropping Bruno from leading suspect to a soft note — the note being that he authored the day's norms and still hasn't given a name of his own until today, when the name was the person accusing him. That's mildly self-serving, but it isn't scum-proof, and I'm not going to pretend my original argument survived his response. Bruno, you asked what observation would make me reconsider: that one. You engaged with the substance instead of just calling me a liar, and you did it in a way that cost you something. Noted and updated.\n\nSecond, on the prediction — I'm going to say the thing that hurts me. Bruno's point lands: being right about Alice is exactly as consistent with me being sharp as with me being the one who chose her. I will not be claiming credit for it, and for the same reason I am deliberately not making a second prediction today. If I called the next death correctly, that would be evidence against me, not for me, and it would be correct evidence. So no more prophecies from me. Judge me on argument quality only.\n\nNow, where my suspicion actually goes: Carmen, then Elena.\n\nWe have had two full days of talking. Carmen authored the most-cited framework in this game — two questions everyone else was asked to answer — and then answered neither of them herself. \"I'm not ready to clear or accuse anyone yet\" was her entire content on day one, and she has taken zero risk since. Elena is one step behind that: she agreed with Bruno, restated the Doctor-save logic everyone had already worked out, and said she'd be watching for someone twisting the no-death — a position that can never be wrong. Alice flagged both of them for exactly this before she died, and neither has addressed it.\n\nCompare that to Bruno today: he stuck his neck out with a name and a reason. Farid has been pushing people to commit since day one. Alice did the same and got killed for it. Whatever else is true, the two people who have never once put anything at risk are Carmen and Elena, and that's now a two-day pattern rather than an opening-statement quirk.\n\nSo, Carmen and Elena, you both speak after me and I want commitments, not process:\n1) Name your top suspect and your top town-read, and say what would change each. No \"I'll watch.\"\n2) Carmen: answer your own two questions from day one, in your own words.\n3) Elena: you said you'd be watching for anyone converting the no-kill into a hard read. Bruno converted it into nothing, I converted it into a soft read on him that I've now retracted. Who actually failed your test, or was it a test nobody could fail?\n\nMy vote today is Carmen unless one of you gives me something real. And to repeat my day-one point, since we're now at the stage where it matters: if a badge comes out this afternoon naming whoever is currently under pressure, ask why it waited until the pressure existed.",
+          "private_reasoning": "Bruno is leading a case on me and I speak third of four today, with Carmen and Elena still to speak. My best play: give Bruno a genuine-sounding concession on his specific point (villagers reward visible updating, and a flat refusal to budge is what a guilty player does), answer Farid's direct question head-on, then redirect pressure onto Carmen and Elena — the two who have produced no content across two days. Carmen is my preferred elimination: my night-1 kill on her failed, so she's either the Doctor self-protecting or someone the Doctor valued enough to cover, meaning she's likely a power role. Getting her voted out is worth more than another random kill. I'll also refuse to make a second prediction, explicitly citing Bruno's point that repeated accurate predictions are equally consistent with being the killer — that's a self-aware line that reads strongly town and defuses the strongest thing he has on me. And I'll keep my Day 1 warning about late Detective claims alive without over-hammering it."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "I want to separate 'playing cautiously' from 'playing evasively.' Devon is right that process-only answers can be a shelter for Mafia, but being careful on day one isn't itself alignment-indicative. My read right now is that the strongest pressure should be on whoever is still refusing to make a concrete call after two days of discussion.\n\nMy current top suspect is still Elena, because her posts have been consistently broad and low-risk without ever narrowing into a real read. My current town lean is Farid, because he has repeatedly forced the table toward specific comparisons and commitments. What would change that is simple: if Elena gives a direct top suspect/top town read with a reason and a change condition, I’ll take that seriously; if Farid starts hedging instead of pushing, that would hurt him.\n\nDevon, I have one direct question for you: if Carmen and Elena both give real commitments now, does your vote stay on Carmen, or does it move to the player whose answers remain most noncommittal? I want that answered plainly, because this is the point where the table needs a live standard, not just a fixed target.",
+          "private_reasoning": "I should respond publicly, stay internally consistent, and use the day to pressure for claims without revealing my Doctor role. I should address the current accusations and ask a specific commitment question. Since Devon is pushing Carmen and Elena, I can defend by noting that cautious play isn't scummy by itself, while still asking everyone to make concrete commitments. I should not claim Doctor. I should keep tone measured and useful."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "Devon, you asked for commitments, so here they are. My top suspect is you, Devon. Your prediction that Alice would die was too convenient—it gave you instant credibility without any real risk, and it's exactly what a mafia member would do after knowing who they killed. You then built a case against Bruno on a mischaracterization of his opening, and only retracted after Farid and Bruno pushed back. That pattern doesn't look like a town player hunting; it looks like someone establishing a 'reliable townie' persona. My top town read is Farid, because he has consistently forced people to give specific comparisons and commitments, not just process-talk. To answer your test about who failed to convert the no-death into a hard read: you did. You converted it into a read on Bruno, and even after retracting, you're still using that same momentum to push suspicion onto Carmen and me. That's not a test—it's a weapon you keep swinging. Carmen, you told everyone to be direct, but you still haven't answered your own two questions from day one. You gave a suspect and a town lean, but you never said what you think caused the no-kill, and you never named which statement was the most alignment-indicative. You're asking for standards while skipping the ones you set. So I'm asking you now, directly: why haven't you answered your own questions? My vote today is on Devon, unless either of you gives me a concrete reason to move it.",
+          "private_reasoning": "I need to appear engaged and give real reads while avoiding being the obvious target. Devon's prediction about Alice's death is coincidence but could also be mafia trying to look good; her quick retraction of the Bruno case after being challenged is suspicious. Farid has been consistently pushing for concrete commitments, so I'll town-read him. Carmen criticized me for evasiveness but hasn't answered her own day-one questions, so I can deflect that back. I'll vote for Devon based on the prediction plus her inconsistent case history."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_2": "agent_4",
+          "agent_3": "agent_5",
+          "agent_4": "agent_5",
+          "agent_5": "agent_4",
+          "agent_6": "agent_4"
+        },
+        "justifications": {
+          "agent_2": "Devon’s correction of his case against me counts in his favor, and Alice’s death does not prove his guilt. But he immediately replaced that flawed case with another overstated one: a supposed two-day pattern of Carmen and Elena avoiding commitments before either had spoken on day two. His repeated attempts to preemptively discredit a future Detective claim also concern me—claims need scrutiny, not automatic suspicion because they follow pressure. Taken together, his arguments look more like manufacturing elimination cases than fairly testing them. He remains my leading suspect.",
+          "agent_3": "I’m voting Elena. Devon has been loud and inconsistent, but he has at least been making and revising concrete cases in public. Bruno has been measured and has now taken a clear stance, which I read as more town-indicative than evasive. Farid has pushed for commitments, but his style has been consistent from the start. Elena, by contrast, has stayed broad and low-risk for most of the game, and when pressed she has only recently given a direct read while still avoiding the kind of specific, self-exposing reasoning that helps village solve. If we’re trying to eliminate the slot most likely to have been comfortable blending in, Elena is my vote.",
+          "agent_4": "Carmen asked me plainly whether my vote stays fixed or follows the standard, and the honest answer is that it follows the standard — so I'm moving it. Carmen answered my question head-on, gave a suspect, a town read, and explicit change conditions, and put a live standard on the table instead of a fixed target. That's someone taking on risk. Elena's commitment came only after I demanded one, and its content is: agree with Bruno's suspect. Bruno had already named me before she spoke. Naming the person the table is already pressuring, with no change condition attached, and echoing the town read that Carmen and I had both already stated, is the cheapest possible move available to her — which is exactly the two-day pattern I flagged, continuing. Alice flagged both Carmen and Elena for playing safe; Carmen has now answered that charge, Elena still hasn't. And note the shape of her case against me: it rests entirely on the Alice prediction, the one thing I voluntarily disarmed today by conceding it cuts both ways and refusing to make another prediction. Bruno, I take your vote seriously and I'm not calling you scum for it — you argued and you committed. Farid, you asked me for a direct answer and I gave you a full retraction that cost me my own case; I'm asking you to weigh who originated something today versus who rode the existing wave. My vote is Elena.",
+          "agent_5": "I'm voting for Devon. His Alice prediction was too convenient—it gave him instant credibility without risk, which fits a Mafia member who knew the kill. He built an overstated case against Bruno, retracted it only under pressure, then pivoted to a vague 'pattern' against Carmen and me before we'd even spoken on day two. His preemptive attack on future Detective claims also reads like preparation to discredit whatever comes out against him. His vote on me now rides the existing wave rather than originating any independent case.",
+          "agent_6": "I've watched this closely. Devon's play pattern worries me most: he built an elaborate case against Bruno, retracted it cleanly when pushed, then immediately pivoted to a new target (Carmen/Elena) with a fresh 'two-day pattern' argument that conveniently ignored that neither had spoken yet that day. That's a repeatable move - manufacture pressure, concede gracefully when caught, then redirect - and it lets him look reasonable while never actually being tested on a stable position. His preemptive strike against future Detective claims also reads less like caution and more like laying groundwork to discredit whoever might expose him later. Elena's case against Devon, while partly resting on the Alice-prediction point Devon already disarmed, at least targets that same instability in Devon's play. Between the two, Devon's shifting-target behavior is the bigger red flag to me right now. I'm breaking the tie on Devon."
+        },
+        "eliminated": "agent_4",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Village",
+    "ended_round": 2,
+    "reason": "All Mafia eliminated."
+  },
+  "meta": {
+    "total_tokens": 85915,
+    "estimated_cost_usd": 0.519284,
+    "generation_duration_sec": 552.7
+  }
+}

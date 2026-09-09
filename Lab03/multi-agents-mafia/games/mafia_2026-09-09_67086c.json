@@ -1,0 +1,193 @@
+{
+  "game_id": "mafia_2026-09-09_67086c",
+  "created_at": "2026-09-09T20:06:40Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8,
+    "use_personas": false
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "anthropic/claude-opus-5",
+      "role": "Detective",
+      "persona": null
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Doctor",
+      "persona": null
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "google/gemini-3.8-flash",
+      "role": "Mafia",
+      "persona": null
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager",
+      "persona": null
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Villager",
+      "persona": null
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager",
+      "persona": null
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_2",
+          "target": "agent_2",
+          "reasoning": "As Doctor, I should protect myself on night 1 to maximize the chance of surviving and preserving my power, unless there is strong public information suggesting another target. There is none yet."
+        },
+        "mafia_kill": {
+          "agent": "agent_3",
+          "target": "agent_5",
+          "reasoning": "It is Night 1. No public information or roles are known yet. Picking Elena as a quiet, solid target who is less likely to receive a default Doctor protection than the first alphabetical player."
+        },
+        "detective_check": {
+          "agent": "agent_1",
+          "target": "agent_4",
+          "result": false,
+          "reasoning": "No information yet, so any target is equally valuable. I'll investigate Devon and start building a picture. I want to accumulate results before considering a claim, so I should also pick someone likely to survive and stay relevant in discussion."
+        },
+        "_eliminated_by_night": "agent_5"
+      },
+      "morning_announcement": "Elena was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_1",
+          "public_statement": "Since there's no vote, let's not waste the day on vibes - let's make everyone put something on the record we can check tomorrow.\n\nTwo things I want us to think about. First: why Elena? She spoke the least of anyone before night fell, so I doubt she was killed for being loud. That makes me think it was either a pure coin flip, or the Mafia had a reason we can't see yet - a role they wanted gone. Either way it tells us the killer wasn't reacting to public pressure, so nobody gets to say \"I was obviously never a threat.\"\n\nSecond, and this is the actual request: I want each of you to name the one player you're most uneasy about right now and give one concrete reason - not \"we have nothing,\" an actual name. I'll go first so I'm not asking for something I won't give. Right now my mild lean is Bruno, purely on order: he's the one I'd expect to be shaping the day early and I want to hear whether he shapes it toward a name or toward mush. That's a soft read, not an accusation.\n\nTomorrow I'm going to compare who defended whom against who died. If someone spends today refusing to commit to any name, that's a person keeping their options open, and I'll treat it as the read it is.\n\nAnd whoever the Doctor is - please don't announce yourself. You're worth more alive and guessing than dead and confirmed.",
+          "private_reasoning": "I know Devon is innocent (Round 1 investigation). No vote today, so my priority is: (1) don't reveal my role, (2) extract behavioral data I can compare against my future results, and (3) avoid over-defending Devon, which would look strange this early. I'll push a structure that makes people commit to a named suspicion now, so that when I get my second result I can point at whoever's story doesn't hold up. Also worth seeding the idea that the Mafia's choice of Elena as a first kill was informed rather than random - that pressures the killer to explain themselves."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "I’ll follow Alice’s format and put a name on the record: right now I’m most uneasy about Alice. Not because I think her push is obviously scummy, but because she’s the one trying to set the day’s agenda very early, and that can be useful cover for a Mafia player who wants to look constructive. I want to hear whether she sticks to a real line of questioning or just keeps the table focused on process.\n\nMy question for everyone: if Elena’s night kill was not random, what specific role or behavior do you think made her a target? Please answer with one concrete reason, not just a vibe.",
+          "private_reasoning": "We should stay consistent with Alice's prompt, avoid claiming Doctor, and give a concrete but not overcommitted suspicion plus a useful question. We know Elena died, likely not random? With no info, a mild pressure statement on Alice's 'mild lean' is okay, but we should not over-accuse. Also mention the request to have everyone name someone uneasy about. Need public statement only, no vote."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "To Bruno's question: if Elena was targeted deliberately, my best guess is she was suspected of being the Detective - killing a possible investigator on night one before they can act again is a very standard Mafia opening move, and it fits with Alice's point that she wasn't targeted for being loud.\n\nOn the 'name a person' ask - I'll play it straight. Right now I don't have a real lean on Alice or Bruno; you two just did exactly what was asked (named each other with reasons), which is the correct move whether or not either of you is Mafia, so I don't think it tells us much yet. My soft unease is actually with the fact that Carmen and Devon haven't spoken at all yet - not an accusation, just noting that in a five-person day, whoever speaks last gets to calibrate their answer against everyone else's, which is a small structural advantage. I want to hear from both of them before I lock in a real read, and I'll be watching whether either of them gives a concrete name/reason like Alice and Bruno did, or hides behind 'I don't know enough yet.'\n\nFor tomorrow's bookkeeping: Alice suspects Bruno (soft), Bruno suspects Alice (soft), I'm reserving judgment pending Carmen and Devon's answers. If someone dies tonight, I'll be looking at who never committed to anything today.",
+          "private_reasoning": "I want to look cooperative and engaged without committing to a hard read I can't back up. I'll answer Bruno's question with a plausible theory (Elena was killed to remove a suspected Detective before she could use her power), and I'll give a soft name per Alice's format - but since Alice and Bruno have already named each other, I want to point out that dynamic and instead focus attention on the two players who haven't spoken yet (Carmen and Devon), noting that silence itself is data we should track. I'll frame this as a genuine, low-confidence read."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "My tentative suspect is Farid. You warn that failing to commit is suspicious, but your own summary says you're reserving judgment. Naming both players who haven't spoken yet isn't the same as choosing one suspect with a behavioral reason. And in a discussion with an established speaking order, not having spoken yet isn't evidence of deliberate silence.\n\nThat's a soft read, not a verdict: waiting for more statements is reasonable, but you shouldn't treat that flexibility as suspicious for everyone except yourself.\n\nOn Bruno's question: eliminating a possible Detective is a plausible motive, but we have no concrete evidence that Elena looked like one. I won't invent a tell to make the kill sound informative. Her death alone doesn't distinguish among the five of us.\n\nCarmen, I'd like your independent strongest read and the specific statement behind it—even if that points at me. For tomorrow, my benchmark for Farid is whether he actually follows through with a specific, accountable suspicion rather than continuing to police everyone else's commitment.",
+          "private_reasoning": "Farid is my strongest tentative suspect because he pressures players who have not yet had their turn while reserving judgment himself. His stated plan to scrutinize noncommitment is inconsistent with his own refusal to choose one suspect. This is a behavioral lead, not proof. Speculation that Elena was the Detective provides no discriminating evidence and could distract from living players' statements. With no vote today, I should establish a clear, revisable read without encouraging role claims."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "Devon, I take your point about Farid—his move to play town bookkeeper while exempting himself from picking an actual suspect was definitely a convenient hedge. \n\nHowever, my primary unease right now is with Bruno. When Alice asked for a suspect to set a baseline, Bruno gave a safe, reciprocal answer on Alice, but then pivoted the table by asking everyone to theorize on why Elena was killed and what role she might have had. As we saw with Farid immediately speculating about Elena being the Detective, prompting the village to dissect power-role tells on Day 1 is counterproductive for town and gives the Mafia useful reads on who thinks like an investigator. \n\nSo my concrete name for the record is Bruno, specifically for steering the discussion toward PR speculation rather than player behavior.",
+          "private_reasoning": "Devon specifically asked me for an independent read with a concrete reason, and both Alice and Farid set expectations that speaking last shouldn't just be an echo of earlier points. To appear thoroughly town-minded, I will provide a distinct read rather than merely piling onto Farid. I'll place my lean on Bruno: Bruno mirrored Alice's suspicion defensively, and more importantly, his question nudged the table into speculating about Elena's potential power role on Day 1 (which Farid immediately fell into). Pointing out that power-role speculation only aids the Mafia is a strong pro-town stance that establishes credibility without locking me into a rigid vendetta."
+        }
+      ],
+      "vote_skipped": true
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_2",
+          "target": "agent_2",
+          "reasoning": "Protecting myself again maximizes survival and keeps the Doctor hidden; Day 1 discussion provided no reliable lock on Mafia, and self-protect is the strongest default when alive with no confirmed town information."
+        },
+        "mafia_kill": {
+          "agent": "agent_3",
+          "target": "agent_4",
+          "reasoning": "Devon is sharp, analytical, and probing, making him a dangerous player and potential investigative role. Furthermore, Alice took a prominent leadership role on Day 1 ('let's not waste the day on vibes', directing the format, cautioning the Doctor), making Alice the most probable target for Doctor protection tonight. Attacking Alice carries a high risk of being blocked, whereas Devon is unlikely to be protected. Killing Devon also preserves the active Alice vs. Bruno clash and the suspicion on Farid for Day 2."
+        },
+        "detective_check": {
+          "agent": "agent_1",
+          "target": "agent_2",
+          "result": false,
+          "reasoning": "Devon is confirmed not-Mafia, so my remaining pool is Bruno, Carmen, Farid. The Mafia almost certainly won't kill Bruno tonight - he's carrying two public suspicions (mine and Carmen's) and is the natural lynch target, which is exactly what a Mafia wants preserved. So Bruno is very likely alive tomorrow, meaning a result on him is guaranteed to be actionable. He's also the single most likely person the village lynches: if he's Mafia I can drive the wagon home with certainty, and if he's clean I prevent a catastrophic mislynch at 4-5 players, where one wrong vote can lose the game. Carmen's read on Bruno was oddly specific about 'power-role tells,' which could be a Mafia manufacturing a wagon on a villager - checking Bruno resolves that too, since a clean Bruno makes Carmen (and her convenient last-speaker calibration) my prime suspect alongside Farid."
+        },
+        "_eliminated_by_night": "agent_4"
+      },
+      "morning_announcement": "Devon was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_3",
+          "public_statement": "Devon being killed is telling. Yesterday, Devon made one very clear, pointed push: he called out Farid for sitting on the fence, playing town bookkeeper, and reserving judgment while demanding commitments from everyone else. Devon specifically stated that his benchmark for Farid today was whether Farid would actually take an accountable stance.\n\nNow Devon is dead. That cuts two ways: either the Mafia wanted Devon gone because he was sharp and holding Farid’s feet to the fire, or it's a blatant frame to make us tunnel Farid. But looking at how Day 1 played out, Farid was the only player who managed to speak without taking any risk or naming any current participant, instead deflecting to whoever hadn't spoken yet.\n\nI was uneasy about Bruno yesterday for prompting the table to hunt for power-role tells, but Devon's death puts the immediate spotlight on Farid. Farid, Devon left you with a direct challenge before he died. No more reserving judgment or commenting on speaking order—with four of us left, who is your top suspect and what is the concrete case?",
+          "private_reasoning": "We are down to 4 players (Carmen, Alice, Bruno, Farid). A mis-elimination today gives Mafia the win after the night kill. On Day 1, Devon's strongest point of friction was calling out Farid for hedging and playing bookkeeper rather than committing to a suspect. Devon explicitly set a benchmark for Farid for Day 2, and now Devon is dead. I will use Devon's death to put heavy pressure on Farid, while maintaining continuity with my Day 1 thoughts. I'll frame Farid's Day 1 hedge as scummy, note that Devon was holding him accountable, and demand to see who Farid targets now. At the same time, I won't completely drop my suspicion of Bruno from Day 1 so my transition feels natural rather than opportunistic."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "Fair challenge, and I'll answer it straight: my top suspect right now is Carmen. Look at the pattern across both days - Carmen is the one assigning suspicion (Bruno on Day 1, me today) but she's never actually sitting under scrutiny herself, and both times she pivots the conversation before she has to answer for her own read. Notice also that Devon's last message directly asked Carmen for her 'independent strongest read and the specific statement behind it' - and she never actually answered that. Instead of giving her own concrete read, she used Devon's death this morning to build a case against me. That's convenient: it lets her look proactive while dodging the exact question Devon posed to her right before he died. I'm not saying that proves anything, but it's the concrete behavioral thing I've got, and it's more than 'speaking order,' which is why I didn't lean on it before. To be accountable like Devon asked: Carmen is my top suspect. If she has a real answer to Devon's original question - her honest strongest read with the statement behind it, not a redirect onto me - I want to hear it now, from her, not filtered through an accusation of me.",
+          "private_reasoning": "I'm being directly challenged and I need to commit to an actual name now, not just process talk. Let me think about who benefits from the current narrative. Carmen has, in both rounds, been the one steering the table's suspicion onto someone else while never landing any heat on herself: Round 1 she named Bruno for 'steering toward PR speculation,' and now Round 2 she's pivoted immediately to me, using Devon's death as leverage before anyone else even speaks. That's a pattern worth naming - she's positioned herself as the accuser both times, and a real Mafia player often does exactly this: stay the one asking questions and assigning suspicion rather than being asked. Also, if Devon's death was meant to silence someone sharp, it's just as consistent with Carmen wanting Devon gone because Devon asked HER directly for her strongest independent read with a specific statement behind it - a demand she never actually answered before he died. She answered by attacking me, not by answering Devon's actual question to her. I should call that out plainly, commit to Carmen as my suspect, and give my reasoning, while acknowledging I'm now taking the accountable stance Devon and Carmen wanted from me."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "I'm claiming Detective, and I'm doing it now because the math leaves me no choice: with four alive, if we vote wrong today the Mafia kills tonight and wins outright. There is no tomorrow to be clever in.\n\nMy two results: Night 1 I investigated Devon - not Mafia. Night 2 I investigated Bruno - not Mafia. Yes, I soft-named Bruno on Day 1 \"purely on order,\" and I said I'd check my reads rather than ride them; that's exactly what I did, and I'm correcting it publicly now. Bruno is clean. Devon was clean. I am the Detective. That means the Mafia is Carmen or Farid, and one of you two is a Villager who has to help us right now.\n\nMy vote is Carmen, for three concrete reasons.\n\nOne: on Day 1 Carmen's single \"concrete name for the record\" was Bruno - a player I have now personally confirmed innocent - and her reason was that Bruno was making the table reveal \"who thinks like an investigator.\" That's a wagon built on a villager, with an argument shaped to discourage exactly the kind of role-thinking that helps town.\n\nTwo: Devon asked Carmen directly, by name, for her independent strongest read and the statement behind it. She never answered it. Instead, the morning after Devon died, she used his death as the entire foundation of a case against Farid. She even said out loud that it could be \"a blatant frame to make us tunnel Farid\" - and then tunneled Farid anyway. Naming the trap and walking into it on purpose is what someone does when they built the trap.\n\nThree: consider who benefits from Devon's death. Devon's last act was pressuring Farid. If Farid were Mafia, killing his own loudest accuser overnight points the arrow straight back at himself for no gain. If Carmen were Mafia, killing Devon hands her a dead man's challenge to prosecute Farid with - which is precisely what she did within minutes of the announcement.\n\nCarmen, if you're about to counterclaim Detective, understand that you'd be doing it after I already put two names and two nights on the record, and your first result would somehow contradict the player I cleared. Instead, answer Devon's actual question: your strongest read, and the statement behind it.\n\nBruno - you're confirmed by me and I've publicly walked back my Day 1 lean on you. Farid, if you're the third Villager, this is the moment: Bruno and I on Carmen plus you makes three, and the Mafia's single vote can't save her. If I'm wrong about which of you it is, we lose tonight either way - so vote, don't hedge.",
+          "private_reasoning": "Decisive math: living are Alice(me), Bruno, Carmen, Farid. My investigations cleared Devon (dead) and Bruno. So the Mafia is Carmen or Farid, and today's vote is the whole game - if we mislynch, three remain, the night kill leaves 1v1 and Mafia wins. There is no future night for me to investigate, so holding my role back has zero value now. Full claim is correct: it converts Bruno into a guaranteed ally and locks the pool to two.\n\nBetween Carmen and Farid I lean Carmen: (1) her one 'concrete name for the record' on Day 1 was Bruno, whom I have now personally confirmed clean, and her reason was an oddly elaborate 'he's making us reveal who thinks like an investigator' - a Mafia-flavored way to build a wagon on a villager; (2) she never answered Devon's direct question to her, then used Devon's corpse as her whole case against Farid this morning, explicitly naming the 'this could be a frame to tunnel Farid' possibility and then tunneling Farid anyway; (3) killing the player who was pressuring Farid, then immediately prosecuting Farid with the dead man's challenge, is exactly the frame a Mafia builds - whereas if Farid were Mafia, killing his own loudest accuser paints a target on himself for no gain; (4) Carmen spoke last on Day 1, calibrating to everyone.\n\nI need to preempt a counterclaim and make the vote coordination explicit so Bruno and Farid both land on Carmen."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Alice’s claim changes the board. If her Detective results are real, then Devon and I are cleared, which leaves Carmen as the only consistent mafia candidate from the day-to-day behavior we’ve actually seen. Carmen’s pattern has been to place suspicion, then avoid being pinned to a concrete original read until someone else dies and she can build off that death. That’s exactly what happened after Devon was killed, and it’s exactly why I’m not treating her case on Farid as strong enough to outweigh Alice’s two named clears. Carmen, if you have a real counterclaim or a stronger specific case, put it forward now. Otherwise the village should be looking hard at you.",
+          "private_reasoning": "We are in a critical 4-player day. Alice has claimed Detective with two innocent checks (Devon, Bruno). Unless counterclaimed, the optimal village line is to align with her and push Carmen, who has the strongest behavioral suspicion and is the remaining named target. I should remain consistent with my earlier Day 1 soft suspicion on Alice? No need to contradict publicly; can explain that Alice’s claim and results outweigh prior uncertainty. Need a single public statement, not a vote. Best is to back the claim, press Carmen, and ask Carmen for direct counterclaim if any."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_3",
+          "agent_2": "agent_1",
+          "agent_3": "agent_1",
+          "agent_6": "agent_3"
+        },
+        "justifications": {
+          "agent_1": "I've confirmed Devon and Bruno are not Mafia, so the Mafia is Carmen or Farid. I vote Carmen: her only concrete Day 1 name was Bruno, a player I have personally cleared, and her stated reason was that Bruno was making the table reveal who thinks like an investigator - an argument that discourages exactly the role-thinking that helps town. She never answered Devon's direct question to her, and the morning after Devon died she named the frame out loud and then walked into it anyway, prosecuting Farid with a dead man's challenge she conveniently inherited. Farid, if you're the third Villager, vote Carmen with us and we win right now.",
+          "agent_2": "I’m voting Alice. Her Detective claim is the decisive claim on the table, but it arrives at the last possible moment when it can’t be checked, and it conveniently hard-clears Bruno and Devon while forcing a binary between Carmen and Farid. Her Day 1 shift from suspecting Bruno to now clearing him based on private investigations is plausible, but the timing and confidence read like a manufactured endgame claim rather than trustworthy information. Carmen has been consistently pushing concrete suspects, while Alice’s claim is the only thing that can explain why we’re being asked to trust a sudden reveal without any protection against a mafia counterplay. I’d rather eliminate the unverified late claim than follow it blindly.",
+          "agent_3": "I completely agree with Bruno's read here. Alice's Detective claim is textbook endgame manipulation: she claims an innocent check on Devon (conveniently dead so he can't corroborate anything) and an innocent check on Bruno (conveniently walking back her Day 1 suspicion purely to lock down Bruno's vote today and force an artificial binary between me and Farid). If Alice were truly the Detective who cleared Devon on Night 1, she let Devon walk straight into the crosshairs while steering attention away from real investigation. Fabricating two safe 'clears'—one dead player and the living player whose vote she desperately needs to secure a majority—is exactly what Mafia does at final four to seal a win without having to prove anything. We cannot hand the game over to a convenient, unverified claim designed to rail-road town. I vote Alice.",
+          "agent_6": "I said yesterday that Carmen was my top suspect, and nothing since then has changed my mind - if anything, Alice's claim reinforces it. Carmen never answered the question Devon posed to her directly before he died. She named the exact trap she was walking into ('a blatant frame to make us tunnel Farid') and then walked into it anyway, using a dead man's words to build a case against me instead of giving her own independent read. That's not what an innocent player under direct challenge does - an innocent answers the question. A guilty player redirects.\n\nOn Alice's claim: I can't verify it, but it's internally consistent with everything I already believed before she said a word. I flagged Carmen as my top suspect for her behavioral pattern before Alice ever claimed Detective. If Alice is lying, that's a coincidence I'd need to explain; if she's telling the truth, it's confirmation. I'd rather trust the read I already had independently than assume the least convenient explanation just because the timing of Alice's claim is suspicious - suspicious timing is exactly what you'd expect from a real Detective at final four, when there's no next day to be clever.\n\nBruno, you're not mafia under any consistent version of this story - either Alice cleared you for real, or Alice is the lone Mafia and you're automatically innocent by elimination. So this vote is genuinely between Alice and Carmen, and I'm going with the person who dodged Devon's direct question and then weaponized his death instead of answering it.\n\nI'm voting Carmen."
+        },
+        "eliminated": "agent_1",
+        "tie_break_used": true
+      }
+    },
+    {
+      "round": 3,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_2",
+          "target": "agent_2",
+          "reasoning": "With three alive and Alice revealed dead from the day tie, the remaining players are Bruno, Carmen, and Farid. My best read from the prior day is that Carmen looked most aligned with the surviving mafia story after opposing Alice and reinforcing the anti-Alice line, while Farid’s vote on Carmen is consistent with town or with a mafia bus. Since the mafia will likely try to remove the player most likely to be correct or most useful to their opponents, protecting Bruno is the safest choice: he has been publicly corroborated by Alice’s claimed detective result and is therefore the most likely night target if the mafia want to remove a confirmed town voice. Also, if Carmen is mafia, she may not target Bruno because doing so would heighten suspicion; but if Farid is mafia, Bruno is still the most dangerous confirmed town. Self-protect is less valuable now because I’m already publicly visible as Doctor; surviving one more night matters, but protecting the strongest town asset matters more."
+        },
+        "mafia_kill": {
+          "agent": "agent_3",
+          "target": "agent_6",
+          "reasoning": "With Alice eliminated and the game continuing into Night 3, both Bruno and Farid now know Alice was town and her results were legitimate, leaving me as the sole remaining suspect. However, if my night kill succeeds tonight, Mafia count (1) will equal the remaining Villager count (1), resulting in an immediate Mafia victory without a Day 3 vote. Alice claimed Detective and was eliminated, leaving Elena, Devon, Bruno, and Farid as the potential Doctor candidates. Elena or Devon being the Doctor is highly probable (50%+ chance the Doctor is already dead). Between the living players, Farid is extremely unlikely to be the Doctor because he did not claim Doctor when Alice narrowed the suspect pool to Carmen and Farid on Day 2. If Bruno is the Doctor and self-protection is permitted, Bruno is most likely to protect himself. Therefore, targeting Farid maximizes the likelihood of a successful kill and an instant win."
+        },
+        "_eliminated_by_night": "agent_6"
+      },
+      "morning_announcement": "Farid was found dead."
+    }
+  ],
+  "outcome": {
+    "winner": "Mafia",
+    "ended_round": 3,
+    "reason": "Mafia count reached or exceeded remaining Villagers."
+  },
+  "meta": {
+    "total_tokens": 81378,
+    "estimated_cost_usd": 0.451478,
+    "generation_duration_sec": 376.3
+  }
+}
