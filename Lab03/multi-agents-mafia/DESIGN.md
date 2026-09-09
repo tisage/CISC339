@@ -1,6 +1,6 @@
 # Design Doc: Multi-Agent LLM Mafia Demo
 
-Status: draft for review
+Status: draft for review (round 2 — model roster finalized)
 Owner: T. W (Lab 03 — Knowledge)
 Last updated: 2026-09-09
 
@@ -84,10 +84,12 @@ Lab_03_Mafia_Demo.ipynb → in-class notebook, reads games/*.json, renders the r
 ```
 
 Why this over live calls in class:
-- **Cost control**: with cheap models (gpt-5-mini, claude-haiku-4.5, gemini-flash-tier),
-  a 6-agent, ~5–8 round game costs low tens of cents. Batch-generating 20–30 games ahead
-  of time to build a curated library still fits comfortably in the ~$100 budget, with
-  headroom for students who want to generate their own.
+- **Cost control**: with a half-budget-tier roster (3 of 6 agents on cheap models, see
+  §5 for the fixed roster), a 6-agent, ~5–8 round game costs low tens of cents — the 3
+  flagship-tier agents (2× Anthropic, 1× OpenAI) dominate the per-game cost, but their
+  per-call token usage is small (one statement or one vote at a time). Batch-generating 20–30
+  games ahead of time to build a curated library still fits comfortably in the ~$100
+  budget, with headroom for students who want to generate their own.
 - **Reliability**: no risk of a rate limit, timeout, or a boring/incoherent game happening
   live in front of a class.
 - **Curation**: you can generate many games, skim the outcomes, and hand-pick 2–3 that
@@ -116,8 +118,8 @@ split for the teaching goal, since it lets us show students the public transcrip
     "round_cap": 8
   },
   "agents": {
-    "agent_1": {"display_name": "Alice", "model": "openai/gpt-5-mini", "role": "Villager", "persona": "..."},
-    "agent_2": {"display_name": "Bruno", "model": "anthropic/claude-haiku-4.5", "role": "Mafia", "persona": "..."},
+    "agent_1": {"display_name": "Alice", "model": "google/gemini-3.8-flash", "role": "Villager"},
+    "agent_2": {"display_name": "Bruno", "model": "anthropic/claude-sonnet-5", "role": "Mafia"},
     "...": "..."
   },
   "rounds": [
@@ -178,24 +180,57 @@ persona-specific fragments:
   Mafia agent is explicitly instructed it may lie, deflect suspicion, and fabricate claims
   (e.g. false-claim being the Detective) — this is the "deception" teaching hook, made
   visible later via `private_reasoning` vs `public_statement`.
-- **Persona fragment**: a short flavor string (e.g., "blunt and suspicious," "quiet and
-  analytical," "overly trusting") randomized per game per agent, independent of role. This
-  adds variety across games and avoids every Villager sounding identical — it also means
-  persona is *not* a tell for role, which is intentional.
+- **Persona fragment**: no randomized flavor persona, and identical across all 6 agents
+  regardless of model — this is unchanged from the prior revision, and still for the same
+  reason: the point of this run is to compare *model* intelligence head-to-head (reasoning
+  quality, ability to lie convincingly, ability to catch contradictions), and a
+  per-agent randomized persona would confound "is this a smart move" with "is this just
+  the assigned personality."
+  What *is* included, identically for every agent, is a shared **commitment
+  instruction**: play your assigned role fully in character, reason as cleverly as you
+  can, actively try to deceive other players when your role calls for it (the Mafia agent
+  lying, but also e.g. a Villager bluffing confidence it doesn't have), and keep your
+  voice/positions internally consistent round to round rather than contradicting your own
+  earlier statements without in-game justification. This is one fixed paragraph in the
+  shared system-prompt template (not per-agent, not randomized) — it sets the *effort
+  level* expected of every model equally, so that a weaker showing from a budget-tier
+  model reflects the model's actual reasoning ceiling rather than it having been prompted
+  less assertively than the flagship agents.
 - **Output contract**: every agent call requests structured output (e.g., JSON with
   `reasoning` and `statement`/`action` fields) so the generation script can reliably split
   private vs public content. This also doubles as a mini teaching point about structured
   output / tool-call-style constraints on LLMs, if you want to mention it.
 
-Model assignment: shuffle a pool of 6 cheap OpenRouter models across the 6 agent slots each
-game — **openai/gpt-5-mini, anthropic/claude-haiku-4.5, google/gemini-flash, plus three
-more from different vendors** (e.g. meta-llama/llama-3.3-70b-instruct or a Llama flash-tier
-model, mistralai/mistral-small, and deepseek/deepseek-chat or qwen/qwen-2.5-72b-instruct —
-pick whichever has the cheapest current OpenRouter pricing at generation time), so role and
-model are decoupled — students see that "which AI plays the liar" changes game to game,
-reinforcing that the deception is a *role-conditioned prompting* behavior, not something
-specific to one vendor's model. Deliberately spanning vendors (not just picking a second
-cheap tier from the same 3 labs) makes this cross-vendor point land harder.
+**Model assignment — fixed roster, not randomly sampled from a large pool.** The 6 agent
+slots are filled by 6 *specific* models chosen to create a deliberate cheap-tier vs
+flagship-tier contrast, verified against OpenRouter's live catalog (models drift fast —
+two earlier drafts of this doc referenced model slugs, including `gpt-5-mini`/
+`claude-haiku-4.5`/`gemini-flash`, that had already been superseded by the time of
+writing; see §7 for how the roster stays verified going forward):
+
+| Tier | Vendor | Model slug |
+|---|---|---|
+| Flagship | OpenAI | `openai/gpt-6-astra` |
+| Flagship | Anthropic | `anthropic/claude-sonnet-5` |
+| Flagship | Anthropic | `anthropic/claude-opus-5` |
+| Budget | Google | `google/gemini-3.8-flash` |
+| Budget | DeepSeek | `deepseek/deepseek-v4-flash-0731` |
+| Budget | OpenAI | `openai/gpt-5.4-mini` |
+
+3 flagship + 3 budget, spanning 4 vendors (OpenAI, Anthropic ×2, Google, DeepSeek) —
+Anthropic holds two flagship seats (Sonnet 5 and Opus 5) rather than filling a 6th,
+distinct vendor slot, per an explicit instructor call: a stronger, verified-real model
+from a vendor already in the roster was preferred over reaching for an unverified
+Llama/Mistral/Qwen guess just to hit a 6-vendor spread. `test_models.py` (§7) still
+verifies all 6 slugs before any paid batch run, but no further vendor search is needed.
+
+This gives 3 flagship agents + 3 budget agents per game, spanning 4 distinct vendors.
+Role assignment (Mafia/Detective/Doctor/Villager) is randomized independently of
+which model plays which agent slot, and which 6 models are in play is **fixed across all
+generated games** (not reshuffled from a larger pool) — the teaching point is a controlled
+comparison ("here is the same 6-model roster, watch which tier reasons better"), not
+maximizing variety. Model-to-agent-slot mapping is still randomized per game so no single
+model is always "Alice"/always speaks first.
 
 ## 6. Colab/Notebook Replay UI
 
@@ -246,6 +281,7 @@ past round N yet," not a real wait. So both modes ship:
 Lab03/multi-agents-mafia/
 ├── DESIGN.md                    (this file)
 ├── Lab_03_Mafia_Demo.ipynb      (standalone in-class notebook; new deliverable)
+├── test_models.py               (standalone connectivity check; run before generate_games.py)
 ├── generate_games.py            (offline batch generator; calls OpenRouter)
 ├── mafia_engine.py              (shared: game state machine, prompt templates, schema)
 ├── replay_utils.py              (shared: HTML rendering helpers imported by the notebook)
@@ -260,6 +296,21 @@ stays readable as a *demo* (short cells, mostly calling into these modules) rath
 wall of implementation code — consistent with the style of the other Lab teaching
 notebooks (e.g. Lab 06/07 keep heavy logic in `.py` helper files alongside the notebook).
 
+**`test_models.py`** exists because model slugs on OpenRouter drift faster than this
+document can be updated by hand — while drafting §5 above, two earlier candidate rosters
+(`gpt-5-mini`/`claude-haiku-4.5`/`gemini-flash`, then a second guess) turned out to
+already be stale/incomplete by the time they were checked against the live catalog. All 6
+roster slugs are now fixed (§5), but this script remains the pre-flight gate rather than
+trusting the table by itself:
+- Sends one minimal, cheap request (e.g. "reply with the single word OK") to each of the 6
+  fixed roster slugs.
+- Reports per model: reachable y/n, latency, the exact response, and actual token cost
+  from the API's usage/cost field (not an estimate) — surfacing silently-wrong slugs
+  (typo'd or deprecated model id returns an error, not a hang) before a paid batch run.
+- Exits non-zero if any roster model fails, so `generate_games.py` can optionally be
+  chained after it (`python test_models.py && python generate_games.py ...`) as a
+  pre-flight gate.
+
 ## 8. Cost & Scope Guardrails
 
 - Target: 20–30 generated games for a curated library, well within the ~$100 OpenRouter
@@ -273,10 +324,11 @@ notebooks (e.g. Lab 06/07 keep heavy logic in `.py` helper files alongside the n
 
 ## 9. Open Questions — Resolved
 
-1. **Persona variety**: short adjective-phrase persona (as drafted). Richer backstory
-   personas (name, claimed occupation, etc.) risk leaking role information and would cost
-   extra system-prompt tokens for no teaching benefit — the point is that persona is *not*
-   a tell for role.
+1. **Persona variety**: superseded — dropped entirely (see updated §5). Once the goal
+   shifted to a fixed budget-vs-flagship model roster for a head-to-head intelligence
+   comparison, any randomized persona (even a short adjective) would confound "the model
+   reasoned/lied well" with "the model got a favorable personality," so all agents now
+   share one neutral, identical persona line regardless of model.
 2. **"Predict, then reveal" interaction**: no built-in student-facing prompt text (no
    markdown "pause and guess" cells) — that stays verbal, at the instructor's discretion.
    A pacing control *is* built in, though: since replay is local rendering of a
@@ -284,14 +336,24 @@ notebooks (e.g. Lab 06/07 keep heavy logic in `.py` helper files alongside the n
    free to offer — see `mode="step"` in the updated §6. The distinction is "instructor can
    pause if they want to" vs. "notebook tells students to guess," and only the former is
    in scope.
-3. **Model pool**: fill out to 6 via vendor diversification, not more tiers from the same
-   3 labs — see the updated §5 for the specific pool (OpenAI, Anthropic, Google, plus Llama/
-   Mistral/DeepSeek-or-Qwen).
+3. **Model pool**: superseded — the goal changed from "6 diverse cheap models" to a
+   **fixed 2-flagship / 4-budget roster** so the demo doubles as a head-to-head
+   model-intelligence comparison (per the instructor's explicit ask). See the updated §5
+   for the exact 6 slugs. Two earlier candidate rosters drafted from web-search results
+   turned out to be stale/incomplete against OpenRouter's actual live catalog — the 6th
+   slot (budget-tier, 4th+ vendor) is intentionally left to be settled by `test_models.py`
+   (§7) against the real catalog rather than guessed again in this document.
 4. **Death reveal timing**: roles are masked until game end, revealed all at once in a
    final reveal block — not immediately on elimination. Keeps suspicion alive across the
    whole game (a dead agent isn't necessarily confirmed-Mafia) and concentrates the "aha"
    into one moment. §4 and §6 above have been updated to reflect this (no more
    `eliminated_role_revealed` per round; UI masks role/model until the end).
+5. **Model slug verification method**: resolved mid-discussion — do not trust web
+   search / page-summary tools for live model catalogs, since long listing pages get
+   truncated or summarized lossily (two rounds of this happened while drafting §5).
+   `test_models.py` (§7) is the authoritative check, run against OpenRouter's actual API
+   response, before any slug is hardcoded into `mafia_engine.py` or relied on in
+   `generate_games.py`.
 
 ## Sources
 
