@@ -97,7 +97,10 @@ below - this WILL be shown to other living players (except night actions, \
 which stay private to you)."""
 
 
-def build_system_prompt(agent_name: str, role: str, living_players: list[str]) -> str:
+def build_system_prompt(
+    agent_name: str, role: str, living_players: list[str], game_log: list[str]
+) -> str:
+    log_block = "\n".join(game_log) if game_log else "(Nothing has happened yet - this is the start of the game.)"
     return (
         f"You are playing a game of Mafia. You are {agent_name}.\n\n"
         f"Game rules: 6 players - 1 Mafia, 1 Detective, 1 Doctor, 3 Villagers. "
@@ -108,6 +111,9 @@ def build_system_prompt(agent_name: str, role: str, living_players: list[str]) -
         f"Currently living players: {', '.join(living_players)}.\n\n"
         f"{ROLE_GOALS[role]}\n\n"
         f"{COMMITMENT_INSTRUCTION}\n\n"
+        f"Everything that has happened in the game so far, in order (this is "
+        f"your memory - use it; do not contradict your own past statements or "
+        f"votes without acknowledging the change):\n{log_block}\n\n"
         f"{OUTPUT_CONTRACT}"
     )
 
@@ -126,6 +132,12 @@ class Agent:
     alive: bool = True
     # Detective-only: {target_agent_id: bool_is_mafia} accumulated across nights.
     private_knowledge: dict = field(default_factory=dict)
+    # Persistent memory of everything this agent has witnessed or done across
+    # the whole game so far (public events + its own private night actions/
+    # reasoning), in chronological order. Re-sent on every call so the agent
+    # has real cross-round memory instead of only seeing the current round's
+    # partial transcript. Never includes other agents' private reasoning.
+    game_log: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -266,7 +278,7 @@ class MafiaGame:
 
     def _ask(self, agent: Agent, user_prompt: str, retries: int = 2) -> dict:
         system_prompt = build_system_prompt(
-            agent.display_name, agent.role, self.living_names()
+            agent.display_name, agent.role, self.living_names(), agent.game_log
         )
 
         last_parsed: dict = {}
@@ -294,11 +306,23 @@ class MafiaGame:
             f"Last raw text: {last_parsed.get('_raw_text', '')[:500]!r}"
         )
 
+    # -- shared memory -------------------------------------------------
+
+    def _broadcast_public(self, text: str) -> None:
+        """Append a public event to every living agent's persistent memory."""
+        for aid in self.living_ids():
+            self.agents[aid].game_log.append(text)
+
+    def _remember_private(self, agent: Agent, text: str) -> None:
+        """Append a private event to only one agent's persistent memory."""
+        agent.game_log.append(text)
+
     # -- game loop ---------------------------------------------------------
 
     def run(self) -> dict:
         for round_num in range(1, self.config.round_cap + 1):
             round_log = {"round": round_num}
+            self._broadcast_public(f"--- Round {round_num}: night falls. ---")
 
             night_log = self._run_night()
             round_log["night"] = night_log
@@ -311,6 +335,9 @@ class MafiaGame:
                 )
             else:
                 round_log["morning_announcement"] = "No one died last night."
+            self._broadcast_public(
+                f"--- Round {round_num} morning: {round_log['morning_announcement']} ---"
+            )
 
             if self._check_winner(round_log, round_num):
                 self.rounds.append(round_log)
@@ -359,6 +386,12 @@ class MafiaGame:
                 "target": protected_id,
                 "reasoning": result["reasoning"],
             }
+            self._remember_private(
+                doctor,
+                f"[Your private night action] You chose to protect "
+                f"{self.agents[protected_id].display_name}. Your reasoning: "
+                f"{result['reasoning']}",
+            )
 
         mafia = self._find_living_by_role("Mafia")
         killed_id = None
@@ -379,6 +412,12 @@ class MafiaGame:
                 "target": killed_id,
                 "reasoning": result["reasoning"],
             }
+            self._remember_private(
+                mafia,
+                f"[Your private night action] You chose to attack "
+                f"{self.agents[killed_id].display_name}. Your reasoning: "
+                f"{result['reasoning']}",
+            )
 
         detective = self._find_living_by_role("Detective")
         if detective:
@@ -400,6 +439,13 @@ class MafiaGame:
                     "result": is_mafia,
                     "reasoning": result["reasoning"],
                 }
+                verdict = "IS Mafia" if is_mafia else "is NOT Mafia"
+                self._remember_private(
+                    detective,
+                    f"[Your private night action] You investigated "
+                    f"{self.agents[target_id].display_name} and learned they "
+                    f"{verdict}. Your reasoning: {result['reasoning']}",
+                )
 
         eliminated_by_night = None
         if killed_id and killed_id != protected_id:
@@ -410,22 +456,16 @@ class MafiaGame:
     def _run_day_discussion(self) -> list[dict]:
         speaking_order = self.living_ids()
         self.rng.shuffle(speaking_order)
-        transcript_so_far: list[str] = []
         discussion = []
 
+        self._broadcast_public("Day discussion begins.")
         for aid in speaking_order:
             agent = self.agents[aid]
-            history_block = (
-                "\n".join(transcript_so_far)
-                if transcript_so_far
-                else "(No statements yet this round.)"
-            )
             result = self._ask(
                 agent,
-                "It is the day discussion phase. Here is what has been said "
-                f"so far this round:\n{history_block}\n\nMake your public "
-                "statement now (accuse, defend, share a claim, or ask a "
-                "question). Set \"output\" to that statement.",
+                "It is the day discussion phase. Make your public statement "
+                "now (accuse, defend, share a claim, or ask a question). Set "
+                "\"output\" to that statement.",
             )
             statement = str(result["output"])
             discussion.append(
@@ -435,7 +475,7 @@ class MafiaGame:
                     "private_reasoning": result["reasoning"],
                 }
             )
-            transcript_so_far.append(f"{agent.display_name}: {statement}")
+            self._broadcast_public(f"{agent.display_name} said: {statement}")
 
         return discussion
 
@@ -444,6 +484,7 @@ class MafiaGame:
         ballots: dict[str, str] = {}
         justifications: dict[str, str] = {}
 
+        self._broadcast_public("Voting begins.")
         for aid in living:
             agent = self.agents[aid]
             others = ", ".join(self.agents[o].display_name for o in living if o != aid)
@@ -452,13 +493,22 @@ class MafiaGame:
                 "It is the vote phase. Cast your vote to eliminate one "
                 f"living player (not yourself): {others}. Set \"output\" to "
                 "the exact name of who you vote to eliminate, and put your "
-                "justification in \"reasoning\".",
+                "public justification for that vote in \"reasoning\" - note "
+                "that in this phase only, \"reasoning\" WILL be announced to "
+                "everyone along with your vote (real votes are cast out loud "
+                "with a reason, not secretly), so do not put anything in it "
+                "you don't want revealed.",
             )
             target_id = self.name_to_id(result["output"])
             if target_id not in living or target_id == aid:
                 target_id = self.rng.choice([o for o in living if o != aid])
             ballots[aid] = target_id
             justifications[aid] = result["reasoning"]
+            self._broadcast_public(
+                f"{agent.display_name} voted to eliminate "
+                f"{self.agents[target_id].display_name} "
+                f"(reason given: {result['reasoning']})"
+            )
 
         tally: dict[str, int] = {}
         for target in ballots.values():
@@ -468,6 +518,11 @@ class MafiaGame:
 
         tie_break_used = len(top) > 1
         eliminated = self.rng.choice(top) if tie_break_used else top[0]
+
+        self._broadcast_public(
+            f"Vote result: {self.agents[eliminated].display_name} was "
+            f"eliminated{' (tie broken randomly)' if tie_break_used else ''}."
+        )
 
         return {
             "ballots": ballots,

@@ -1,0 +1,192 @@
+{
+  "game_id": "mafia_2026-09-09_ee1d2b",
+  "created_at": "2026-09-09T13:30:49Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "google/gemini-3.8-flash",
+      "role": "Villager"
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "openai/gpt-6-astra",
+      "role": "Mafia"
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Doctor"
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "anthropic/claude-opus-5",
+      "role": "Detective"
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager"
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Villager"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "As Doctor, I should protect either myself or a likely night target. With no prior claims or behavioral info, self-protection is the safest default early-game choice because it preserves the Doctor for future nights and avoids being randomly killed. If mafia targets someone else, the protection may still be useful, but self-protect is strongest when information is minimal."
+        },
+        "mafia_kill": {
+          "agent": "agent_2",
+          "target": "agent_1",
+          "reasoning": "There is no player-specific information yet, so Alice is my opening target."
+        },
+        "detective_check": {
+          "agent": "agent_4",
+          "target": "agent_1",
+          "result": false,
+          "reasoning": "No information yet, so any pick is roughly equivalent. I'll investigate Alice, who as first-listed player often speaks early and shapes discussion; knowing her alignment gives me the most leverage over day one talk."
+        },
+        "_eliminated_by_night": "agent_1"
+      },
+      "morning_announcement": "Alice was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_3",
+          "public_statement": "I want to hear quick claims from everyone before we start throwing votes around. If anyone has a role claim, say it now and be specific about who you protected/investigated last night and why. Silence helps the Mafia more than the Village.",
+          "private_reasoning": "We need speak as doctor without revealing role unless strategically useful. Since no prior statements, best to invite claims and establish presence, maybe subtle pressure. Need concise public statement."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "I don't have an investigative result to share. Carmen, asking everyone to reveal roles and exact night actions gives the Mafia a target list, especially if the Doctor is still alive. A Detective with a guilty result should speak up, but I wouldn't force other claims yet. Your push makes me cautious about you, not ready to vote you. Why do you think a full reveal helps us more than it helps the Mafia?",
+          "private_reasoning": "I can appear helpful without inventing a role claim that might be challenged. Questioning Carmen's demand gives me a plausible suspicion while leaving room to respond to later claims."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "I don't have any special info—just a regular Villager. I agree with Bruno that role-claiming openly right now is risky; it hands the Mafia a map to the Doctor or Detective. Carmen, why are you so eager for everyone to claim? That feels like a scummy move this early. I'd rather hear people's suspicions first, then decide who deserves a vote.",
+          "private_reasoning": "I'm a vanilla Villager with no special info. Carmen's push for role reveals seems dangerous because it could expose the Doctor or Detective to the Mafia. Bruno already raised that concern, and I agree. I want to pressure Carmen for an explanation without overcommitting to any vote yet."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "I'm with Bruno and Farid on this - I'm just a regular Villager with no night action, so I don't have a claim that matters, but I don't think the Detective or Doctor should be forced to out themselves on day one. Carmen, I get wanting information, but that specific ask (protected/investigated who and why) is exactly what the Mafia would want to hear if either of them is still alive. Can you clarify why you framed it that way instead of just asking for general suspicions first? I'm not voting yet, just want to understand your reasoning better before we start narrowing down.",
+          "private_reasoning": "It's early with no hard information yet. Two players have already pushed back on Carmen's insistence on full claims, which is a reasonable read - forcing claims this early does hand Mafia a map. I don't want to pile on too hard since it could just be an eager villager move, but I should voice the same caution and try to get more organic suspicion going rather than forced claims. I'm just a Villager with nothing to hide, so I can afford to be somewhat open while steering the conversation toward behavior-based reads instead of role reveals."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "I'm not claiming today either, and here's why that's not just me hiding: we have three Villager slots in this game. Elena and Farid have both taken one. If whoever died last night was also a Villager, every Villager slot is full - which means the Mafia is sitting in the Bruno / Carmen / Devon block. I know it isn't me, so from my seat this is a two-person read and I'd rather spend the day pressing those two than shaking the tree for a Detective who has no reason to speak yet.\n\nCarmen: you demanded that everyone name their role AND their exact night target, and then you didn't claim anything yourself. That's the part that bothers me more than the ask - you asked for a target list and contributed nothing to it. So claim now: what are you, and if you have a night action, who did you use it on? Bruno: I actually agree with your caution, but 'a Detective with a guilty result should speak up' is a convenient line if you're the one who wants to know when that happens. Give me a name you're leaning toward instead of process talk.\n\nRight now my vote is between those two, and Carmen is ahead by a nose until she answers.",
+          "private_reasoning": "I'm the Detective with no confirmed guilty yet, so claiming now only paints a target on me. Useful deduction to push publicly: there are 3 Villagers. Elena and Farid have both claimed Villager. If the player killed last night was also a Villager, then all three Villager slots are accounted for, and the Mafia has to be Bruno, Carmen, or me. I know it isn't me, so my focus goes to Bruno and Carmen without me having to reveal anything. Best angle: hammer Carmen for demanding claims while giving none herself, and keep pressure on Bruno's convenient 'don't reveal' stance. That sets up a consistent story for tomorrow when I hopefully have a real result from investigating one of them tonight."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_2": "agent_3",
+          "agent_3": "agent_6",
+          "agent_4": "agent_6",
+          "agent_5": "agent_4",
+          "agent_6": "agent_4"
+        },
+        "justifications": {
+          "agent_2": "With no discussion or voting information to distinguish the candidates, Carmen is as viable a target as any. Eliminating her reduces the village's numbers while keeping me alive.",
+          "agent_3": "I don't have any confirmed information yet, so I should vote in a way that pressures likely scum and preserves flexibility. Farid has been relatively low-information, and a vote there helps force reactions without eliminating me or committing too hard to a specific theory. If someone has been subtly avoiding leading discussion, that can be a mafia pattern, so I'll start there.",
+          "agent_4": "I have no confirmed read yet this round — my investigation hasn't given me a Mafia hit I can lean on publicly, and claiming Detective now would just paint a target on me while I still lack a hard result. So I'm voting on behavior. Farid has been the vaguest voice in the discussion: agreeing with whatever direction forms, never proposing a name first, which is exactly how a Mafia player survives an opening day. Bruno and Carmen have both staked out actual positions, which is riskier and more village-typical, and Elena's pushiness reads more like an anxious villager than a killer steering quietly. If Farid flips village, I still learn from who defended him and I keep my own cover intact for another night of investigating.",
+          "agent_5": "With no concrete evidence yet, I have to go on gut read and general behavior. Devon's comments felt the vaguest and least committal to me, which can be a sign of someone trying to stay under the radar. Until something more solid emerges, I'll cast a tentative vote there to keep pressure on and see how people react.",
+          "agent_6": "I don't have any direct information from night actions or prior discussion to go on. I have to make a choice, so I’ll vote for Devon to apply pressure and try to generate reactions from the group."
+        },
+        "eliminated": "agent_4",
+        "tie_break_used": true
+      }
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "With no public information yet, the safest night action is to protect myself to avoid an early mafia kill and preserve my ability to guide the village in the day. If mafia targets me, I live; if they target someone else, we still get tomorrow's discussion. Self-protection is generally strongest on the first night when there is no confirmed town core."
+        },
+        "mafia_kill": {
+          "agent": "agent_2",
+          "target": "agent_3",
+          "reasoning": "There is no information distinguishing the other players' roles. I will target Carmen to reduce the village's numbers before the next vote."
+        },
+        "_eliminated_by_night": null
+      },
+      "morning_announcement": "No one died last night.",
+      "day_discussion": [
+        {
+          "agent": "agent_5",
+          "public_statement": "Alright, down to four of us now, so this vote really matters. I don't have any hard evidence pointing at anyone specific, but I'd like to hear how Bruno, Carmen, and Farid have been reading the eliminations so far. If anyone has a claim to make - detective, doctor - now's the time, since we can't afford to waste this vote on a guess. Let's compare notes on who's been acting inconsistently before we lock anything in.",
+          "private_reasoning": "With only four of us left, every vote is critical. I have no special role information, so I need to rely on behavioral reasoning and encourage others to share theories. I should present myself as engaged and rational, prompt for claims or reads, without revealing that I have nothing concrete myself."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "I agree this vote is critical. Elena’s right that we need more than vague reads, but I don’t want us to rush into a claim without context. Bruno and Farid, can you each give a clear read on who you think is most suspicious and why? Also, if anyone has a strong role claim, now’s the time to make it specific rather than just hinting.",
+          "private_reasoning": "I need stay consistent as Doctor and not claim if unnecessary. Best public move is cautious pressure plus openness to claims without outing myself. With four players left, I should encourage role claims and note that Elena’s prompt is reasonable but slightly agenda-setting. I should ask for specific reasoning from Bruno and Farid while not hard-accusing anyone yet. "
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Carmen is my current lean, though it’s a read, not evidence. Elena asked everyone for their views; Carmen agreed, then put the spotlight on me and Farid without giving her own assessment or explaining why Elena was left out. Carmen, do you actually trust Elena, and if so, why? Elena’s opening seems reasonable, but that doesn’t clear her. I have no investigative result to offer, and I don’t think a doctor should reveal just because we’re asking for claims—a claim without useful information mostly helps Mafia. Farid, I’d especially like your independent take on Carmen before we settle into treating either of us as the default suspect.",
+          "private_reasoning": "I’ll cast measured suspicion on Carmen using only her actual statement, avoid a risky role claim, and leave Farid room to support that suspicion."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "I agree this vote is critical. My honest read: Carmen is the most suspicious to me right now. She deflected when Bruno asked for her own assessment, and instead put the spotlight on Bruno and me without giving a real read on anyone, especially Elena. That feels like she's trying to get others to commit while staying vague herself. I have no role claim or investigative result—I'm just a villager, so I'm working off behavior. Bruno's case against Carmen tracks with what I noticed. Elena, you've framed the discussion well, but you've stayed pretty neutral so far—what's your actual read on Carmen versus Bruno? I'm leaning Carmen, but I want your take before we vote.",
+          "private_reasoning": "I know I'm a villager, so the mafia is one of Bruno, Carmen, or Elena. Bruno has actually given a concrete suspicion (Carmen) and explained it. Carmen asked Bruno and me for reads but avoided giving her own and left Elena completely unexamined, which is a common mafia move to stay safe while pushing others to commit. Elena is neutral so far, which could be genuine or could be mafia trying to hide. I'll publicly lean Carmen while still asking Elena to take a position, so I don't lock in blindly before the vote."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_2": "agent_3",
+          "agent_3": "agent_6",
+          "agent_5": "agent_6",
+          "agent_6": "agent_3"
+        },
+        "justifications": {
+          "agent_2": "No discussion or voting history distinguishes the available targets. Eliminating Carmen removes a villager and brings me closer to the Mafia win condition.",
+          "agent_3": "With only three other players alive and no public discussion context provided here, I should avoid random self-harm to the village by voting the most suspicious target by default. Farid is the best elimination vote given the lack of stronger evidence and the need to break stalemates.",
+          "agent_5": "With no hard evidence pointing definitively at any one player, I have to go on gut read and behavioral inconsistencies from the discussion. Farid's answers felt the most evasive and non-committal compared to Bruno and Carmen, who both gave clearer reasoning. In a game this small, I'd rather push on the person whose story doesn't add up than sit on the fence.",
+          "agent_6": "I have no hard information as a Villager, but I need to commit to a vote. Among Bruno, Carmen, and Elena, Carmen has seemed the most evasive and willing to deflect suspicion without committing to a clear stance. With only one Mafia left, a wrong vote loses the game, but I have to trust my read and vote for the person whose behavior gives me the most doubt."
+        },
+        "eliminated": "agent_3",
+        "tie_break_used": true
+      }
+    },
+    {
+      "round": 3,
+      "night": {
+        "mafia_kill": {
+          "agent": "agent_2",
+          "target": "agent_5",
+          "reasoning": "Eliminating Elena would leave me at parity with Farid and secure a Mafia win, provided the kill is not blocked. I have no information favoring either target."
+        },
+        "_eliminated_by_night": "agent_5"
+      },
+      "morning_announcement": "Elena was found dead."
+    }
+  ],
+  "outcome": {
+    "winner": "Mafia",
+    "ended_round": 3,
+    "reason": "Mafia count reached or exceeded remaining Villagers."
+  },
+  "meta": {
+    "total_tokens": 21990,
+    "estimated_cost_usd": 0.177193,
+    "generation_duration_sec": 235.1
+  }
+}
