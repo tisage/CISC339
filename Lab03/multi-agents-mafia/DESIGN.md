@@ -1,6 +1,6 @@
 # Design Doc: Multi-Agent LLM Mafia Demo
 
-Status: draft for review (round 2 — model roster finalized)
+Status: draft for review (round 3 — model roster + persona/commitment prompt finalized)
 Owner: T. W (Lab 03 — Knowledge)
 Last updated: 2026-09-09
 
@@ -336,13 +336,16 @@ trusting the table by itself:
    free to offer — see `mode="step"` in the updated §6. The distinction is "instructor can
    pause if they want to" vs. "notebook tells students to guess," and only the former is
    in scope.
-3. **Model pool**: superseded — the goal changed from "6 diverse cheap models" to a
-   **fixed 2-flagship / 4-budget roster** so the demo doubles as a head-to-head
-   model-intelligence comparison (per the instructor's explicit ask). See the updated §5
-   for the exact 6 slugs. Two earlier candidate rosters drafted from web-search results
-   turned out to be stale/incomplete against OpenRouter's actual live catalog — the 6th
-   slot (budget-tier, 4th+ vendor) is intentionally left to be settled by `test_models.py`
-   (§7) against the real catalog rather than guessed again in this document.
+3. **Model pool**: superseded, twice — the goal changed from "6 diverse cheap models" to
+   a **fixed 3-flagship / 3-budget roster** so the demo doubles as a head-to-head
+   model-intelligence comparison (per the instructor's explicit ask), then finalized at
+   OpenAI ×2 (1 flagship, 1 budget), Anthropic ×2 (both flagship: Sonnet 5 and Opus 5),
+   Google ×1 (budget), DeepSeek ×1 (budget) — see §5 for the exact 6 slugs. Two earlier
+   candidate rosters drafted from web-search results turned out to be stale/incomplete
+   against OpenRouter's actual live catalog before landing on this final set; a 4th
+   distinct vendor for the 6th slot was considered but dropped in favor of a second,
+   verified-real Anthropic flagship (instructor call — stronger and confirmed beats
+   diverse and guessed).
 4. **Death reveal timing**: roles are masked until game end, revealed all at once in a
    final reveal block — not immediately on elimination. Keeps suspicion alive across the
    whole game (a dead agent isn't necessarily confirmed-Mafia) and concentrates the "aha"
