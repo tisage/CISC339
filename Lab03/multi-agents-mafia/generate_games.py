@@ -70,7 +70,12 @@ def main() -> int:
 
     GAMES_DIR.mkdir(exist_ok=True)
 
-    client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
+    # A hard per-request timeout matters here: with no timeout, a single slow
+    # or hung upstream model response blocks the whole batch run indefinitely
+    # (observed in practice - one call took well over 10x the typical latency
+    # with no error and no progress). 90s comfortably covers normal reasoning
+    # latency for this roster while still failing fast on a genuine hang.
+    client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key, timeout=90.0)
 
     n_games = args.n
     if args.max_games is not None:

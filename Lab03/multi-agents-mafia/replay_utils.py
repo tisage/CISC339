@@ -166,6 +166,8 @@ def _round_summary_line(game: dict, round_log: dict) -> str:
         parts.append(f"{n_statements} statements")
     if vote:
         parts.append(f"voted out {_agent_name(game, vote['eliminated'])}")
+    elif round_log.get("vote_skipped"):
+        parts.append("no vote (Day 1 information-gathering only)")
     return " &mdash; ".join(_esc(p) if i else p for i, p in enumerate(parts))
 
 
@@ -277,3 +279,80 @@ class StepReplay:
 
         button.on_click(on_click)
         display(header, button, output)
+
+
+# ---------------------------------------------------------------------------
+# Game library browser
+# ---------------------------------------------------------------------------
+
+
+def list_games(games_dir: str | Path = "games") -> list[Path]:
+    """List available game JSON files directly inside games_dir, sorted by
+    filename (which sorts by generation date since game_id embeds a date).
+    Does not recurse into subfolders like games/_discarded_*/ - those are
+    intentionally excluded archives, not part of the active library."""
+    games_dir = Path(games_dir)
+    if not games_dir.exists():
+        return []
+    return sorted(p for p in games_dir.glob("*.json") if p.is_file())
+
+
+def _game_summary_label(path: Path) -> str:
+    """One-line label for a game, safe to show before the reveal - outcome
+    (winner/round count/cost) is meta-game info, not a role/identity spoiler."""
+    try:
+        game = load_game(path)
+    except (json.JSONDecodeError, OSError):
+        return f"{path.name}  (could not read)"
+
+    outcome = game.get("outcome", {})
+    meta = game.get("meta", {})
+    n_rounds = len(game.get("rounds", []))
+    winner = outcome.get("winner", "?")
+    cost = meta.get("estimated_cost_usd")
+    cost_str = f"${cost:.2f}" if isinstance(cost, (int, float)) else "?"
+    return f"{path.stem}  —  {n_rounds} round(s), {winner} won, {cost_str}"
+
+
+class GameBrowser:
+    """Dropdown picker over every game in games_dir - avoids hardcoding a
+    single GAME_FILE path in the notebook as the library grows from a
+    handful of games to 20-30. Selecting an entry re-renders in place.
+
+    Usage in a notebook cell:
+        browser = GameBrowser("games")
+        browser.show()
+    """
+
+    def __init__(self, games_dir: str | Path = "games", mode: str = "full"):
+        self.games_dir = Path(games_dir)
+        self.mode = mode
+        self.paths = list_games(self.games_dir)
+
+    def show(self) -> None:
+        import ipywidgets as widgets
+
+        if not self.paths:
+            display(HTML(f"<p><em>No games found in {self.games_dir}/.</em></p>"))
+            return
+
+        options = [(_game_summary_label(p), str(p)) for p in self.paths]
+        dropdown = widgets.Dropdown(
+            options=options, description="Game:", layout=widgets.Layout(width="600px")
+        )
+        output = widgets.Output()
+
+        def on_change(change):
+            if change["name"] != "value" or change["new"] is None:
+                return
+            output.clear_output()
+            with output:
+                game = load_game(change["new"])
+                if self.mode == "step":
+                    StepReplay(game).show()
+                else:
+                    display(HTML(render_full(game)))
+
+        dropdown.observe(on_change, names="value")
+        display(dropdown, output)
+        on_change({"name": "value", "new": dropdown.value})

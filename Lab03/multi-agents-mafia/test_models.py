@@ -76,7 +76,7 @@ def main() -> int:
         print("ERROR: OPENROUTER_API_KEY not set (check your .env file).")
         return 1
 
-    client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
+    client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key, timeout=30.0)
 
     print(f"Testing {len(ROSTER)} roster models against OpenRouter...\n")
 

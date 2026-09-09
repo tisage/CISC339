@@ -166,14 +166,29 @@ class LLMCaller:
         self.client = client
 
     def call(self, model: str, system_prompt: str, user_prompt: str) -> dict:
-        response = self.client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            response_format={"type": "json_object"},
-        )
+        # The client has a hard per-request timeout (see generate_games.py /
+        # test_models.py). A timeout or transient network error here is
+        # retried once - most such failures are one-off upstream hiccups,
+        # not a reason to burn an entire in-progress game.
+        last_exc: Optional[Exception] = None
+        for attempt in range(2):
+            try:
+                response = self.client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    response_format={"type": "json_object"},
+                )
+                break
+            except Exception as exc:  # noqa: BLE001 - network/timeout errors from the SDK
+                last_exc = exc
+                if attempt == 0:
+                    continue
+                raise
+        else:
+            raise last_exc  # pragma: no cover - unreachable, loop always breaks or raises
         raw_text = response.choices[0].message.content
         parsed = _safe_parse_json(raw_text)
         return {"parsed": parsed, "raw_text": raw_text, "usage": response.usage}
@@ -343,11 +358,26 @@ class MafiaGame:
                 self.rounds.append(round_log)
                 break
 
-            round_log["day_discussion"] = self._run_day_discussion()
+            # Round 1 is a discussion-only round: no vote. With zero
+            # information on Day 1, a vote is a pure guess and routinely
+            # lynches the Detective or Doctor before they get a second
+            # night action - see DESIGN.md for the rationale (this mirrors
+            # a common real-world "no Day 1 lynch" house rule).
+            skip_vote = round_num == 1
+            round_log["day_discussion"] = self._run_day_discussion(skip_vote=skip_vote)
 
             if self._check_winner(round_log, round_num):
                 self.rounds.append(round_log)
                 break
+
+            if skip_vote:
+                round_log["vote_skipped"] = True
+                self._broadcast_public(
+                    "No vote today - the village agreed to gather information "
+                    "on Day 1 before eliminating anyone."
+                )
+                self.rounds.append(round_log)
+                continue
 
             vote_log = self._run_vote()
             round_log["vote"] = vote_log
@@ -453,19 +483,27 @@ class MafiaGame:
         night["_eliminated_by_night"] = eliminated_by_night
         return night
 
-    def _run_day_discussion(self) -> list[dict]:
+    def _run_day_discussion(self, skip_vote: bool = False) -> list[dict]:
         speaking_order = self.living_ids()
         self.rng.shuffle(speaking_order)
         discussion = []
 
         self._broadcast_public("Day discussion begins.")
+        vote_notice = (
+            " There will be NO vote today - the village has agreed to spend "
+            "Day 1 gathering information only, since a vote with zero "
+            "information tends to guess wrong. Speak accordingly (you can "
+            "still share claims, suspicions, or ask questions)."
+            if skip_vote
+            else ""
+        )
         for aid in speaking_order:
             agent = self.agents[aid]
             result = self._ask(
                 agent,
                 "It is the day discussion phase. Make your public statement "
-                "now (accuse, defend, share a claim, or ask a question). Set "
-                "\"output\" to that statement.",
+                "now (accuse, defend, share a claim, or ask a question)."
+                f"{vote_notice} Set \"output\" to that statement.",
             )
             statement = str(result["output"])
             discussion.append(

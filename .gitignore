@@ -142,3 +142,7 @@ teaching/
 # AI Agents
 CLAUDE.md
 .claude/
+
+# Lab 03 Multi-Agent Mafia demo - discarded/superseded game recordings
+# (kept locally for reference, not meant for the curated teaching library)
+Lab03/multi-agents-mafia/games/test/
