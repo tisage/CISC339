@@ -168,10 +168,52 @@ class LLMCaller:
 
 
 def _safe_parse_json(raw_text: str) -> dict:
+    """Parse the model's structured-output JSON, tolerating common deviations
+    (markdown code fences, leading/trailing prose) some OpenRouter upstreams
+    add even when response_format=json_object is requested.
+
+    Falls back to treating the raw text as the public output only as a last
+    resort - and even then, if the raw text still looks like an embedded
+    {"reasoning": ..., "output": ...} object (parse just failed to extract
+    it), we must not let it leak whole into the public-facing "output" field,
+    since that would leak an agent's private reasoning as if it were their
+    public statement.
+    """
+    text = (raw_text or "").strip()
+
     try:
-        return json.loads(raw_text)
+        return json.loads(text)
     except (json.JSONDecodeError, TypeError):
-        return {"reasoning": "", "output": raw_text or ""}
+        pass
+
+    # Strip ```json ... ``` or ``` ... ``` fences and retry.
+    if text.startswith("```"):
+        stripped = text.strip("`")
+        stripped = stripped[4:] if stripped.startswith("json") else stripped
+        try:
+            return json.loads(stripped.strip())
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    # Try to extract the first {...} block from surrounding prose.
+    start, end = text.find("{"), text.rfind("}")
+    if start != -1 and end != -1 and end > start:
+        try:
+            return json.loads(text[start : end + 1])
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    # Genuine fallback: no JSON object could be recovered at all. Do not
+    # surface this raw text as public "output" - it may contain private
+    # reasoning verbatim (as happened when this safeguard was added). Mark it
+    # as a parse failure instead so callers can decide how to handle it
+    # (e.g. skip the turn) rather than silently leaking content.
+    return {
+        "reasoning": "",
+        "output": "",
+        "_parse_failed": True,
+        "_raw_text": text,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -222,17 +264,35 @@ class MafiaGame:
 
     # -- LLM call helper -------------------------------------------------
 
-    def _ask(self, agent: Agent, user_prompt: str) -> dict:
+    def _ask(self, agent: Agent, user_prompt: str, retries: int = 2) -> dict:
         system_prompt = build_system_prompt(
             agent.display_name, agent.role, self.living_names()
         )
-        result = self.caller.call(agent.model, system_prompt, user_prompt)
-        self.usage.add(result["usage"])
-        parsed = result["parsed"]
-        return {
-            "reasoning": str(parsed.get("reasoning", "")),
-            "output": parsed.get("output", ""),
-        }
+
+        last_parsed: dict = {}
+        for attempt in range(retries + 1):
+            result = self.caller.call(agent.model, system_prompt, user_prompt)
+            self.usage.add(result["usage"])
+            parsed = result["parsed"]
+            last_parsed = parsed
+            if not parsed.get("_parse_failed"):
+                return {
+                    "reasoning": str(parsed.get("reasoning", "")),
+                    "output": parsed.get("output", ""),
+                }
+            # Structured output could not be recovered - retry rather than
+            # ever surfacing raw (possibly private-reasoning-containing) text
+            # as this agent's public output.
+            if attempt < retries:
+                continue
+
+        # All retries exhausted: fail loudly rather than silently leaking
+        # unparseable raw text into a "public" field.
+        raise ValueError(
+            f"Could not parse structured JSON output from {agent.model} "
+            f"for agent {agent.agent_id} after {retries + 1} attempt(s). "
+            f"Last raw text: {last_parsed.get('_raw_text', '')[:500]!r}"
+        )
 
     # -- game loop ---------------------------------------------------------
 

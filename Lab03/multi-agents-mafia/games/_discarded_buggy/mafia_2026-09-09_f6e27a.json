@@ -1,0 +1,173 @@
+{
+  "game_id": "mafia_2026-09-09_f6e27a",
+  "created_at": "2026-09-09T13:13:46Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "anthropic/claude-opus-5",
+      "role": "Mafia"
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "google/gemini-3.8-flash",
+      "role": "Detective"
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Doctor"
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager"
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Villager"
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "Protecting myself is the safest default on night 1/early night because I am the Doctor and losing me would remove the village's protection immediately. With no public information yet, self-protect maximizes my chance to survive and continue gathering information."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_4",
+          "reasoning": "No information yet, so my kill is essentially blind. I want to remove someone likely to be an influential voice or a power role. I'll take Devon, and later I can position myself as someone who suspected trouble. Killing early avoids the Doctor's likely self- or high-profile protection."
+        },
+        "detective_check": {
+          "agent": "agent_2",
+          "target": "agent_1",
+          "result": true,
+          "reasoning": "It is Night 1 and there is no prior discussion to inform my choice. I will investigate Alice to gain an early read on a prominent player."
+        },
+        "_eliminated_by_night": "agent_4"
+      },
+      "morning_announcement": "Devon was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_3",
+          "public_statement": "We should use this first discussion round to get commitments on the table. I want to hear from everyone: what role claims, if any, are you willing to make, and who do you think is most suspicious right now? I’m especially interested in anyone who talks too confidently without giving reasons.",
+          "private_reasoning": "As Doctor, I want to avoid claiming immediately unless pressured. Best opening is neutral but probing, encouraging claims and contradictions. Need stay consistent later if I do claim or hint."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "I'm Elena, and I'm a plain Villager—no special abilities. I don't have any private information, so I'm relying on what people say and how they say it. Right now I don't have a strong suspicion, but I agree with Carmen that we need commitments. I'd like each of us to state clearly whether they have a role, and if they don't, to say so plainly. I'm especially wary of anyone who claims a power role too eagerly or who tries to steer suspicion without giving actual reasoning. Let's hear from everyone before we vote.",
+          "private_reasoning": "Carmen is trying to structure discussion, which is neutral. As a Villager, I have no night info, so I should be honest that I have no special role and focus on behavior. I want to encourage others to commit to claims and reasons, and avoid letting anyone hide behind vague confidence."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "I'm Farid, also a plain Villager with no night action. I agree with Carmen and Elena that we should get baseline claims out first before jumping to accusations. Nothing anyone's said so far strikes me as off, but I'll be watching for people who dodge direct questions or who try to rush a vote without reasoning. Let's hear from Bruno and Alice next so we have everyone's position before we start narrowing suspects.",
+          "private_reasoning": "No strong info yet. Best to appear cooperative, plainly claim villager, and encourage others to reveal info without overcommitting to any accusation this early."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "I'm Alice, and I'm a plain Villager too — no night action, no private information. But let's do the math out loud before we all get comfortable, because it matters. There were six of us: one Mafia, one Detective, one Doctor, three Villagers. Someone died last night, and we don't know what they were. If that person was a Villager, then only two real Villagers are sitting here — and Elena, Farid and I have now all claimed Villager. That means one of the three of us is lying, and I'll say plainly it isn't me. So keep that arithmetic in your pocket; it may be the most useful thing we get out of today.\n\nWhich brings me to Carmen. She opened by demanding commitments from everyone and warning us about people who talk confidently without reasons — and then gave us neither a claim nor a suspect of her own. That's the cheapest seat at the table: you set the terms, you collect everyone else's information, you risk nothing. Carmen, straight question, no hedging: are you a Villager, or do you have a role? If you have one, say so; if you don't, say the word. And Bruno, same to you — you've been silent while the rest of us put ourselves on the record.\n\nI'm not calling either of you Mafia yet. But I'll be watching who answers directly and who answers around it, and I'd rather we spend today on that than on vague warnings about tone.",
+          "private_reasoning": "Six players at start, five living, so one died overnight — role unknown publicly. Roles are 1 Mafia (me), 1 Detective, 1 Doctor, 3 Villagers. Elena and Farid have both claimed plain Villager. If I also claim Villager, that's three villager claims among five living; if the dead player was a Villager, only two real Villagers live, meaning one of the three of us is lying. Rather than let someone else spot that later and point at me, I should raise the arithmetic myself — it makes me look analytical and honest, and it pre-loads an attack on Elena or Farid for a later round. Claiming Detective or Doctor is too risky with the real ones alive to counterclaim. I'll claim plain Villager, and turn pressure onto Carmen, who demanded claims from everyone while giving none herself. That's a natural, defensible suspicion that doesn't require me to invent facts."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Alice hit the nail on the head regarding Carmen. Carmen kicked off the day demanding that everyone reveal their roles and suspects, yet she gave us no claim, no suspect, and risked absolutely nothing herself. That is textbook role-fishing from someone looking to map out the power roles before making a move.\n\nAs the last person speaking before we head into voting, let's look at where we stand: Elena, Farid, and Alice all put themselves on record as plain Villagers. I am firmly on the Village team, but I am not going to give the Mafia a detailed roadmap of our remaining power roles when we're down to five players. Handing them that certainty on a silver platter only helps them.\n\nCarmen set a trap she didn't step into herself, and that makes her the most suspicious person at the table. That is where our focus—and our votes—should be.",
+          "private_reasoning": "I am the last speaker in this discussion round before voting commences (Carmen, Elena, Farid, and Alice have all spoken). Elena, Farid, and Alice all claimed plain Villager. Carmen opened by demanding everyone reveal their roles and suspicions, but she gave neither a claim nor a suspect herself—a classic Mafia role-fishing tactic that Alice astutely called out. Since I am the Detective but have no explicit guilty investigation handed to me in the prompt, openly claiming Detective paints a bullseye on my back without providing an indisputable guilty result to guarantee a lynch. However, claiming plain Villager would create four Villager claims in a game with at most three total, which is mathematically impossible and invites scrutiny. The best play is to back Alice's pressure on Carmen, call out Carmen's blatant role-fishing, refuse to hand Mafia a neat power-role roadmap on Day 1, and focus the room's voting momentum onto Carmen right before the vote."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_6",
+          "agent_2": "agent_3",
+          "agent_3": "agent_2",
+          "agent_5": "agent_3",
+          "agent_6": "agent_2"
+        },
+        "justifications": {
+          "agent_1": "No strong reads yet, and my priority is to look like an engaged villager while pushing the vote onto someone who isn't me. Farid has been the least committal and hasn't offered any real read, which is easy to frame as fence-sitting - a plausible, non-aggressive accusation that won't make me look like a wild bus-driver. Eliminating him is a coin flip that could take out the Detective or Doctor, and either outcome helps me. I'll keep my stated logic simple and consistent so I can build on it next round.",
+          "agent_2": "Without a confirmed guilty result yet or explicit public hard claims, I need to push on the player whose behavior and positioning feels most non-committal and deflective. Carmen has been careful and evasive, making her a strong suspect for the lone Mafia trying to blend into the town consensus. Placing my vote on Carmen to force accountability.",
+          "agent_3": "We have no public discussion history in this prompt, so I need to make a best-guess vote. As Doctor, I want to avoid random village self-destruction, but with no information the safest practical approach is to vote for whoever seems most likely to be Mafia by process of elimination. I will choose Bruno as a conservative pressure vote; if others have stronger claims later, I can adjust in future rounds, but for now this is a reasonable default.",
+          "agent_5": "We have no concrete evidence this early, and no one has stepped forward with a detective claim or strong lead. Carmen has been relatively quiet in our discussions, which often signals an attempt to avoid scrutiny. With a 1/4 chance of hitting the mafia, I'll vote for the player who has contributed the least, hoping to pressure her into revealing more if she's innocent or catch a slip if she's guilty.",
+          "agent_6": "Without any concrete evidence pointing to a specific player, I have to go with gut instinct from the discussion so far. Bruno's answers felt the most evasive and inconsistent to me, so I'll cast my vote there to keep pressure on the most suspicious behavior."
+        },
+        "eliminated": "agent_2",
+        "tie_break_used": true
+      }
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "Protecting myself is the safest default when there is no information, since as Doctor I am a valuable target and losing me reduces village power. If mafia guesses, they may target someone else, but self-protection preserves my ability to influence future days."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_5",
+          "reasoning": "Four players left: me plus three villagers-aligned. If I kill one tonight and survive the day vote, it'll be 1v1 or I can push a mislynch. Among Carmen, Elena, and Farid, one is likely the Detective and one the Doctor. The Doctor most often self-protects late game, so I want to target someone who's more likely to be a plain Villager or the Detective. I'll target Elena — removing her keeps the remaining pair easier for me to manipulate against each other, and I can frame the death as evidence against whoever pushes hardest at me."
+        },
+        "_eliminated_by_night": "agent_5"
+      },
+      "morning_announcement": "Elena was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_6",
+          "public_statement": "Alright, it's down to the three of us, so this vote really matters. I'm just a villager with no special info, so I'd like to hear from both of you - any reads, suspicions, or claims from earlier rounds? If either of you is Detective or Doctor, now's the time to speak up so we can cross-check. I'll be listening closely for anything that doesn't add up before I decide my vote.",
+          "private_reasoning": "Only three of us are left, so this vote is critical - if we pick wrong, mafia could win very soon. I have no special information, so I need to prompt Alice and Carmen to share what they know or suspect, and watch for inconsistencies or defensiveness. I'll open by asking for reads and pushing for claims."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "{\"reasoning\": \"There are 3 players: me (Mafia), Carmen, Farid. If today's vote eliminates either of them, it's 1 mafia vs 1 villager and I win. So I need one of them to vote with me. Farid has claimed villager and asked for claims. My strongest play is a hard Detective claim that both flatters Carmen (clearing her, so she trusts me and knows my claim is 'consistent' with her own knowledge) and condemns Farid. If Carmen is the real Detective this backfires, but I need a decisive push and Carmen's vote is the one I must win. I'll explain my earlier silence as detective self-preservation.\", \"output\": \"Okay Farid, you asked for it, so I'm going to drop the act I've been keeping up all game: I'm the Detective. I stayed quiet and played the boring villager on purpose, because the moment I claim, I'm the Mafia's top kill target - and you can see it worked, I'm still here.\\n\\nHere are my results. Night one I checked Carmen: innocent. Night two I checked you, Farid: MAFIA.\\n\\nThat's why I'm not interested in a long debate. Carmen, you know for a fact you're innocent, so you know my first result is accurate - I didn't have to clear you, and a Mafia bluffing Detective would have far more reason to smear you than to vouch for you. My read lines up with the whole game: Farid, you've spent every round asking other people for reads and 'listening closely' instead of ever putting your own neck out, and now with three left you open by pre-claiming plain villager and inviting the real power roles to expose themselves. That's exactly what the Mafia wants on the final day.\\n\\nCarmen, you and I vote Farid and this is over right now. If we split, the Mafia survives another night and one of us doesn't wake up. My vote is Farid.\",\"}",
+          "private_reasoning": ""
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "I’m the Doctor, and I’m not buying Alice’s Detective claim as-is. A real Detective would usually have a cleaner line than “I stayed quiet all game and just happened to have two perfect results now,” and her push to rush Farid feels too convenient.\n\nMy read: Alice is the most suspicious so far. Farid has at least been consistent in asking for claims and discussion; Alice’s sudden full claim with exact results is the thing that needs pressure. I want to hear why she thinks there’s no possibility she’s being counterclaimed or why she didn’t speak sooner if she truly had these results.\n\nI’m not locking my vote yet, but I’m leaning Alice over Farid.",
+          "private_reasoning": "We are Doctor and need to respond publicly in a way that is consistent and helps village. Alice has hard-claimed Detective and accused Farid. We need to assess whether to counterclaim now. With 3 alive, if Alice is mafia and we counterclaim Doctor, Farid may be real villager and vote Alice; but if Alice is real Detective, counterclaiming could confuse. However as Doctor, I should likely avoid revealing unless necessary. Need make clear suspicion on Alice's claim because it's too convenient and she gave a self-serving info line about Carmen being innocent which is unverifiable to her. I should not reveal exact role unless needed, but can say I don't buy the Detective claim and that I'm not voting Farid yet. Since public statement can be a claim or question. Best: state I am the Doctor? But if Alice is mafia and Farid is villager, counterclaiming may out us and still maybe not help. Yet with only three players, a Doctor claim can directly challenge Alice and force a 50/50. Since if Alice is mafia, one of us must be lying and Farid can judge. We need maximize village survival. Since Farid asked for claims, and Alice claimed Detective, I can counterclaim Doctor and say I did not see any reason to assume Farid is mafia; Alice's claim is too neat. Let's do concise."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_6",
+          "agent_3": "agent_6",
+          "agent_6": "agent_3"
+        },
+        "justifications": {
+          "agent_1": "Only three of us left, and this vote effectively decides the game. If a villager goes, it's 1v1 and I take it from there; if I go, I lose. So I need to cast a confident, consistent vote and hope the other two split. I've been pushing suspicion toward Farid, so switching now would look erratic and hand Carmen a reason to bundle me with a flip-flop narrative. Sticking with Farid keeps my story straight: he's been the one steering votes and avoiding hard commitments, which is the read I've voiced all game. Best case, Carmen follows my lead and Farid's vote on me isn't enough.",
+          "agent_3": "With only Alice and Farid left besides me, I need to choose the most suspicious. Farid has been the louder uncertainty and is the better elimination to resolve the game. If he is Mafia, this wins; if not, we at least narrow the final state. Voting Farid is the strongest village play from my perspective.",
+          "agent_6": "With only three of us left, the Mafia must be either Alice or Carmen. Reflecting on the discussion, Carmen's answers felt more evasive and inconsistent when pressed about her whereabouts, while Alice's story held together better. Given the stakes of this final vote, I'll go with the read that Carmen is more likely to be the Mafia."
+        },
+        "eliminated": "agent_6",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Mafia",
+    "ended_round": 2,
+    "reason": "Mafia count reached or exceeded remaining Villagers."
+  },
+  "meta": {
+    "total_tokens": 26345,
+    "estimated_cost_usd": 0.190389,
+    "generation_duration_sec": 205.4
+  }
+}
