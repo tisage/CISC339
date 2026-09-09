@@ -1,0 +1,132 @@
+{
+  "game_id": "mafia_2026-09-09_cf3e7d",
+  "created_at": "2026-09-09T13:26:54Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "anthropic/claude-opus-5",
+      "role": "Detective"
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Mafia"
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager"
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Villager"
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "google/gemini-3.8-flash",
+      "role": "Doctor"
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_5",
+          "target": "agent_5",
+          "reasoning": "It is Night 1 with no prior information or reads on mafia tendencies. Protecting myself ensures that the Doctor survives into Day 1 to participate in deductions and continue protecting key town members in subsequent nights."
+        },
+        "mafia_kill": {
+          "agent": "agent_2",
+          "target": "agent_5",
+          "reasoning": "Targeting a likely investigative or coordinating threat; choosing Elena to reduce village information-gathering while avoiding obvious patterning."
+        },
+        "detective_check": {
+          "agent": "agent_1",
+          "target": "agent_2",
+          "result": true,
+          "reasoning": "No information exists yet, so my first investigation is a blind pick. I'll investigate Bruno to establish a baseline, and I'll track who pushes whom in the day discussion to compare against my findings."
+        },
+        "_eliminated_by_night": null
+      },
+      "morning_announcement": "No one died last night.",
+      "day_discussion": [
+        {
+          "agent": "agent_4",
+          "public_statement": "I'm Devon, a plain Villager. I have no night action and no special info. The fact that nobody died is important: either the Mafia didn't kill, or the Doctor blocked a kill. I'd like everyone to share whether they have any night information, even vague. I'm not ready to accuse anyone yet, but I'll be watching for contradictions as the discussion goes on.",
+          "private_reasoning": "I have no special information as a plain Villager. Since no one has died, either the Mafia chose not to kill or the Doctor saved someone. My best move is to encourage reveals and see who contradicts themselves later."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "I agree with Devon that the no-death result is meaningful. I don't have any night information to report, so I'm leaning toward hearing from anyone who *does* have a claim or saw something unusual. If someone has a protective or investigative result, now would be the time to start narrowing things down.",
+          "private_reasoning": "Need speak as mafia. Best strategy is low-commitment, join information push, avoid hard claims. Mention no night info and ask for role claims subtly. Keep consistent if later pressed."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "I'm Carmen, a Villager with no night information. A no-death night doesn't clear anyone, and we shouldn't turn it into a fishing expedition for our power roles. Devon and Bruno both invited disclosures; Bruno, your push for protective results especially concerns me. How would exposing the Doctor help us identify the Mafia? A Detective with a guilty result is a different matter, but otherwise I'd rather hear suspicions and reasoning than vague hints about roles. Bruno is my first person to scrutinize, not a firm accusation.",
+          "private_reasoning": "There is no confirmed evidence against anyone. Encouraging broad role disclosures could expose the Doctor or Detective, so I want to challenge that pressure without treating it as proof of guilt."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "I'm Farid, also a plain Villager with nothing to report from the night. Carmen, I think you're right that a quiet night doesn't clear anyone, but I don't read Bruno's comment as pressuring the Doctor specifically - he just said 'if someone has a claim.' That said, I agree we shouldn't turn this into a role-outing contest this early; if the Detective has something solid, they can choose to share it without being cornered. For now I'd rather hear how everyone is reading Devon, Bruno, and Carmen's exchange itself - does anyone see a reason to be more suspicious of one of them over the other, or should we wait for Elena and Alice to speak before forming opinions?",
+          "private_reasoning": "I have no real information, so my best move is to stay useful without overcommitting. Carmen raises a fair point about not pressuring the Doctor to expose themselves, but I also don't want to let that stand as an unchallenged deflection from Bruno's fairly mild suggestion. I'll try to keep the conversation focused on behavior and reasoning rather than role claims, while noting that both Bruno's suggestion and Carmen's pushback are pretty standard opening moves that don't tell us much yet."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "I'm Alice, and I'm deliberately not going to state a role today - not because I'm hiding a guilty result, but because I think announcing who is and isn't a power role on night one is exactly the service the Mafia wants from us. If the Detective has a confirmed guilty, they should say so immediately; if they have nothing solid, they should stay quiet and keep investigating. Same for the Doctor - Carmen is right that outing protection helps only the killer.\n\nOn reads: Devon opened by asking everyone to share night info, which is a little role-fishy but at least he committed to a claim. Bruno then repeated Devon's frame word for word with no content of his own and specifically named protective results as something he wanted to hear. Bruno, that's the one ask on the table that has no upside for the village - a Doctor claim doesn't narrow the Mafia by a single name, it just tells the killer who to shoot around. So I'd like you to answer Carmen directly instead of restating that you have nothing: who do *you* suspect, and why? Farid, I don't think Carmen was cornering the Doctor, so your defense of Bruno read to me as smoothing over the one moment of real friction we've had.\n\nFor now Bruno is my lean, and I'd rather spend today extracting actual opinions from him and Farid than hunting our own power roles.",
+          "private_reasoning": "I'm the Detective but I haven't got an actionable guilty result to present, so claiming now would just paint a target on me for zero payoff. I want to stay flexible: I'll deliberately decline to state a role rather than claim Villager, so that if I do get a guilty result later, my earlier words don't contradict my claim. Read-wise: Devon opened with a role-fishing invitation, Bruno echoed it with zero content of his own and specifically invited protective results, which is the kind of ask that helps Mafia locate the Doctor. Carmen's pushback was substantive and villager-flavored. Farid softened the Bruno pressure while offering nothing himself. Bruno is my lean, and pressuring him also has the side benefit of discouraging the role-hunting."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "I completely agree with Alice and Carmen: pushing for role reveals today only plays into Mafia's hands, so I'm not going to state my role either. The math alone is already telling—there are only three plain Villagers in this game, yet Devon, Carmen, and Farid have all explicitly claimed plain Villager, and Bruno claimed no night info. That means at least one of those four is not what they claim to be.\n\nBruno, your specific request for protective information is especially glaring. Exposing protection doesn't catch Mafia; it just hands them a roadmap of who to target next. Carmen was right to call that out, and Farid, your instinct to immediately soften the spotlight on Bruno felt premature before Bruno even explained himself.\n\nBruno, before we vote, I want to hear your direct reasoning: why did you think uncovering a protective role would help the Village right now?",
+          "private_reasoning": "I am the Doctor. I definitely must not reveal my role, as keeping the Doctor hidden is crucial for village survival, especially after a night with zero deaths. In terms of game math, there are only 3 Villagers, but Devon, Carmen, and Farid have all claimed plain Villager outright, and Bruno claimed having no night info. This means at least one of those four is lying (either Mafia blending in or Detective laying low). Bruno's specific request for 'protective results' makes zero sense from a village standpoint because a Doctor claim provides no guilty check and only paints a bullseye on the Doctor. Alice and Carmen made great points highlighting this, while Farid curiously tried to soften the pressure on Bruno. I will support Alice's stance against role-claiming, call out Bruno's suspicious fishing, and note Farid's defense."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_6",
+          "agent_2": "agent_3",
+          "agent_3": "agent_2",
+          "agent_4": "agent_6",
+          "agent_5": "agent_2",
+          "agent_6": "agent_2"
+        },
+        "justifications": {
+          "agent_1": "I have no investigation results yet, so this vote is essentially blind. My priorities: (1) don't paint a target on myself by leading a hard push, (2) avoid eliminating players I may later want alive as confirmed-clean allies, and (3) cast a vote I can defend consistently later. Farid has been the least committal so far, offering nothing actionable, which is a defensible public reason without me claiming any special knowledge. If Farid turns out to be a Villager, my stated reasoning ('low information contribution') still holds up and doesn't contradict anything I've said. I'll plan to investigate whoever survives with the most suspicion next night.",
+          "agent_2": "I want to steer suspicion away from me by pushing a cautious, non-committal vote. Carmen is a reasonable target because I can frame it as pressure on someone who has not clearly cleared themselves and whose behavior I can characterize as quiet/low-information. A vote on Carmen keeps options open and avoids directly antagonizing a player who may be more persuasive if they're town.",
+          "agent_3": "No discussion, voting history, or investigative results are available to distinguish the candidates. I am voting for Bruno as a low-confidence tie-break, not because of any established evidence against him.",
+          "agent_4": "We have no concrete information from night actions or discussion yet. As a villager I have to make a choice to start narrowing things down and pressure reactions. I'll vote for Farid because I want to force him to defend himself and see how the rest of the group reacts to that vote.",
+          "agent_5": "Without hard information or an investigation result shared yet, I want to place a vote on Bruno to push for accountability and observe how the table reacts to pressure. As Doctor, keeping my identity concealed while actively participating in village consensus is key.",
+          "agent_6": "With no strong evidence pointing to anyone yet, I'll go with a gut read. Bruno has been a bit quiet and non-committal in the discussion, which sometimes signals someone trying not to draw attention. Better to start narrowing the field with someone who hasn't given much to work with."
+        },
+        "eliminated": "agent_2",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Village",
+    "ended_round": 1,
+    "reason": "All Mafia eliminated."
+  },
+  "meta": {
+    "total_tokens": 15408,
+    "estimated_cost_usd": 0.102168,
+    "generation_duration_sec": 114.2
+  }
+}
