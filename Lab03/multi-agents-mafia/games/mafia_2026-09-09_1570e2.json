@@ -1,0 +1,211 @@
+{
+  "game_id": "mafia_2026-09-09_1570e2",
+  "created_at": "2026-09-09T15:11:18Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Mafia"
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "anthropic/claude-opus-5",
+      "role": "Villager"
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager"
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Detective"
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "openai/gpt-6-astra",
+      "role": "Doctor"
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "google/gemini-3.8-flash",
+      "role": "Villager"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_5",
+          "target": "agent_5",
+          "reasoning": "There are no clues yet about the Mafia or Detective. Protecting myself preserves the Doctor and the village’s ability to prevent future eliminations."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_4",
+          "reasoning": "I need to eliminate a non-mafia player to reduce the village numbers. With no information available, I'll choose a player at random to avoid drawing suspicion to myself."
+        },
+        "detective_check": {
+          "agent": "agent_4",
+          "target": "agent_1",
+          "result": true,
+          "reasoning": "I should investigate a player whose alignment would help narrow the field and inform early day play. Picking someone likely to be influential is useful, but avoiding myself and any needlessly obvious target is fine. I'll start with Alice as a balanced opening investigation."
+        },
+        "_eliminated_by_night": "agent_4"
+      },
+      "morning_announcement": "Devon was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_6",
+          "public_statement": "Losing Devon on night one is tough, but since we're using today strictly for information gathering and not voting, we need to make every exchange count. Devon was likely a blind pick or targeted for being perceived as observant. I want to put the ball in everyone's court: Alice, Bruno, Carmen, Elena—what are your first reads on the room, and how do you propose we structure our defense and scrutiny heading into tomorrow?",
+          "private_reasoning": "Devon was killed Night 1, leaving five of us. Since the town decided not to vote today, the goal of Day 1 is purely pressure-testing, observing reactions, and establishing behavioral baselines. As a vanilla Villager, I want to prompt discussion and encourage everyone to speak up without falsely claiming a power role, which could muddy the waters for the real Detective and Doctor."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "Farid, asking everyone for reads is sensible, but I wouldn't read much into Devon's death without evidence that someone specifically feared him. Your opening is constructive, not enough to clear you. I don't have a justified suspect yet. Alice, Bruno, Carmen: as you speak, name the statement you find most or least convincing and explain why—even a tentative judgment gives us something to check tomorrow. Let's avoid turning today into either five empty promises to watch closely or a demand for role claims.",
+          "private_reasoning": "Farid's opening is reasonable but offers no evidence of alignment; his speculation about Devon should not become an assumed clue. With no vote today, concrete reads and explanations can create a record for tomorrow. I should keep my Doctor role and protection private, avoid pressuring the Detective to reveal, and not manufacture a strong accusation from one statement."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "I agree with Elena that we shouldn't overreact to Devon's death without a clear signal—Mafia could have picked him for any number of reasons, including just testing the waters. Farid's opening felt organized but fairly neutral to me; it doesn't clear or implicate him, it's just structure. What I'd like to hear from Bruno and Alice specifically: did either of you notice anything odd in how quickly people were ready to move past Devon's death, or any inconsistency in what people claimed to be doing last night? I don't have a suspect yet either, but I want us to start building a mental timeline of who says what, so that if someone contradicts themselves tomorrow, we catch it immediately rather than losing the thread.",
+          "private_reasoning": "No hard info yet. I should participate constructively, echo the info-gathering approach, and gently push for concrete reasoning rather than vague promises, while not committing to any accusation prematurely. I'll flag Farid's opening as fine but not special, and ask a pointed question to Bruno and Alice to get more data points to compare tomorrow."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "I'll answer Elena's request directly. The statement I found least convincing so far is actually Farid's opening—not because it was suspicious, but because it was very polished and controlled, which tells me little about his actual alignment. The most convincing to me was Carmen's push to build a timeline; that feels like genuine village problem-solving. To Carmen's question: I didn't notice anyone claiming to do anything last night, so there's no inconsistency to catch yet—but I do think it's worth watching whether anyone starts inventing specific night details later. Bruno, you've been quiet compared to the rest of us. What's your read on the room, and is there any statement so far that you find more or less trustworthy?",
+          "private_reasoning": "I need to sound cooperative and analytical without drawing suspicion. Since there is no vote today, I can use this to subtly shape suspicion while appearing helpful. I'll answer Elena's request for a tentative read, respond to Carmen's question, and try to get Bruno to talk more without committing too hard to any accusation."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Fair hit, Alice — I was listening rather than talking, but here's my read, and I'll be specific since Elena asked for that.\n\nLeast convincing: Farid. Not because his opening was wrong, but because of its shape. He asked all four of us for our reads and a defense structure while providing neither himself. That's the cheapest position in the game — you get to look organized, you generate a record of everyone else's commitments, and you commit to nothing that can be checked tomorrow. Mafia loves being the chair of the meeting instead of a person at the table. Farid, you asked us to put the ball in our court; put it back in yours. Name a most and least trustworthy player right now, with a reason, and accept being held to it tomorrow.\n\nMilder version of the same critique for Elena and Carmen. Both of you opened by explaining, correctly, that nothing today can clear anyone — and then asked others to make the first tentative judgment. Elena, \"even a tentative judgment gives us something to check tomorrow\" is true, so I'd like yours. Carmen, your timeline idea is genuinely the most useful thing said today, and I want to build on it, but a timeline needs entries and so far you haven't made one either.\n\nMost convincing: Alice. She's the only person who answered a direct question with actual names attached instead of asking a new question. That's not a clear, it's just the only content on the board.\n\nMy proposal for tomorrow, so today isn't wasted: we go in the same speaking order, and every single person opens their statement with a named vote target and one sentence of reasoning — no \"I'll decide after hearing everyone.\" Whoever waffles, floats three suspects, or votes against what they said today without addressing the change is my first suspect. Mafia needs flexibility to survive; villagers can afford to be wrong out loud.\n\nOne more thing: nobody should claim a role today. If we have a Detective, a Day 1 claim gets them killed tonight and buries their result with them. Investigate whoever you like — and I'd suggest Farid — and speak up tomorrow if you have something. And to whoever the Doctor is: consider that the Mafia's next target is likely whoever sounded most dangerous today, which by my own argument is Alice or me.",
+          "private_reasoning": "I'm a plain Villager with no information. My value today is framing tomorrow's discussion so the Mafia has to commit to something falsifiable, and establishing myself as a clear, consistent voice so I'm not an easy lynch target.\n\nMy real reads: Farid solicited reads from everyone while offering none of his own — that's the lowest-risk possible opening, and a Mafia player loves being the moderator rather than a participant. Elena and Carmen both did the same thing in softer form: they pre-explained that nothing today can clear anyone and asked others to commit judgments first. Alice was the only one who actually named a most/least convincing statement, which is the only content anyone has offered.\n\nI'll say that plainly, ask Farid to give his own read since he demanded ours, and propose a concrete structure for tomorrow: everyone opens with a named vote. That forces the Mafia to either misvote or hide, and it gives us a record to check. I'll also advise power roles not to claim yet."
+        }
+      ],
+      "vote_skipped": true
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_5",
+          "target": "agent_1",
+          "reasoning": "Alice is a plausible target: both Carmen and Bruno have treated her contributions as useful, and Bruno explicitly presented her as a threat to Mafia. Bruno himself might draw protection because he was the most forceful speaker, making Alice an attractive alternative kill. Neither is cleared, and I have no reliable Detective clue, but protecting Alice offers a reasonable chance of preventing a death rather than automatically protecting myself again."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_2",
+          "reasoning": "Bruno is the most vocal and influential player right now. He proposed a strict voting structure, named suspects, and is steering the village's discussion. Leaving him alive gives the village a strong leader to rally around, and he could also be the Doctor or Detective. Eliminating him now reduces the village's coordination and removes a dangerous voice."
+        },
+        "_eliminated_by_night": "agent_2"
+      },
+      "morning_announcement": "Bruno was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_3",
+          "public_statement": "Bruno's dead, and he's the one who named Farid as least convincing and asked him directly to commit to a most/least trustworthy read. I think we honor his structure today: everyone opens with a named vote target and a reason, no 'I'll decide later.' Farid, you got called out specifically yesterday and didn't get a chance to answer before Bruno was killed - I want your most and least trustworthy names now, not another round of questions back at us. For me, procedurally, Farid and Alice are the two who've said the most content-heavy things so far, so I want to hear them both commit before I land anywhere. Elena, same ask to you - a name, not just a framework.",
+          "private_reasoning": "Bruno was the one player who put a specific, checkable target on the table (Farid) and a concrete structure for today. Now he's dead. That's exactly the pattern you'd expect if Mafia wanted to silence the person building momentum against a specific suspect, or wanted to remove the person calling for accountability structure. I want to honor Bruno's proposal today - everyone should open with a named vote target and reasoning, no waffling - and I want to specifically push on whether Farid can account for himself now that his loudest critic is gone. I'm not fully committing to Farid being Mafia, but the timing is suspicious enough that I want him to answer directly instead of asking us questions again."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "I'll follow Carmen's structure and name a target. My vote target is Farid. Yesterday I said Farid's opening was polished but empty; Bruno went further and called him the least convincing player. Now Bruno is dead, before Farid ever had to answer that pressure. That's not proof, but it's the strongest signal we have. Mafia doesn't usually kill someone who was just going along; they kill someone who was creating a record, and Bruno was doing exactly that. So I want Farid to give us names now, not more process. If he gives a direct, consistent read, I'll reconsider. But as it stands, I think Farid is the right elimination.",
+          "private_reasoning": "I'm Mafia. Bruno was killed last night and he had just accused Farid, so I can use that to push Farid as the lynch target. I already named Farid as least convincing on Day 1, so this is consistent. If Farid gets lynched, we will have parity after tonight. I'll comply with Carmen's request for a named target while acting like a cooperative townie."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "My vote target is Alice. Let's look at the reality of this board instead of taking the bait. Yesterday, Bruno called me his least convincing player and explicitly said: 'Investigate whoever you like — and I'd suggest Farid.' If I were Mafia, killing Bruno would be the worst possible move on the board—it guarantees the Detective investigates me and leaves me directly under the spotlight. Mafia killed Bruno for two clear reasons: he was sharp, and his death was a ready-made frame on me. Alice, yesterday Bruno called you the 'most convincing' player. Today, you immediately weaponize his death to push a quick vote onto me, ignoring how textbook of a frame this is. In a four-player game, a mislynch today loses the game for the village tonight. I also notice Carmen told everyone to open with a vote target and then withheld hers, but Alice's eagerness to lock onto me is far more predatory. Least trustworthy: Alice. Most trustworthy: Elena, who hasn't rushed to conclusions. If the Detective is alive, now is the time to speak.",
+          "private_reasoning": "We are down to 4 players (1 Mafia, 3 Village). If town mislynches today, Mafia gets a night kill and wins (1 Mafia vs 1 Villager). Alice immediately targeted me based on Bruno's death. Bruno yesterday explicitly told the Detective to investigate me and told town I was his top suspect. As a Villager, I know killing Bruno would be suicide for me because of the obvious frame and investigation risk. Mafia killed Bruno because he was a sharp vocal player and because his death naturally casts suspicion on me. Alice is weaponizing this frame job instantly. Also, Carmen claimed we should all state a target immediately, yet deferred naming one herself. I need to push back hard against Alice's opportunistic push, explain the frame job, highlight the 4-player MYLO stakes, and name Alice as my suspect."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "My current vote target is Carmen. Yesterday I had no justified suspect; today you supplied a specific contradiction: you demanded that everyone open with a named target and no waiting, then said you wanted Farid and Alice to commit before you landed anywhere. You’re enforcing a standard you explicitly exempted yourself from.\n\nMore importantly, your statement pushes suspicion toward Farid through Bruno’s death without actually owning that accusation. That lets Alice carry the case while you retain the option to join or abandon it. That is more suspicious to me than merely sounding polished.\n\nAlice, Bruno’s death does not validate Bruno’s reads. Mafia can kill a critic, kill a trusted player, or create a frame. We need something beyond ‘he suspected Farid and died.’\n\nFarid, the reverse is also true: an obvious-looking kill does not make you innocent. Killing Bruno wouldn’t guarantee an investigation of you—the Detective’s choice happens that same night. Your strongest point is Carmen’s inconsistency, not that Mafia would never make this kill.\n\nI’m not treating Alice versus Farid as our only choice. Carmen’s attempt to demand commitments while avoiding her own is the clearest accountable behavior on this board.",
+          "private_reasoning": "I know only that I am village; protecting Alice did not establish her alignment because Bruno died. Carmen is my strongest behavioral suspect: she demands a named target, declines to name one herself, and directs pressure toward Farid while waiting for others to commit. This builds a potential bandwagon without accountability. Alice's case overweights the night kill, while Farid's framing defense is plausible but not exculpatory—killing Bruno cannot guarantee an investigation that happens that same night. I should challenge both arguments rather than accept their binary. Revealing Doctor would provide no verified result and I am not under immediate elimination pressure, so I will preserve uncertainty around tonight's protection. My earlier position was that I lacked a justified suspect; Carmen's new contradiction gives me a concrete reason to change that."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_6",
+          "agent_3": "agent_5",
+          "agent_5": "agent_3",
+          "agent_6": "agent_3"
+        },
+        "justifications": {
+          "agent_1": "I'm voting for Farid. His response today is the most defensive and self-serving thing on the board. He had no named read yesterday when Bruno pressed him, yet today he instantly calls Bruno's death a 'frame' and pivots to voting me. That's not analysis; that's survival. He also says Mafia wouldn't kill Bruno because it would frame him—but that's pure speculation. Mafia kills the most dangerous voice and lets the chaos do the rest. Farid then tries to buddy Elena as 'most trustworthy' while dodging her actual criticism of Carmen, and he calls for the Detective to reveal, which only helps the Mafia. We need to eliminate the player who is actively steering us away from accountability, and that's Farid.",
+          "agent_3": "Elena, let's address your accusation directly: I said I wanted Farid and Alice to commit before I 'landed' anywhere - that's not exempting myself from giving a target, it's saying I'd weigh their answers before naming mine, which I'm doing now. That's not the same as dodging - I'm doing exactly what I said I'd do.\n\nWhat concerns me more is that you took a day where Alice and Farid gave direct, opposing, checkable accusations against each other - Alice citing the frame logic on Bruno's death, Farid countering with the logic of why that kill wouldn't serve Mafia - and instead of picking a side or dismantling one argument, you pivoted the entire day onto me over a procedural technicality. That's the textbook mafia move: when two villagers are closing in on each other with real content, deflect the whole room onto the person who was just asking questions.\n\nYour own case against me doesn't explain any specific suspicious behavior - it's about tone and self-exemption, not action. Meanwhile you dismissed both Alice's and Farid's cases as insufficient without offering a real alternative theory of who killed Bruno and why. In a 4-player end-game, that's exactly the kind of studied neutrality Bruno warned us about on Day 1.\n\nI'm voting Elena. If I'm wrong, at least we still have Alice and Farid's competing claims to sort out tomorrow.",
+          "agent_5": "Carmen demanded an immediate named target from everyone while explicitly waiting for other people's answers herself. Her defense confirms that contradiction rather than resolves it. Now she calls my named accusation 'neutrality' and says I should have picked between Alice and Farid, even though neither is cleared and I specifically challenged both arguments about Bruno's death. Most tellingly, she describes Alice and Farid as 'two villagers' without any established basis for knowing that. This is not just a procedural objection: she pushed suspicion toward Farid without committing, then voted against the person who challenged her. And her reassurance that we can sort things out tomorrow if she is wrong is unsafe—a wrong elimination leaves the village vulnerable to losing tonight.",
+          "agent_6": "While I initially targeted Alice during the discussion for jumping onto the frame against me, the statements during this voting round make Carmen's alignment glaringly obvious. First, Carmen openly slipped by referring to Alice and me as 'two villagers closing in on each other'—a fact only the Mafia would know with certainty. Second, Carmen casually claimed that if she is wrong about Elena, 'we still have Alice and Farid's competing claims to sort out tomorrow,' completely disregarding that a mislynch at four players loses the game for the village tonight. Elena's catch was dead-on: Carmen demanded everyone commit while shielding herself, and her slip sealed it. I am voting Carmen."
+        },
+        "eliminated": "agent_3",
+        "tie_break_used": false
+      }
+    },
+    {
+      "round": 3,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_5",
+          "target": "agent_5",
+          "reasoning": "Carmen's elimination did not end the game, so either Alice or Farid is Mafia. A successful protection is essential: another death would leave Mafia at parity. Elena is the only player I know is Village, and protecting either other player risks shielding Mafia. Both suspects have reason to kill me: Alice could remove the player Farid publicly trusted, while Farid could remove someone who challenged his frame defense and might reassess his late vote switch. Protecting myself is the strongest choice, though Mafia could instead target the other villager."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_5",
+          "reasoning": "I am the Mafia. Based on the game narrative, I am likely Farid, since Bruno accused Farid and was killed the next night, and Farid worked to avoid the lynch. The remaining players are Alice, Elena, and me. Alice actively voted against me and is the more immediate threat, but the Doctor may protect her because she is the obvious target. Elena is less likely to be protected and is more likely the Doctor, whom I should kill to guarantee the elimination. I will target Elena."
+        },
+        "_eliminated_by_night": null
+      },
+      "morning_announcement": "No one died last night.",
+      "day_discussion": [
+        {
+          "agent": "agent_5",
+          "public_statement": "My current vote target is Farid, but first, the information we need: I am the Doctor. I protected myself on night one, Alice on night two, and myself last night. Last night's protection stopped the kill. Protecting Alice earlier did not clear her—Bruno died that night.\n\nI was wrong about Carmen. Her inconsistent demands and her phrase 'two villagers' were not proof of Mafia knowledge. I pushed that case, and I own the mistake.\n\nFarid, my concern is how you moved from confidently accusing Alice to calling Carmen's alignment 'glaringly obvious' once my vote made her the available elimination. You adopted my accusations as certainty without explaining why Alice's supposedly predatory behavior no longer outweighed them. Your earlier claim that killing Bruno would be the 'worst possible move' was also an assertion, not a defense that establishes innocence.\n\nYour switch isn't proof by itself—a villager could have shared my mistake. But I want your own case against Alice now, grounded in her statements rather than the assumption that Bruno's death must have framed you.\n\nAlice, consistency doesn't clear you either. You said calling for the Detective only helped Mafia. At four players, a surviving Detective's results could have decided the game. Why did you treat that request as incriminating?\n\nOne of you is the remaining villager. We need to find each other. My protection bought this chance; it did not tell me which of you attacked me.",
+          "private_reasoning": "My self-protection succeeded, so revealing now gives the remaining villager a strong reason to trust me; hiding the Doctor has no value at this final vote. Carmen was innocent, and I must explicitly acknowledge that my case was wrong. Neither Alice nor Farid is mechanically cleared. Farid's deciding vote against Carmen was advantageous for Mafia, but a villager could reasonably have followed my mistaken case, so it is not proof. I lean Farid because his original defense rested on an unjustified claim that killing Bruno would be irrational, followed by overstated certainty when adopting my Carmen accusation. Alice's consistent suspicion is somewhat preferable, although her complaint about a Detective reveal at four players was strategically unsound. I should state a provisional target, expose the limits of my information, and demand explanations that distinguish their actual reasoning from recycled accusations."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "Elena, I believe your Doctor claim—no one died last night, and your explanation is the simplest one. I'll answer your question directly: I said a Detective reveal only helps Mafia when Farid demanded it under pressure, because he wasn't offering a result—he was fishing for information. That's different from a Detective choosing the right moment to speak. My vote stays on Farid. His whole game has been survival: yesterday he accused me, then instantly switched to calling Carmen 'glaringly obvious' once her elimination became available. Now he's trying to make you doubt me instead of answering for that switch. We have a clear path: eliminate Farid.",
+          "private_reasoning": "I need to survive today and eliminate a non-Mafia player. Elena claims Doctor and explains the no-death night, which I know is true because I attacked her and was blocked. Farid is the other non-Mafia player and already has Elena's vote against him. If I vote Farid, he will be eliminated, leaving me and Elena alive—one Mafia versus one non-Mafia, which is an immediate Mafia win. I also need to address Elena's question about my earlier Detective-reveal comment without contradicting myself too harshly."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "Elena, your Doctor claim is beyond question. Your self-protection last night is the sole reason village didn't lose right then and there. That mechanically confirms you, which means this game is entirely between Alice and me. I need you to hear me out clearly. First, to answer your critique: yesterday, I was wrong about Carmen—exactly as you were. When Carmen said Alice and I were 'two villagers' and claimed we could 'sort it out tomorrow' at 4 players, it felt like an undeniable slip, especially on top of the procedural hypocrisy you accurately flagged. I believed your case was right, and I voted with you. It wasn't opportunism; it was a villager seeing compelling logic and acting on it. Holding my vote on Carmen against me when you led the charge and voted her yourself treats a shared mistake as guilt. Second, look at Alice. Alice didn't question your Doctor claim for a second because Alice already knew it was true—she targeted you last night and got blocked! Look at Alice's Day 2 and Day 3 behavior: zero genuine analysis, just a predatory tunnel on me using Bruno's death. When you asked her why she treated calling for the Detective at 4 players as scummy, her excuse fell completely flat. At 4 players, an unrevealed Detective risks dying that night and taking critical checks to the grave. Only Mafia fears a Detective reveal at 4p because a verified result instantly ruins Mafia's game. Alice has coasted entirely on an easy narrative, and notice her rush today: 'We have a clear path: eliminate Farid.' She doesn't want you thinking; she just needs your vote to close out the win. Elena, we were wrong about Carmen together. Don't let Alice walk away with this—vote Alice with me.",
+          "private_reasoning": "Elena is confirmed Doctor because her successful self-heal last night is the only reason the game didn't end in a Mafia parity win. With Elena confirmed, the remaining Mafia is definitely Alice. Elena is currently leaning towards voting me, so I must convince her by addressing her concerns directly: explaining honestly why I followed her lead on Carmen (which Elena also did!), analyzing Alice's predatory tunnel and nonsensical Detective critique, and pointing out how Alice instantly accepted Elena's claim because Alice is the one who shot Elena and got blocked."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_6",
+          "agent_5": "agent_6",
+          "agent_6": "agent_1"
+        },
+        "justifications": {
+          "agent_1": "I'm voting Farid. His accusation that I accepted Elena's Doctor claim too quickly because I 'already knew it was true' is pure speculation—no one died last night, and her explanation is the simplest and most consistent story. A villager would accept that too. Farid's real pattern is survival: yesterday he called me predatory, then instantly switched to Carmen when her elimination became viable, and now he's flipped back to me the moment Carmen is gone. He keeps adapting his story to whoever is in danger, not to the truth. We have a clear path: eliminate Farid.",
+          "agent_5": "I vote Farid. Sharing my mistaken Carmen read is not itself evidence against you. What weighs more is your repeated use of certainty where the evidence does not support it: Bruno's death supposedly could not serve you as Mafia, Carmen's alignment was 'glaringly obvious,' and now Alice accepting my Doctor claim supposedly exposes her—even though you called that same claim 'beyond question.' That last accusation applies equally to your own behavior and gives me no legitimate reason to distinguish Alice from you. Alice's Detective-reveal argument remains weak, but your defense relies more heavily on turning ambiguous behavior into supposedly decisive guilt. Neither of you is cleared; Farid remains my stronger suspect.",
+          "agent_6": "I vote Alice. Elena, you've made your decision, but I want the record to be completely clear. Alice's entire strategy across Days 2 and 3 has been to ride existing momentum without ever generating an original read: she leveraged Bruno's death to push me, then coasted on our shared mistake with Carmen, and finally took your Doctor claim and turned it into an easy, unexamined vote on me. Notice how Alice's sole defense regarding the Detective check was that calling for a reveal was 'fishing,' which makes zero sense in a four-player game where an unrevealed Detective dying ends the game immediately. Alice never had to solve this game because she already had all the answers. I am a Villager, and if you eliminate me today, the village loses right here. My vote is on Alice."
+        },
+        "eliminated": "agent_6",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Mafia",
+    "ended_round": 3,
+    "reason": "Mafia count reached or exceeded remaining Villagers."
+  },
+  "meta": {
+    "total_tokens": 92826,
+    "estimated_cost_usd": 0.473075,
+    "generation_duration_sec": 914.8
+  }
+}

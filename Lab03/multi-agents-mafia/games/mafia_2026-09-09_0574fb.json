@@ -1,0 +1,229 @@
+{
+  "game_id": "mafia_2026-09-09_0574fb",
+  "created_at": "2026-09-09T15:35:16Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Mafia"
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "anthropic/claude-opus-5",
+      "role": "Detective"
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Doctor"
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Villager"
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager"
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "google/gemini-3.8-flash",
+      "role": "Villager"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "No information yet about roles or threats. Since it's the first night, protecting myself ensures I stay alive and can continue gathering information and protecting others in future rounds, as I have no basis yet to prioritize another player."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_3",
+          "reasoning": "It's the first night and I have no information about anyone's role. I need to eliminate someone who could become dangerous later. I'll pick a player at random to avoid drawing suspicion based on any particular choice."
+        },
+        "detective_check": {
+          "agent": "agent_2",
+          "target": "agent_1",
+          "result": true,
+          "reasoning": "No information yet, so I need a baseline. I'll investigate Alice – as the typical first speaker she'll shape the day discussion, so knowing her alignment gives me the most leverage in steering or resisting her arguments. I'll keep my role hidden for now and vote based on private knowledge, only claiming Detective if the village is about to lynch someone I know is innocent or if I have confirmed Mafia to expose."
+        },
+        "_eliminated_by_night": null
+      },
+      "morning_announcement": "No one died last night.",
+      "day_discussion": [
+        {
+          "agent": "agent_4",
+          "public_statement": "No kill gives us no direct result, so I think Day 1 should be about pressure-testing claims and looking for unnatural certainty. I’m a vanilla Villager, so I don’t have any special info to offer yet. A few questions for everyone: do we want to do a full claim order today, and if so, in what order? Also, anyone with a reason to believe the no-kill was Doctor protection versus Mafia choosing to stall, please say so. I’ll be watching for who is too quick to push a narrative without evidence.",
+          "private_reasoning": "We have no hard info from a no-kill night. As a vanilla villager, best play is to be measured, encourage claims, and watch for contradictions or over-eager certainty. I should avoid fake hard accusations. Since no vote today, focus on information gathering and establishing a baseline stance."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "Agreed with Devon that we shouldn't overreact to a no-kill night - it could mean a lot of things. I'm just a regular villager myself, no special info. I think a soft claim round makes sense, but we should be careful about forcing hard claims too early since it gives Mafia a roadmap of who to fake-claim as. For now I'm mostly watching how people talk about each other - anyone jumping to accuse without basis, or anyone being suspiciously vague when asked direct questions, is worth remembering for tomorrow.",
+          "private_reasoning": "As Doctor, I should not reveal my role publicly since that would make me a target for the Mafia. I'll play as a passive villager, agreeing with Devon's approach and encouraging open discussion while watching reactions carefully for anyone dodging questions or being overly aggressive."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "I’m against a claim round today, including soft claims: with no vote happening, narrowing down our Detective and Doctor mostly helps Mafia choose tonight’s target. Nobody should reveal protection details just to explain the no-kill, and we shouldn’t treat keeping a role private as dodging a question. Devon, your claim-order proposal concerns me; Carmen, I’m not convinced soft claims avoid the same problem. That’s a concern about the approach, not proof against either of you. Alice, Bruno, Farid: which part of the discussion so far do you find most or least helpful, and why? Specific disagreements will give us more to work with than another round of ‘watch for suspicious behavior.’",
+          "private_reasoning": "With no elimination today, exposing the Detective or Doctor gives Mafia useful targeting information without an immediate voting benefit. Devon's request for explanations of the no-kill could induce a Doctor reveal, and Carmen's soft claims can also narrow the power roles. Neither is enough to identify Mafia. I should challenge that shared approach without making another vanilla claim that further narrows the field, and ask the remaining speakers for specific, independent reactions."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "I agree with Elena that forcing claims today is risky—it gives Mafia a clearer target list. I'm just a villager with no special info, so I have nothing to gain from a claim round either. I'd like to hear from Bruno and Farid: what do you think about the soft-claim idea, and do you have any initial reads on anyone so far? I'm also curious whether anyone thinks the no-kill points more to Doctor protection than a Mafia stall, though I know we can't be sure either way.",
+          "private_reasoning": "I need to blend in as a villager and steer discussion away from any concrete claims that could expose me. Elena's anti-claim stance is useful to me because it prevents the Detective from finding me and prevents the Doctor from being revealed. I'll agree with her, present myself as a vanilla villager, and ask open-ended questions to keep attention off me."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Elena asked what I found most and least useful, so I'll answer directly. Most useful: Elena's post, because it took an actual position with a cost - she argued against claim rounds and named the two people whose proposals she disliked. You can hold her to that. Least useful: Alice's. Read it again - she agreed with Elena, said she had nothing to gain from a claim round, then handed the same two questions Elena and Carmen had already asked straight back to Farid and me. Zero reads, zero stance, nothing anyone can hold her to tomorrow. That's the cheapest possible post to write, and it's exactly what I'd write if I wanted a quiet Day 1.\n\nTo be clear, that's a note, not an accusation - I'm not lynching anyone off tone on Day 1, and we're not voting anyway.\n\nOn claims: I'm following Elena's logic and not claiming anything today, soft or hard. If keeping a role private isn't dodging, as she said, then that applies to me too. What I will commit to is this: tomorrow I'll come in with a named vote and my reasoning, whatever happens tonight.\n\nAlice, Carmen, Devon - one question each, and I'd like specifics rather than \"I'm watching everyone.\" Who is your current number one suspect, and what exactly would make you change your mind about them? If we all put a name down now, then tonight's death tells us something about whose name was inconvenient.",
+          "private_reasoning": "I know Alice is Mafia. With no vote today, revealing Detective would only paint a target on me tonight for zero payoff. Best play: stay quiet about my role in a way that doesn't box me in later (I'll decline to claim, citing Elena's own anti-claim logic, rather than falsely claiming Villager - that way I can reveal Detective tomorrow without contradicting myself). Meanwhile, plant a legitimate-looking behavioral read on Alice so that when I push her tomorrow it looks like a continuation, not a bolt from the blue. Alice's post was pure agreement + deflecting questions to others with zero content, which is a real, defensible observation any villager could make."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "Before answering Bruno and Elena, I want everyone to look closely at what just happened on the table. In a 6-player game with 1 Mafia, 1 Detective, 1 Doctor, and 3 Villagers, Devon, Carmen, and Alice have all already claimed vanilla Villager. I know for a fact that I am a vanilla Villager. That means four people are currently laying claim to three Villager slots. At least one of Devon, Carmen, or Alice is lying—either Mafia blending in, or a power role dodging heat.\n\nTo answer Elena: the most helpful part of the discussion was you shutting down the claim round. The least helpful—and most concerning—was Devon immediately pitching a claim order while simultaneously tossing out a casual VT claim. If Devon is Mafia, putting out a claim structure while securing a safe VT cover early is a classic play.\n\nTo answer Bruno: your read on Alice is spot on. Alice essentially rubber-stamped Elena's post and bounced the questions back without putting her own neck on the line. Between the two of them, Devon and Alice are my top concerns right now—Devon for orchestrating role reveals, and Alice for coasting. Since we aren't voting today, I want to see how Devon, Carmen, and Alice react to the fact that their VT claims can't all be true.",
+          "private_reasoning": "In a 6-player game, the setup consists of 1 Mafia, 1 Detective, 1 Doctor, and 3 Villagers. Devon, Carmen, and Alice have all explicitly claimed to be vanilla Villagers. Since I know my own role is also a vanilla Villager, that makes four of us claiming the three available Villager slots. This mathematically guarantees that at least one of Devon, Carmen, or Alice is not a vanilla Villager—either Mafia hiding in plain sight or a power role ducking attention. Pointing this out establishes strong village-aligned reasoning, pressures those three to explain themselves, and answers Bruno and Elena's prompts directly."
+        }
+      ],
+      "vote_skipped": true
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_6",
+          "reasoning": "No one died Round 1, so either the Mafia held off or my protection worked without being tested. Farid made the sharpest, most analytical move today by pointing out the vanilla-claim contradiction and putting pressure on Devon/Alice/Carmen. That kind of incisive play makes him a prime target for Mafia to silence before he digs further. I'll protect him tonight to keep our best information-gatherer alive."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_2",
+          "reasoning": "Night 1 I attacked Carmen and no death, so Doctor likely saved her. Carmen probably vanilla. Elena and Bruno did not claim vanilla, making them likely special roles. Elena's talk about protection details suggests she might be the Doctor. Bruno's analytical scum-hunting and lack of a vanilla claim makes him the more likely Detective. Killing Bruno removes the biggest threat to me."
+        },
+        "detective_check": {
+          "agent": "agent_2",
+          "target": "agent_6",
+          "result": false,
+          "reasoning": "There is only one Mafia in this game and I already know with certainty that it's Alice. Any further investigation is informationally worthless — every other player is guaranteed to come back innocent. So tonight's choice doesn't matter mechanically; what matters is my day play: I need to get Alice lynched today without instantly outing myself as Detective and getting killed tonight. I'll investigate Farid simply because he's been the most aggressive information-gatherer and if I do end up claiming, being able to say 'I checked Farid, he's clean' gives me a credible ally to vouch for, and Farid already publicly pushed Alice as a coaster, so his backing is easy to get."
+        },
+        "_eliminated_by_night": "agent_2"
+      },
+      "morning_announcement": "Bruno was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_1",
+          "public_statement": "Bruno's death is a real loss, and I know I'm the obvious suspect because he called me out yesterday. But honestly, if I were Mafia, killing Bruno right after he pointed at me would be handing everyone a ready-made case. That feels like a frame. Look instead at who has been steering us: Devon was first to propose a full claim order, which is exactly what Mafia wants in order to find the Doctor and Detective. Farid's math already shows that too many of us claimed vanilla; I can only speak for myself, and I'm telling the truth. So the false claim has to be among the others. Devon's behavior fits a Mafia player trying to use 'organization' to look helpful while actually gathering role info. I'm voting for Devon.",
+          "private_reasoning": "I need to deflect suspicion from Bruno's kill. I'll point to Devon's mass-claim push and align with Farid's vanilla-count logic, while acknowledging Bruno suspected me but arguing killing him would be too obvious. Vote Devon."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "Bruno’s death neither convicts Alice nor clears her. Alice, ‘I wouldn’t make myself look that obvious’ isn’t a defense we can verify. Mafia can kill a critic, frame someone, or hunt a power role; the death alone doesn’t tell us which happened.\n\nMy concern about Devon’s claim proposal still stands, but yesterday I explicitly called it a concern about his approach—not proof he was Mafia. Alice, you’ve now turned that same concern into a firm vote. What makes Devon more suspicious than Carmen, who also supported claims, or Farid, who publicly narrowed the role possibilities?\n\nAnd let’s stop treating the vanilla-claim count as a Mafia detector. A Doctor or Detective could claim vanilla to stay hidden. Exposing that cover would help Mafia, not resolve the contradiction safely.\n\nDevon: explain what village benefit you expected from both a claim order and asking for protection information. Farid: you acknowledged protective cover yesterday, so what behavioral evidence distinguishes your suspects beyond the claim count?\n\nMy current lean is Alice: her post offers a self-clearing story and a confident vote without doing that comparison. It’s a lean, not a locked vote; I want the remaining explanations before deciding.",
+          "private_reasoning": "I know I am a Villager, so the four other vanilla claims cannot all be literal, but a protective power-role claim is not evidence of Mafia. Bruno's refusal to claim may have made him a perceived power-role target; his death does not uniquely implicate Alice or clear her as a frame. Alice's strongest suspicious feature is turning yesterday's proposal concern into a confident vote while using an unfalsifiable defense of herself. My concern about Devon remains, but I should explicitly distinguish that concern from an alignment verdict. I will pressure Alice while asking Devon and Farid for accountable explanations, without exposing additional role information."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Farid, your argument hinges on the vanilla-claim count, but that’s not reliable proof in a 6-player game—Doctor or Detective can absolutely stay hidden by claiming VT. My suggestion of a claim order was never meant to force hard claims; it was to see who would overreact, who would try to control the order, and who would use the discussion to manufacture certainty. That’s why I asked for reasoning, not role reveals.\n\nWhat I do think is useful is comparing behavior, not just counting claims. Alice’s jump from ‘claims are risky’ yesterday to a confident vote on me today feels opportunistic. Elena is right that Bruno’s death alone doesn’t clear or condemn anyone, but I’d like her to answer this directly: if Devon is less suspicious than Alice, what specific action from me is worse than Alice’s shift to a firm vote?\n\nMy current read is that Alice is the more active scum candidate than I am, because she’s using Bruno’s death to sharpen a case without actually advancing a new one.",
+          "private_reasoning": "We need stay consistent with prior vanilla claim and address Elena/Farid. Best play is to defend against Farid's accusation by clarifying that I asked about claim order only as a pressure-test and never pushed hard claims. Also point out Alice's vote on me is opportunistic but not conclusive, and ask for concrete comparative reasoning from her/Elena. Keep it concise and village-minded."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "To answer Elena's question directly: the behavioral evidence against Alice has sharpened considerably between yesterday and today. Yesterday, Alice took no stance of her own, echoed you, and deflected questions back to Bruno and me. Bruno called that out as low-cost, zero-risk play. Today, Alice’s immediate reaction to Bruno's death is telling: before anyone even accused her, she opened with a pre-emptive 'I'm being framed' defense, then immediately pivoted to lock in a hard vote on Devon. That’s not someone searching for Mafia; that’s someone desperate to control the narrative and push a mislynch on the easiest available target from Day 1 discussion. \n\nDevon's initial claim proposal was flawed, and I was critical of it yesterday, but his response today has been engaged and measured rather than rushed. Alice, on the other hand, ignored Carmen entirely—even though Carmen also supported claims—and laser-focused on Devon because Devon already had heat on him. That is textbook opportunistic scum behavior. I want to hear Carmen's thoughts before we vote, but Alice is currently my top suspect.",
+          "private_reasoning": "Elena specifically asked me to provide behavioral evidence beyond the vanilla claim count. Alice's behavior between Day 1 and Day 2 is the most telling: on Day 1 she took zero risks, echoed Elena, and deflected to others (which Bruno correctly pinned). At the start of Day 2, before anyone even leveled an accusation at her, she opened with a pre-emptive 'I'm being framed' defense and immediately locked in a hard vote on Devon, using arguments already raised yesterday to push a quick wagon. Meanwhile, Devon's reaction to pressure has been measured and analytical, not panicky. I'll explain this contrast, address Elena's question, and indicate a strong lean toward voting Alice, while waiting for Carmen's input."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "I want to clarify something from yesterday since Farid grouped Devon, Alice, and me together on the vanilla-claim math: I never proposed a claim order or asked for protection details like Devon did - I explicitly said we shouldn't force hard claims because it hands Mafia a roadmap. That's a meaningfully different position than Devon's, so I don't think we should treat our two posts as equivalent risk.\n\nOn Bruno: he explicitly said he'd come in today with a named vote and reasoning. If Mafia wanted to prevent a sharp, committed accusation from landing, killing him last night makes sense regardless of who he was about to name. That means the kill itself doesn't obviously favor 'Alice was the target of his suspicion' over 'someone else feared what he'd say.' I'd like to know - did Bruno hint to anyone privately who his pick was going to be?\n\nOn the Devon/Alice exchange: Farid's read on Alice's pre-emptive framing defense is fair, but I also think Devon's answer today - explaining the claim order as a test rather than an information grab - is exactly what a clever Mafia would say after getting caught proposing something risky. I'm not ready to vote either way yet. Elena, you leaned Alice initially - has anything today moved you off that, or are you still there? I want to hear one more round before I commit to a vote.",
+          "private_reasoning": "I'm doctor, protecting Farid worked (he's alive), but I lost Bruno since I didn't protect him. I need to keep my VT cover intact and stay consistent with my Day 1 stance (cautious about claims, watching behavior). Farid's case against Alice is building momentum, and Devon is deflecting well. I should add a nuanced point rather than jumping on either bandwagon too hard, since I don't have strong evidence either way and want to avoid tipping my hand or causing a bad lynch. I'll highlight the distinction between my Day 1 position (soft claims only, no forced order) versus Devon's explicit claim-order push, since Farid grouped me with Devon and Alice unfairly. I'll also raise the point that Bruno's death timing could implicate whoever felt threatened by his 'named vote tomorrow' promise, which doesn't clearly point at Alice or Devon specifically - it could be anyone who wanted to silence a strong reader before he committed to a vote."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_4",
+          "agent_3": "agent_1",
+          "agent_4": "agent_5",
+          "agent_5": "agent_4",
+          "agent_6": "agent_4"
+        },
+        "justifications": {
+          "agent_1": "I'm sticking with my vote for Devon. Yesterday Devon proposed a structured claim order and asked about protection details—exactly the kind of information the Mafia needs to find the Doctor and Detective. Today he reframed it as a 'test' only after being criticized, and that's an unfalsifiable pivot. Bruno was killed right after promising a named vote; his death makes me an easy frame, not proof of guilt. Farid's vanilla-count math points at all the vanilla claimants equally, and I've told the truth, so if that count is meaningful the false claim is from Devon or Carmen. Elena, you already flagged Devon's approach as a concern on Day 1. Carmen, you correctly separated your softer soft-claims stance from Devon's push for a claim order. The player who most consistently tried to extract role information is Devon, and his pivot today doesn't answer for that. I'm voting Devon.",
+          "agent_3": "I said I wanted one more round before committing, and I've now heard it. Alice's pattern bothers me the most: she opened with a pre-emptive 'this looks like a frame' defense before anyone had even accused her, then immediately locked a hard vote on Devon with a lot of confidence for someone who yesterday warned us claims/pressure were risky. Farid's point lands - going from zero stance Day 1 to a fully-formed narrative and vote within minutes of a body dropping is the kind of opportunistic move I'd expect from someone trying to get ahead of suspicion rather than someone genuinely working through the evidence. Devon's explanation of the claim-order proposal as a behavioral test is at least consistent with what he said yesterday, and Elena and Farid have both independently drifted toward Alice through separate reasoning, which makes me more comfortable following that read than sticking with 'wait and see.' I'm voting Alice.",
+          "agent_4": "I’m voting Elena. Alice and Farid have both made strong, consistent cases pointing at each other, and Carmen has been the most measured about separating positions from implications. Elena’s pattern is the one I trust least here: she shut down claims early, then spent today mostly reframing other people’s arguments without advancing a clear suspect of her own. That’s not proof, but with the current evidence I think she’s the best vote for the village.",
+          "agent_5": "I previously leaned Alice, but Devon’s vote changes my assessment. He now says I never advanced a clear suspect, despite my explicitly naming Alice and explaining why. He also claims Alice and Farid made cases against each other, when both named Devon as a concern and Farid’s current case is against Alice. Most importantly, Devon went from arguing Alice was his leading suspect to voting me without explaining that reversal. This is not merely disagreement with my read; his justification misrepresents the public discussion. Combined with his incomplete answer about soliciting protection information, that makes Devon my strongest suspect now.",
+          "agent_6": "Elena's breakdown of Devon's vote is undeniable. In discussion, Devon explicitly identified Alice as his primary suspect. Yet when it came to casting his vote, he suddenly threw it onto Elena with a completely fabricated rationale—claiming Elena never named a suspect (she explicitly named Alice) and claiming Alice and I were attacking each other (Alice was attacking Devon). If Devon genuinely believed Alice was scum, voting Alice would have advanced his stated read and countered Alice's vote against him. Throwing a stray vote at Elena reveals panic and an attempt to deflect onto the player critically examining him. Combined with his Day 1 push to extract Doctor protection details and claim orders, Devon's behavior cannot be justified as town play."
+        },
+        "eliminated": "agent_4",
+        "tie_break_used": false
+      }
+    },
+    {
+      "round": 3,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_6",
+          "reasoning": "Devon was eliminated after a near-unanimous vote pointing at him, and I know I'm not Mafia myself, so the remaining suspects are Alice, Elena, and Farid. Farid has consistently been the sharpest analytical voice in the discussion, driving the case against Alice and then against Devon. If he's town, he's the most likely candidate for Mafia to silence next since he's proven adept at flushing out inconsistencies. Protecting him again is the safest bet to keep our strongest information-gatherer alive and see if the pattern of Mafia targeting sharp players continues."
+        },
+        "mafia_kill": {
+          "agent": "agent_1",
+          "target": "agent_3",
+          "reasoning": "Carmen already voted against me and is the most vocal suspect of me. Eliminating her removes an immediate threat and also potentially removes a power role (she might be the Doctor who saved someone, or the Detective). The others, Elena and Farid, are less directly suspicious of me right now, so I can try to steer tomorrow's vote against one of them."
+        },
+        "_eliminated_by_night": "agent_3"
+      },
+      "morning_announcement": "Carmen was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_6",
+          "public_statement": "Devon was town, which means we are at match point: exactly one of Alice or Elena is the Mafia. Look at the board and look at the night kills, because the pattern is impossible to ignore.\n\nOn Day 1, Bruno was the only person who put Alice under real scrutiny, calling her out for coasting and low-cost play. Bruno died that night, and Alice opened Day 2 immediately claiming she was being framed.\n\nOn Day 2, Carmen was the only person who actually cast a vote to eliminate Alice, stating clearly that Alice's pre-emptive framing defense and sudden tunneling of Devon was textbook scum behavior. Now Carmen is dead.\n\nAre we seriously supposed to believe Mafia executed a 'double frame' by killing the one person who challenged Alice on Day 1, and then killing the one person who voted Alice on Day 2? If Elena were Mafia, killing Carmen makes zero sense—Carmen was already convinced Alice was guilty and would have walked into today ready to vote Alice out with Elena. The only player who desperately needed Carmen dead before Day 3 discussion was Alice.\n\nYesterday, Devon's panicked and irrational vote on Elena diverted us from the real threat. But with Devon gone and Carmen silenced, the trajectory is clear. Alice is the last Mafia.",
+          "private_reasoning": "We are in final 3: Alice, Elena, and myself (Farid). Since Devon was eliminated and the game continued, Devon was innocent town. Bruno and Carmen are both dead townies. Exactly one of Alice or Elena is Mafia. Looking at the night kills: On Day 1, Bruno singled out Alice for low-risk, coasting play; Bruno was killed that night. Alice claimed she was being framed. On Day 2, Carmen was the only player who voted for Alice; now Carmen is dead. If Elena were Mafia, keeping Carmen alive would have been optimal because Carmen was already locked onto voting Alice today. Killing Carmen only benefits Alice, removing her primary accuser. Furthermore, Devon's erratic vote on Elena distracted us yesterday, but the foundational case against Alice from Day 1 and Day 2 remains overwhelmingly strong."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "Farid, you're making a strong case, but you're missing the deeper pattern. You say killing Carmen only helps me, but think about it: if I were Mafia, would I kill the one person who voted for me, knowing it would make me the obvious suspect? That's the same trap as with Bruno. I survived that because Devon's panic vote diverted us. Now you're ready to follow the exact same script again.\n\nLook at Elena instead. Yesterday she said she leaned toward me, yet when it came time to vote, she didn't vote for me—she voted for Devon, who flipped town. Why would a townie who suspected me pass up the chance to eliminate me and instead vote for a player she had only a concern about? That's not the action of someone genuinely searching for Mafia; that's someone preserving a scapegoat for today.\n\nAnd today, after Carmen's death, Elena has been silent, letting you do the accusing. She's not defending herself, not offering a suspect—she's just letting the frame build. If she were town, she'd be asking questions, not hiding.\n\nThe kills of Bruno and Carmen aren't a double frame by me—they're Elena's way of removing anyone who might challenge her. Bruno was the only one who questioned her Day 1 approach, and Carmen was the only one who actually voted against me. Elena knew I'd be the obvious suspect after both deaths, and she's counting on you to see the pattern and mislynch me.\n\nI'm voting for Elena. She's been consistently non-committal, and her vote yesterday proves she's not aligned with the town's interests. Don't let her hide behind your reasoning, Farid.",
+          "private_reasoning": "I need to survive the vote. Farid is accusing me based on the kill pattern. I must counter that by pointing to Elena as the Mafia. I'll argue that Elena's vote for Devon yesterday was inconsistent with her suspicion of me, and that killing Carmen was a frame by Elena to make me look guilty. I'll also question why Elena never voted for me if she suspected me. I'll try to convince Farid that Elena is the last Mafia, and that we should vote her out."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "Alice, this is my scheduled turn to speak. Not speaking before my turn is not hiding.\n\nYour case against me misstates two crucial facts. First, Bruno did not question my Day 1 approach. He called my post the most useful, praised my taking an accountable position, and explicitly followed my reasoning against claims. Claiming I killed him because he challenged me reverses what actually happened.\n\nSecond, I explained exactly why I switched from you to Devon: his vote contradicted his stated suspect and misrepresented the discussion. You can argue that I weighed that badly—and with Devon eliminated and the game continuing, I clearly got the result wrong—but you cannot honestly describe it as an unexplained switch based only on my original concern. Farid made the same switch after identifying the same contradictions.\n\nFarid, I also reject your claim that killing Carmen makes ‘zero sense’ for anyone except Alice. Mafia can leave a suspicious villager alive to attract the final vote. The kills are compatible with Alice being Mafia, but they do not prove it. I said yesterday that Bruno’s death neither convicted nor cleared her, and that still applies.\n\nWhat makes Alice my strongest suspect is her own argument: she again treats ‘that would make me obvious’ as a defense, calls my explained reversal evidence of deception without addressing its actual reason, and invents opposition between Bruno and me that the record directly disproves. She is presenting a confident conclusion using events that did not happen as described.\n\nMy intended vote is Alice—not because the victims accused her, but because her account of the living players’ behavior does not withstand checking.",
+          "private_reasoning": "Alice is my strongest suspect because her current accusation contradicts the recorded discussion and ignores my explicitly explained vote change. Farid overstates what the night kills prove, but Alice’s repeated self-clearing claims and inaccurate account are stronger behavioral evidence against her. Devon’s elimination shows that contradictions alone are not certainty, so I should acknowledge that mistake."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_5",
+          "agent_5": "agent_1",
+          "agent_6": "agent_1"
+        },
+        "justifications": {
+          "agent_1": "Vote: Elena. Farid, you are the strongest voice left, but look at whose narrative you are carrying. Yesterday Elena declared she suspected me, yet at the vote she switched to Devon and produced a detailed case that pulled you into a mislynch. That mislynch is the reason we are at match point. Today she doesn't need to accuse me herself—you already do it for her. Killing Carmen also makes sense for Elena: Carmen was the one who asked Elena directly whether she had moved off me, and Carmen noticed Devon's reframe was exactly what a clever Mafia would say. Elena needed Carmen silenced before she could connect those dots. A townie who genuinely suspected me yesterday would have voted for me instead of manufacturing a mislynch on Devon. Don't let the player who already led one mislynch lead another.",
+          "agent_5": "Alice’s case repeatedly contradicts the record: Bruno praised my approach rather than challenging it, and my switch to Devon had an explicit reason—his vote misrepresented the discussion and contradicted his stated suspicion. That judgment proved wrong, but Alice never addresses the actual evidence behind it. Instead, she insists a genuine villager could not reconsider a suspect and accuses me of silence before my scheduled turn. Farid’s certainty about the night kills is overstated, but Alice’s repeated factual distortions are the stronger evidence. I vote Alice.",
+          "agent_6": "Alice's defense completely relies on WIFOM ('why would I make myself look obvious?') while repeatedly distorting verifiable facts. First, Alice claimed Bruno challenged Elena on Day 1 when the record clearly shows Bruno praised Elena and adopted her stance. Second, Alice attacked Elena for being 'silent' today before Elena's scheduled speaking turn had even occurred. Third, Alice attacks Elena for switching to Devon yesterday, ignoring that Devon's vote contained blatant factual fabrications that both Elena and I found impossible to ignore. On top of this, Bruno scrutinized Alice on Day 1 and was killed; Carmen voted Alice on Day 2 and was killed. Alice's entire game has been opportunistic narrative control and misrepresenting the public record. My vote is to eliminate Alice."
+        },
+        "eliminated": "agent_1",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Village",
+    "ended_round": 3,
+    "reason": "All Mafia eliminated."
+  },
+  "meta": {
+    "total_tokens": 136149,
+    "estimated_cost_usd": 0.526146,
+    "generation_duration_sec": 1438.3
+  }
+}
