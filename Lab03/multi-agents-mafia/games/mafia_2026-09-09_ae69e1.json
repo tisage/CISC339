@@ -1,0 +1,176 @@
+{
+  "game_id": "mafia_2026-09-09_ae69e1",
+  "created_at": "2026-09-09T18:21:49Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8,
+    "use_personas": true
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager",
+      "persona": "folksy and roundabout - you tell little stories or analogies before making your point"
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "google/gemini-3.8-flash",
+      "role": "Mafia",
+      "persona": "theatrical and confident - you narrate your own reasoning like it's obviously correct"
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Doctor",
+      "persona": "blunt and impatient - you get to the point and don't sugarcoat your reads"
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager",
+      "persona": "warm and diplomatic - you soften disagreements and look for common ground"
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "anthropic/claude-opus-5",
+      "role": "Detective",
+      "persona": "dryly sarcastic - you needle people with dry humor, but you're still playing to win"
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Villager",
+      "persona": "quiet and analytical - you speak rarely, but when you do it's dense with specifics"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "Protect self. As Doctor, preserving my own slot keeps protection available and avoids random night kill. No public info yet."
+        },
+        "mafia_kill": {
+          "agent": "agent_2",
+          "target": "agent_1",
+          "reasoning": "It is Night 1 with no prior information on player roles. Eliminating Alice gives a clean start to disrupt potential power roles (Detective or Doctor) before any town consensus or investigations occur."
+        },
+        "detective_check": {
+          "agent": "agent_5",
+          "target": "agent_1",
+          "result": false,
+          "reasoning": "No information exists yet, so this is a blind pick. I'll investigate Alice — she's likely to speak early and shape the day's narrative, so knowing her alignment gives me the most leverage over the discussion. If she's clean, I can safely amplify her; if she's Mafia, I can quietly steer the wagon."
+        },
+        "_eliminated_by_night": "agent_1"
+      },
+      "morning_announcement": "Alice was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_3",
+          "public_statement": "One dead already, and we’re not wasting today pretending random guessing is smart. I want full claims from everyone: who is willing to say a role, and what exact read do you have on the other four alive? If you’re hiding behind 'just a villager' on Day 1, fine, but say something useful anyway. Also: if anyone has a reason to suspect a specific person based on how they talk, pressure them now. Silence helps mafia more than it helps us.",
+          "private_reasoning": "We know Alice is dead, leaving 5 alive: Bruno, Carmen, Devon, Elena, Farid. I am Doctor and protected myself last night. Since no vote today, I should push for information with a blunt, useful stance. I should not claim doctor yet unless necessary; better to solicit claims and force contradictions. Need stay consistent later. Publicly I can say I protected self? No, that's private. Better: ask for role claims and initial reads, and point out that the kill implies either mafia found a soft target or there was no protective interference. Since no one knows anything, I should avoid overcommitting, but still sound sharp and direct."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "I'll be plain: I'm a Villager, no night action. I have no special information beyond what we all saw. What I want today is not just role claims, but a standing commitment from each of you—one sentence on what you are, and one sentence on your current strongest suspicion or null read. Carmen's already spoken; Bruno, Devon, Elena, I need the same from you. I'll be keeping notes, and if anyone's story shifts later without a clear reason, that becomes the most useful data we have. Right now I have no strong read on anyone—only Carmen has talked, and demanding claims is a null tell, not a scum tell.",
+          "private_reasoning": "I need to use this no-vote day to gather information without giving the Mafia too much cover. Carmen's opening was aggressive and structure-demanding; that's not inherently suspicious, but I want to hear everyone commit to a claim and a read. Since I'm a Villager, I can safely say so and push for others to be equally explicit. I'll also signal that I'm tracking consistency across later rounds, which may pressure the Mafia into a mistake."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "Villager. No night action, no secret notebook, no dramatic reveal — sorry to disappoint.\n\nNow, a small note on procedure, since Carmen and Farid have both asked for a full round of claims: that is a wonderful idea if you're Mafia. There are six of us, one of them kills at night, and you're asking the Detective and Doctor to raise their hands and stand still. If a power role claims today, they're dead by morning and we've paid for information we could have gotten for free by just waiting. So: if you have a night role, please ignore Carmen's homework assignment. Do your job quietly and let the bodies do the talking.\n\nWhat I actually want is stuff Mafia can't fake cheaply. Two questions, and I'll be holding you to the answers tomorrow:\n\nOne — does anyone believe they were the intended target last night instead of Alice? If someone was protected, that person's silence tomorrow tells us something. Two — say now, out loud, who you'd vote if we had to swing today. Not who you're suspicious of in a vague, gassy way. A name. Because on Day 2 I'm going to line up today's name against tomorrow's name, and the person whose story quietly rotates is the person I go after.\n\nMy name, since I'm asking for names: Carmen, thinnest of a very thin bunch. Opening the day by demanding everyone flag their roles is either genuine impatience or a Mafia player fishing, and I can't tell which yet — which is exactly why I'm glad we're not voting. Farid I read as null; he echoed Carmen but at least he showed his reasoning. Bruno and Devon haven't said a word, which is worth precisely nothing so far, so let's hear them.\n\nAnd Carmen — no hard feelings. If you're a Villager, congratulations, you've been very loud in service of the enemy.",
+          "private_reasoning": "I'm the Detective with a wasted first investigation — Alice was clean and she's dead, so I have literally zero actionable information. Claiming Detective now would be suicide with nothing to show for it. Best play: soft-claim Villager, and push back on the mass-claim demand, because forcing role claims on Day 1 is exactly how the Mafia locates the Detective and Doctor for free. That argument is genuinely pro-village AND it protects me, and it puts mild pressure on Carmen and Farid, who are both hammering for claims. No vote today, so my goal is to set a framework I can reference later: I want to be the person who said 'don't out your power roles' so that when I do eventually speak with confidence, it reads as earned rather than convenient. I'll also seed the expectation that information will exist by tomorrow without saying who has it — that way if I flip the switch on Day 2, I've foreshadowed it. And I'll ask a question that's actually useful: who thinks they were the intended target, and what does each person plan to do tonight, so I can compare tomorrow's story to today's."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Thanks for laying out the two different approaches - I actually think both Carmen/Farid and Elena have a point, and they're not as opposed as they sound. Elena's right that power roles shouldn't blindly claim into the open, but Farid's right that we need something to compare across days. So let me just answer honestly: I'm a Villager, no night action, nothing dramatic to add. I don't believe I was the target last night - no reason to think Alice's death was meant for me instead.\n\nOn a hypothetical vote: if I had to name someone today, I'd lean toward watching Carmen a little, not because I think she's confirmed anything bad, but because opening by demanding full claims on Day 1 is a classic move that works great for Mafia even if it's also just a Villager being impatient. That said, I'm not locked in - it's thin, and I'll gladly drop it if she gives us something clearer tomorrow. Bruno, I'd love to hear from you too since you haven't spoken yet - no pressure, just curious where your head's at.",
+          "private_reasoning": "I'm a villager with no real information, so I should play this cooperatively and diplomatically - acknowledge the tension between Carmen/Farid's push for claims and Elena's caution about protecting power roles, and give a genuine but soft answer to the questions Elena raised without overcommitting. I want to seem helpful and non-threatening while giving people something to work with."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Ah, at last, the spotlight swings my way! Let us dispense with the mundane formalities first, for those diligently scribbling in their little notebooks: I am an unadorned, simple Villager. No nocturnal investigations, no apothecary remedies in my coat—just good eyes and a distaste for sloppy theater. And no, I have neither the arrogance nor the evidence to claim Alice was struck down in my stead; the tragedy was entirely hers.\n\nNow, let us examine the drama unfolding upon our stage, because the choreography is utterly transparent. Carmen opens the morning by demanding everyone lay their cards face-up—a maneuver that is either breathtakingly reckless for a Villager or a wonderfully brazen fishing expedition for the Mafia. Elena, with admirable sharp sense, instantly called it out for what it was: an invitation for power roles to step directly into the firing line.\n\nYet observe the subtle ripple that followed! Devon glides effortlessly into Elena's wake, adopting her exact thesis, smoothing down the edges, and placing a polite, safe, non-committal finger upon Carmen. It is always the quiet conformists—the ones who borrow another player's sharp critique so they don't have to formulate their own—who warrant a second look. \n\nIf we were forced to cast a hypothetical vote today, Carmen has earned the brightest glare under the lamp for handing the wolves a roadmap. But do not let Devon lounge too comfortably in the chorus while Carmen takes the brunt of the heat. That is my read, and frankly, the logic speaks for itself.",
+          "private_reasoning": "As Mafia, my goal is to blend in as a thoughtful Villager, lean into my theatrical persona, and avoid drawing power role scrutiny. Everyone so far (Farid, Elena, Devon) has claimed Villager and expressed wariness of Carmen's aggressive Day 1 role-fishing. I will claim Villager as well to avoid being forced into a corner. To demonstrate pro-town 'analysis', I will validate Elena's point about Carmen while drawing attention to Devon's passive agreement, creating subtle division among the town without committing too hard to a single target."
+        }
+      ],
+      "vote_skipped": true
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "Protect self again. I'm alive, unclaimed, and keeping the Doctor hidden matters more than gambling on a read this early. If mafia hits me, village loses the role and my future protection value. If they don't, fine. No reason to expose myself by getting cute."
+        },
+        "mafia_kill": {
+          "agent": "agent_2",
+          "target": "agent_6",
+          "reasoning": "Elena established herself as the town leader on Day 1 and openly committed to Carmen as her top suspect, while Devon also leaned toward Carmen. Targeting Elena carries a high risk of being blocked by the Doctor, who would naturally prioritize protecting her. Meanwhile, Carmen is the primary mislynch target for tomorrow. Farid is a methodical, open-minded player taking notes who has no strong reads yet, making him dangerous to leave alive as an independent thinker. Eliminating Farid guarantees a kill, avoids any Doctor protection, and preserves the Elena-versus-Carmen conflict heading into Day 2."
+        },
+        "detective_check": {
+          "agent": "agent_5",
+          "target": "agent_2",
+          "result": true,
+          "reasoning": "Alice is confirmed clean and dead, so the Mafia is Bruno, Carmen, Devon, or Farid. Carmen is the obvious wagon, which means investigating her is partly redundant — if she's Mafia, town may hang her anyway. The more valuable check is the player quietly steering: Bruno rode my critique of Carmen, endorsed the safe wagon, then planted a fresh, unprompted seed against Devon while framing himself as the room's sharpest analyst. That's the classic Mafia posture — be useful, be entertaining, and make sure a Villager stays under the lamp. Also, Carmen is the least likely player to die tonight (Mafia won't kill its own lynch shield), so if I check her the info might just confirm the obvious; checking Bruno gives me leverage to either break the Carmen wagon with confidence or clear him and narrow to three."
+        },
+        "_eliminated_by_night": "agent_6"
+      },
+      "morning_announcement": "Farid was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_5",
+          "public_statement": "Right. Time to spend the thing I've been sitting on, because if I keep being coy for one more day we all lose.\n\nI'm the Detective. Yes — I claimed Villager on Day 1. I also stood right here and told every power role in the room to ignore Carmen's homework assignment and \"do your job quietly.\" I took my own advice. If you're going to be annoyed at me for lying, at least be annoyed at me for lying exactly the way I announced I would, in advance, out loud.\n\nNight 1 I checked Alice. Clean. She died anyway, which is how I learned the Mafia here has taste.\n\nNight 2 I checked Bruno. Bruno is Mafia.\n\nDo the arithmetic with me, since it's short. Alice: clean, dead. Farid: dead, and the wolves don't kill their own. That leaves the Mafia among Bruno, Carmen, Devon. I looked at Bruno. It's Bruno.\n\nAnd look at why I looked at him. On Day 1 Bruno swanned in, agreed with my critique of Carmen so he'd never have to generate a read of his own, endorsed the safe wagon everyone was already on — and then, in the same breath, quietly planted a brand new seed against Devon for the crime of... agreeing with me. That is the whole Mafia playbook in one monologue: be entertaining, be useful, and make absolutely sure a Villager stays under the lamp. He wasn't analyzing the stage. He was blocking it.\n\nNow, the part where he stands up. Bruno hard-claimed \"unadorned, simple Villager\" on Day 1 — no investigations, no remedies in his coat. So if he now discovers a badge in his pocket and counterclaims Detective, that is not a defense, that's my Day 1 test firing on schedule. I said the person whose story quietly rotates is the person I go after. Bruno, please don't rotate. It'd be so on the nose.\n\nCarmen, Devon: one of you is the Doctor. I know that, because the Doctor is alive and it isn't me and it isn't him. Claim it now. It costs you nothing — the game ends today either way — and it locks the board: me Detective, you Doctor, Bruno by elimination. If Bruno also finds a doctor's bag under his coat, he'll have claimed three different roles in two days, and we can all go home.\n\nOne last thing, and I want it heard clearly. There are four of us. If we get this wrong, or if you two get clever and split your votes into a tie, Mafia kills one of you tonight and it's over. There is no Day 3 for the losers. My vote is Bruno, it isn't moving, and I need both of you on it.\n\nCarmen — I named you Day 1 as the thinnest of a thin bunch, and I'll own that I was wrong. You were loud in service of the village after all. Congratulations, I suppose.",
+          "private_reasoning": "Endgame math: 4 alive, Bruno is confirmed Mafia by my Night 2 check. If we mislynch today, Mafia kills one of the remaining two villagers overnight and wins. So I must claim Detective now and hard-drive the Bruno wagon; subtlety loses the game.\n\nKey levers:\n1. I hard-claimed Villager on Day 1 — but I did it while publicly telling power roles to lie low and 'do their job quietly.' So my cover is consistent, and I pre-announced the strategy.\n2. Bruno also hard-claimed Villager on Day 1. Any counterclaim from him is a story rotation — exactly the test I set up on Day 1 ('the person whose story quietly rotates is the person I go after'). That trap is now sprung.\n3. Alice was clean (Night 1). Alice and Farid are dead, both non-Mafia. So Mafia is Bruno, Carmen, or Devon — and I checked Bruno.\n4. Doctor is alive and must be Carmen or Devon. If that person claims Doctor, the room is fully solved: me (Detective), them (Doctor), and Bruno by elimination. Inviting that claim costs nothing now and creates a second counterclaim trap for Bruno.\n5. I need at least two of Carmen/Devon on Bruno to avoid a tie, so I should explicitly warn them that a split vote or a tie is a Mafia win."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Brava, Elena! Brava! What breathtaking melodrama, what magnificent audacity! But oh, how utterly transparent the choreography becomes when the wolf realizes she is one mislynch away from victory!\n\nNotice, Devon and Carmen, the desperate velocity of her opening monologue. Why did Elena spend half her breath frantically warning you that if Bruno speaks up, if Bruno reveals a badge, it's just 'a trick'? Because she *knew* she was racing against the clock! She knew that at four players alive, the Mafia wins the entire game today if she can fool you into executing a townsperson. So she takes the ultimate gamble: strike first, fake the Detective claim, poison the well before I can utter a syllable, and pray the chorus falls in line!\n\nWell, lower the curtain on that farce. *I* am the Detective.\n\nYesterday, Elena herself gave the grand lecture on why power roles must keep their heads down and claim Villager on Day 1. I obliged. I played the unadorned Villager precisely to survive the night and do my work in the dark. And let us compare our work, shall we? The contrast is positively laughable:\n\nElena claims her Night 1 investigation was... Alice! How exquisitely convenient! A corpse that can never speak, verifying absolutely zero living players. A phantom check straight out of the Mafia fake-claim handbook.\n\nMy Night 1 investigation? Devon. Result: Innocent. Devon, you know your own soul—you know you are town, and you know who took the time to verify the living rather than concoct convenient stories about the dead.\n\nAnd Night 2? While Elena spent Day 1 orchestrating the room, planting landmines, and aggressively clearing the path, I aimed my lens directly at the conductor of the orchestra. My Night 2 investigation on Elena: MAFIA.\n\nLook at the stakes, Devon and Carmen. One of you is the Doctor, one of you is a Villager. Elena is the sole wolf among us, backed into a corner, attempting a brazen coup de théâtre to steal the village's win. Do not let her theatrical panic swindle you. We vote Elena, we bury the wolf, and the curtain falls on a village victory.",
+          "private_reasoning": "Elena has hard-claimed Detective and dropped a guilty result on me. In a 4-player game (1 Mafia, 3 Town), an uncontested Detective guilty is an instant loss for Mafia. If I stay a Villager, Carmen and Devon will unquestionably follow Elena. My only winning play is to counterclaim Detective, expose Elena as the Mafia making a desperate final gambit at match point, and provide an investigation log that appeals directly to Devon (clearing Devon N1) while pointing out how utterly convenient Elena's 'Alice' N1 check is (a dead player who verifies nothing). I will deliver this in Bruno's signature theatrical, razor-sharp style, turning Elena's well-poisoning against her."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Okay, we're down to two Detective claims and one of you has to be lying, which by process of elimination makes that person Mafia - there's no room here for an honest mistake. So let me point at the one thing I can actually verify from my side of the table: Bruno, you say your Night 1 check was on me, result innocent. Fine - but then why did you spend your entire Day 1 speech trying to cast suspicion on me? 'Do not let Devon lounge too comfortably in the chorus' - those were your words, about someone you're now claiming you already knew was clean. A real detective sitting on a confirmed-innocent read doesn't spend his one public speech steering the room toward that same person. That's not analysis, that's insurance - keeping a genuine villager warm as a fallback target in case your Night 2 story didn't land. Elena's Night 1 check on Alice being 'unverifiable' isn't a strike against her; it's just bad luck, the kind that happens to real detectives too. Carmen, this is on you and me now - Elena's story holds together without contradicting her own Day 1 behavior, and Bruno's doesn't. I'm leaning Bruno, and I'd like to hear whether you see the same thing before we lock our votes, because a split here is exactly how the wolves win tonight.",
+          "private_reasoning": "I need to pick between two dueling detective claims, and I have one genuine piece of leverage: Bruno says he checked me Night 1 and got 'innocent.' I know I actually am innocent, so that's consistent - but it's also exactly what a lying Mafia would claim, since it costs him nothing to name the person he knows is safest to vouch for. What actually bothers me more is the contradiction in his own behavior: if Bruno really had a confirmed-innocent read on me after Night 1, why did he spend his Day 1 speech trying to cast suspicion on me ('do not let Devon lounge too comfortably')? A real detective sitting on a clean read on someone has no reason to publicly undermine that person - it only helps if you're trying to keep a genuine villager under a cloud as a fallback scapegoat. That's the tell I want to point at, and it favors Elena's story over Bruno's. I'll lay this out for Carmen since she's the deciding vote, and push toward Bruno without sounding like I'm just picking a side out of panic."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "Bruno, your Detective claim is garbage. You don't get to call Elena's Night 1 check 'convenient' when your own Day 1 was one long performance of safe, sideways suspicion. Devon already nailed it: a real Detective with a clean read on Devon doesn't spend the whole day laying tracks toward him. That's not certainty, that's setup.\n\nElena's story is ugly, sure, but it fits the game state better than Bruno's. Alice being her Night 1 check isn't a contradiction; it's just a dead check. Bruno, on the other hand, is trying to turn a clear layout into a circus.\n\nMy read: Bruno is the vote unless he can explain why his Day 1 and Day 2 behavior make sense together. Right now they don't.",
+          "private_reasoning": "Elena's Detective claim is more consistent than Bruno's. Bruno hard-conflicts by trying to flip Elena while also having a shaky Day 1 posture; Devon's point about Bruno leaving himself room to pivot is strong. I should sound blunt and decisive, but not overclaim Doctor. Publicly I should pressure Bruno and keep door open to Elena if needed, while not revealing my role."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_2": "agent_5",
+          "agent_3": "agent_2",
+          "agent_4": "agent_2",
+          "agent_5": "agent_2"
+        },
+        "justifications": {
+          "agent_2": "Elena is the sole Mafia. Her Night 1 check on a dead Alice is the oldest wolf trick in the book, engineered to offer zero accountability. Devon, my Day 1 poke at your safe posture was classic investigative prodding—a Detective never reveals his confirmed innocents early, lest the Mafia hunt them down or learn the investigator's hand. Elena panicked at parity, threw down a preemptive strike, and is hoping to drag the village down with her. My vote is on Elena, and I urge Devon and Carmen to see through the illusion before the game is lost.",
+          "agent_3": "Elena's claim is the only one that actually fits the game state cleanly. Bruno's Detective story is full of garbage: he says he checked Devon Night 1 and got innocent, yet spent Day 1 pushing suspicion onto Devon anyway. That's not how a real Detective behaves. I called Bruno's line trash earlier, and I stand by it. Vote Bruno.",
+          "agent_4": "I laid this out already: Bruno's own story doesn't hold together. He claims he checked me Night 1 and got 'innocent,' yet his entire Day 1 speech was spent steering suspicion onto me. A real Detective sitting on a confirmed-innocent read has no reason to spend his one public turn planting doubt on that exact person - that's not investigative prodding, that's hedging a bet. Elena's story, by contrast, is consistent with her Day 1 behavior: she told power roles to stay quiet, and she did exactly that. Carmen and I agree here, and a split vote is how the wolves survive tonight, so I'm locking in with her. My vote is Bruno.",
+          "agent_5": "Bruno. Investigated, confirmed, and nothing he said today moved me an inch. He hard-claimed \"unadorned, simple Villager\" on Day 1 — no investigations, nothing in his coat — and then produced a badge the moment I named him. I told you all yesterday that the person whose story quietly rotates is the person I'd go after, and he rotated so precisely he may as well have taken a bow. He also asks you to believe he was sitting on a clean read of Devon while spending his entire Day 1 speech telling the room not to let Devon lounge too comfortably. Devon and Carmen both caught that; I'm just signing the receipt. Alice was my Night 1 check, she came back clean and died anyway, and yes, that verifies nothing living — that's what happens to real Detectives who get unlucky, not evidence of a lie. Bruno is Mafia. My vote hasn't moved since I opened my mouth this morning, and thank you both for not getting clever with a tie."
+        },
+        "eliminated": "agent_2",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Village",
+    "ended_round": 2,
+    "reason": "All Mafia eliminated."
+  },
+  "meta": {
+    "total_tokens": 64817,
+    "estimated_cost_usd": 0.318801,
+    "generation_duration_sec": 257.6
+  }
+}

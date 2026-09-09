@@ -1,0 +1,176 @@
+{
+  "game_id": "mafia_2026-09-09_443443",
+  "created_at": "2026-09-09T18:11:23Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8,
+    "use_personas": true
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager",
+      "persona": "blunt and impatient - you get to the point and don't sugarcoat your reads"
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "anthropic/claude-opus-5",
+      "role": "Villager",
+      "persona": "warm and diplomatic - you soften disagreements and look for common ground"
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Villager",
+      "persona": "dryly sarcastic - you needle people with dry humor, but you're still playing to win"
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Doctor",
+      "persona": "folksy and roundabout - you tell little stories or analogies before making your point"
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Mafia",
+      "persona": "anxious and over-explaining - you second-guess yourself out loud before landing on a position"
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "google/gemini-3.8-flash",
+      "role": "Detective",
+      "persona": "theatrical and confident - you narrate your own reasoning like it's obviously correct"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_4",
+          "target": "agent_4",
+          "reasoning": "Early nights are usually for keeping the bell on the porch from ringing too soon. I don't have any public info yet, so the safest play is to protect myself: that preserves the Doctor and gives me another day of discussion to gather tells. If the Mafia aims at me, this blocks it; if they hit elsewhere, we'll still have everyone alive for more information tomorrow."
+        },
+        "mafia_kill": {
+          "agent": "agent_5",
+          "target": "agent_1",
+          "reasoning": "No information yet. I need to pick someone to eliminate. I'll choose Alice as a random but plausible target to reduce the village numbers."
+        },
+        "detective_check": {
+          "agent": "agent_6",
+          "target": "agent_2",
+          "result": false,
+          "reasoning": "Night 1 gives no behavioral cues yet, so I will select Bruno to investigate arbitrarily and establish a clear anchor for tomorrow's deduction."
+        },
+        "_eliminated_by_night": "agent_1"
+      },
+      "morning_announcement": "Alice was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_5",
+          "public_statement": "Oh no, Alice... that's so awful. I really didn't expect her to be the first one gone. I mean, I know every night is dangerous, but it's still a shock, you know? I guess we don't have any information yet, so a no-vote makes sense today. We should probably talk through everyone's thoughts carefully before we decide anything tomorrow. I keep second-guessing whether there's any pattern in who the mafia might pick first, but honestly, it could be random too. We just need to stay calm and pay attention to what everyone says. I'm really hoping we can figure this out before another night passes.",
+          "private_reasoning": "I'm the mafia and need to avoid suspicion. Alice is dead, and there's no vote today, so I can sound helpful and speculative without committing too hard. I should express sadness, consider who the mafia might be, and avoid pointing at anyone too aggressively."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Well now, this is a bit like standing in the barn after the first storm and trying to guess which board’s rotten by the squeak alone. We’ve only got Alice’s death and Elena’s very careful note so far, and that doesn’t amount to a whole haystack yet.\n\nI’m with the idea of using today to gather information instead of swinging blind, but I’d like everyone to give us something concrete: who feels most off to you, and why? If you were trying to keep the village safe, who would you be watching tonight? Even a small hunch is better than silence at this point.\n\nFor my part, I don’t think we should treat the first night as random and shrug it off completely. Mafia often like to make the opening feel messy so nobody notices the shape of it. Let’s hear from Bruno, Carmen, and Farid with specifics, not just general nerves.",
+          "private_reasoning": "We have only one public statement so far from Elena, who is cautious and leans no-vote. As Doctor, I should not claim unless necessary; better to ask probing questions and sound useful. I should avoid overcommitting because there is no vote today. I can mention the lack of info and invite each player to give a concrete read or note who they'd protect/observe, without revealing my role. Keep voice folksy. Need consistency with prior night self-protect decision if ever referenced later. Publicly I can say I’m not seeing much yet, but Elena's immediate push for no-vote is sensible; however, I want more specifics from everyone. Since no vote today, focus on information gathering."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "Devon, that's a lot of barn poetry for a woman who's been dead less than twelve hours. I half expected you to start naming which plank is 'giving mafia energy.' That said, you're not wrong that we should actually say something useful instead of just vibing sadly like Elena, no offense Elena, your grief was very sincere and very content-free.\n\nHere's my only real observation: nobody's said anything yet because there's genuinely nothing to go on - one body, no claims, no behavior to read. So instead of forcing hunches out of thin air, I'd rather just watch how people talk today and tomorrow. If someone's suspiciously eager to point fingers with total confidence on zero evidence, that's worth remembering. If someone's suspiciously quiet, that's worth remembering too. I'll admit I don't have a target - I just don't trust anyone volunteering certainty this early, including myself.",
+          "private_reasoning": "No real info yet, so I'll play it dry, poke at Devon's folksy metaphor a bit for flavor, and gently push for actual observations rather than vague vibes. I don't want to accuse anyone baselessly since we have zero info, but I can note that overly eager 'let's find the mafia NOW' energy on day one is itself mildly interesting to file away."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "Magnificent. Simply magnificent. The curtain rises on tragedy—poor Alice, cut down before the prologue even finished—and what do our esteemed colleagues offer? Devon manufactures rustic homilies to demand hunches out of thin air, Elena performs the delicate art of saying absolutely nothing with great emotional resonance, and Carmen lounges in the orchestra seats declaring that anyone who thinks anything is immediately suspect. A delightfully transparent opening act.\n\nSince Devon demands specificity, let us supply some rigor. We have no elimination today, which means today’s sole purpose is taking the measure of the actors. My eye is drawn not to Bruno—who has had the good sense to let others overplay their hands before stepping onto the boards—but to Elena’s conspicuous eagerness to establish a 'we know nothing, let's just vibe' narrative, and Devon’s subtle push to see who jumps at shadows.\n\nObserve how easily people hide behind faux-helplessness. Let us hear what Bruno has to say when he finally speaks, but mark my words: when the villain slips, it will not be with a roar, but with a rehearsed platitude. I shall be watching Devon and Elena very closely indeed.",
+          "private_reasoning": "I know Bruno is innocent from my Night 1 investigation. Revealing my Detective role today is unnecessary and dangerous—there is no vote today, so revealing now merely paints a bullseye on my back for Night 2 before I can secure a second investigation. If I stay alive through Night 2, I will have checked two of the four suspects, which practically solves the game on Day 2. Therefore, I will play the confident, theatrical analyst: lightly deflecting heat from Bruno without claiming, critiquing Devon, Elena, and Carmen's performances, and maintaining my flamboyant persona without giving away my power role."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Thank you all for waiting on me - and Farid, I'll take the compliment, though I want to gently note something about it. You praised me for staying quiet, then found something suspicious in Devon, Elena, and Carmen alike. That's a very safe place to stand: everyone's a little guilty, nobody can hold you to anything, and the one person you flattered is the one who hadn't spoken yet. I don't say that as an accusation, truly - it's just the sort of thing I want us all to remember tomorrow if it becomes a habit. Broad suspicion of everyone is the same as suspicion of no one.\n\nAnd Carmen, I'm mostly with you, but I'd soften one edge: you've set up a rule where confidence is suspicious and silence is suspicious. That's a net that catches every fish in the pond, including you. Devon, I actually think asking for specifics was right, even if the poetry was thick - though I'd like to hear your own hunch, not just collect ours. Elena, your instinct to stay calm is a kind one, and I don't hold vagueness against anyone on Day 1; there genuinely isn't much to hold.\n\nHere's what I'd like us to agree to, since we're not voting. First: if you have a special role, please don't announce it today. A public claim tonight is a death sentence, and we'd be handing the mafia their next meal. Second, and this is the part I'd really ask for - tomorrow morning, before anyone responds to anyone else, let's each say two things straight away: the one person we'd vote if forced, and the one person we'd most want kept alive. Fresh, unpolished, no waiting to see which way the wind blows. Then we compare those lists against who actually died in the night.\n\nThat gives us real texture. If someone's \"protect\" list happens to spare the mafia, or if someone conveniently loses their strong opinion overnight, that shows. For my part, I'll go first tomorrow so nobody can say I hid behind the crowd twice. Right now, honestly, I have no suspect - and I'd rather admit that plainly than manufacture one and get poor Alice's death avenged on an innocent neighbor.",
+          "private_reasoning": "I'm a plain Villager with no information. Day 1 with no vote means my value is in setting up structures that constrain the Mafia tomorrow, and in noting behavioral markers now so I can be consistent later. Concrete observations I can honestly make: Elena's opening was emotionally rich but content-free; Devon demanded hunches from others while offering none of his own; Carmen preemptively declared anyone with certainty suspicious, which is a cheap shield; Farid delivered a sweeping critique of literally everyone else while flattering me for staying quiet, which costs him nothing and buys goodwill from me. That last one is worth flagging warmly - a Mafia player loves a read that names everyone. I'll also propose a concrete mechanism: tomorrow, each person names one top suspect and one person they'd protect, and we compare against tonight's death. And advise power roles to stay silent tonight. Keep tone warm and diplomatic per my voice."
+        }
+      ],
+      "vote_skipped": true
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_4",
+          "target": "agent_2",
+          "reasoning": "We have no confirmed detective claim, and the first day produced only tonal reads. Farid was the loudest pusher and tried to frame Devon and Elena with confident generalities; Carmen was sharp but mostly balanced; Bruno looked the most measured and helpful, while Elena stayed vague but not overtly scummy. As Doctor, I should protect the slot most likely to be targeted if the mafia wants to remove a careful town voice, or myself if I think I’m under threat. Since I’m the Doctor and have already self-protected once, repeating self-protect risks looking like pure safety play but is still often optimal early when information is thin. However, with Farid drawing attention as a potential aggressive mafia and possibly trying to steer the game, the better strategic protection is Bruno: he appears most village-minded and his structured approach is valuable to keep alive. If mafia are aiming at the most methodical town player, this blocks that kill and preserves discussion power for tomorrow."
+        },
+        "mafia_kill": {
+          "agent": "agent_5",
+          "target": "agent_6",
+          "reasoning": "Farid openly targeted me and Devon as suspicious, and he's actively trying to build a case. If he's the Detective, he might have investigated me and found me guilty, making him an immediate threat. Even if he's just a villager, his loud voice could sway others against me tomorrow. Eliminating him reduces immediate risk and removes a vocal player who's watching me closely."
+        },
+        "detective_check": {
+          "agent": "agent_6",
+          "target": "agent_4",
+          "result": false,
+          "reasoning": "Bruno is already confirmed Village to me. Between Devon, Elena, and Carmen, Devon has taken the strongest leadership/instigating posture during Day 1. Confirming Devon's alignment will either catch the Mafia red-handed or clear Devon, which in a 5-player state immediately isolates the Mafia to Carmen or Elena (and creates a core of 3 known innocents: Bruno, Devon, and myself)."
+        },
+        "_eliminated_by_night": "agent_6"
+      },
+      "morning_announcement": "Farid was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_5",
+          "public_statement": "Oh no... Farid too? That's just... I mean, he was so loud yesterday, and now he's gone. And I can't stop thinking about how he called out both Devon and me. That's terrifying, because I know I didn't do it, and I'm scared people will look at me and think I killed him to shut him up. But I didn't. I really didn't. So that leaves... Devon? Or maybe the mafia is someone Farid didn't even mention, like Bruno or Carmen, and they're trying to make it look like it's one of us two. I keep going back and forth and I can't settle on anything. Bruno, you said we should each say who we'd vote and who we'd protect, fresh. I'll try. If I had to vote right now, I'd probably vote Devon, just because Farid's suspicion of him is the only concrete thing we have, and Farid's death makes me think he was onto something. But I'm not confident. I'm never confident. And for who I'd protect? I'd protect Bruno, because he's been the most level-headed and his plan makes sense, and he's the least suspicious to me. But maybe that's exactly what the mafia wants me to think. I don't know. I just want us to be really careful and not make a mistake.",
+          "private_reasoning": "Farid accused both me and Devon, and now he's dead. That naturally puts suspicion on the two of us. I need to deflect by pointing toward Devon while appearing cooperative and uncertain. I'll also protect Bruno to seem reasonable and to keep him on my side. If someone claims Detective and accuses me, I'll have to improvise, but for now this is the best play."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Elena, thank you for going first — I'd said I would, and I don't hold it against you for stepping up before me; the spirit was right, and I'd rather someone speak than everyone wait.\n\nBut I have to be honest with you all, gently and plainly: today is the whole game. Four of us left. If we eliminate a neighbor and get it wrong, then tonight there will be three, and by morning two, and the mafia will be one of those two. There is no Day 4 where we correct this. So I need to change something I said on Day 1, and I want to name the change rather than slide past it. On Day 1 I begged the special roles to stay silent, because a claim then was a death sentence. That reasoning has expired. Detective — if you're alive, speak now. Tell us who you checked and what you saw. Waiting to protect yourself protects nothing anymore; there's no tomorrow left to spend the information in. Doctor, same, if it helps you support a read. And if two people claim Detective, well — that's information too, and I'd rather have that puzzle than this fog.\n\nNow my own two, as promised, unpolished. Forced vote: Elena. Protect: Carmen.\n\nElena, please hear the tone I mean this in — I'm not certain, and I'm not enjoying it. But here's what caught in my throat. You called Farid's suspicion of Devon \"the only concrete thing we have.\" Farid didn't suspect Devon. He closed by saying he'd be watching Devon *and Elena* very closely indeed, and the paragraph before that was entirely about your 'we know nothing, let's just vibe' framing. So when you pick up a dead man's suspicion and carry only the half that points away from you, that's not vagueness — that's editing. And then, in the same breath, you offered to protect me, the person who designed the exercise you were answering. Warmth is lovely, and I've been warm with you both days, but I notice the person who says \"I'm never confident\" produced one confident vote today, and it landed on the other name Farid flagged.\n\nDevon, Carmen — you both owe us your two names now, fresh, and I'd ask you not to just echo mine. Devon, you asked us all for hunches twice and have yet to spend one of your own; that debt is due today. Carmen, you said you'd remember who volunteers certainty on no evidence — I've just volunteered some, so judge me by your own rule and say so out loud if I've failed it. If either of you can show me why Elena's reading of Farid was innocent, I'll move. I'd genuinely rather be argued out of this than be right about it.",
+          "private_reasoning": "I'm a Villager. Mafia is one of Carmen, Devon, Elena. Critical: if we misvote today, we go to 3 players, mafia kills one at night, and it's 1v1 — mafia wins. So today's vote must be right, and information must come out now.\n\nElena's speech reads badly to me: she cited Farid's suspicion of Devon as \"the only concrete thing we have\" while conveniently omitting that Farid named HER in the same breath — arguably harder, since he called out her 'we know nothing, let's just vibe' framing. Selective use of a dead man's suspicion is a real tell. She also nominated me as her 'protect,' which is cheap currency aimed at the person who built the framework she's now using. Layered on top of two rounds of pure hedging, that's my best read.\n\nDevon's alternative case: he pushed for hunches to see who jumps. Weaker, in my view.\n\nI should also call for the Detective to claim NOW — I asked for silence on Day 1, so I need to explicitly address reversing that rather than pretending I never said it. A fake claim is possible, but with four players left, the cost of no information is worse. Stay warm but firm."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "Alright, Bruno, that's the first argument today that isn't just vibes — you actually went back and reread what Farid said instead of remembering the flattering half. And you're right, Elena: Farid said he'd watch you AND Devon, and you converted that into 'concrete suspicion of Devon' pretty smoothly. That's not nerves, that's editing. I'd like to hear you address that directly instead of another 'I don't know, I'm never confident' loop, because that loop is starting to do a lot of convenient work for you.\n\nMy two, fresh: forced vote, Elena, for the reason above. Protect, Bruno, mostly because he's the only person today who's shown his work instead of just showing his feelings.\n\nDevon — you spent two days asking other people for hunches like you're collecting rent. Bruno's called that debt due and so am I. Give us a name and a reason, not another round of barn metaphors. If you dodge again, that itself becomes the read.",
+          "private_reasoning": "Bruno's catch on Elena is legitimate — she really did quote only the half of Farid's suspicion that pointed away from herself, and that's the kind of thing worth flagging under my own 'watch for selective certainty' rule. I should validate that instead of hiding behind vague caution now that there's actual evidence to chew on. Devon still hasn't given a real hunch despite demanding them from everyone else, so I should press him. I'll give my forced vote/protect as requested, lean toward Elena based on Bruno's textual read, and keep pressure on Devon to stop collecting opinions and start producing one."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Well, here’s the hitch in the wagon wheel that keeps rattling me: Elena, you said Farid’s suspicion of Devon was the only concrete thing we had, but that ain’t what he said. He named Devon and you together, and then you carried the beam only toward Devon. That kind of editing is the sort of thing that makes a fellow squint at the page twice.\n\nI’m not ready to swing an axe on that alone, but I do want Elena to answer plainly: was that a slip, or were you reshaping Farid’s words to make them fit a vote?",
+          "private_reasoning": "We’re at 4 players. If I claim Doctor now, I likely get targeted and may still save the wrong person tonight; but with only one mafia left and one misvote losing the game immediately, public claim may be useful if it helps coordinate. However, Bruno and Carmen are both pressing Elena; Elena’s story is shaky because she rewrote Farid’s suspicion. Carmen has been consistent and analytical. Bruno’s logic is strong but he’s also the one most likely to be the town leader, making him worth preserving. Since day discussion is for a single statement, I should keep it pointed and avoid hard-claiming unless needed. Best move: challenge Elena on the exact edit and force her to reconcile it. That fits my folksy voice and keeps me consistent with earlier cautiousness. I should not contradict prior silence; instead, I can say I'm not ready to hang a vote yet but Elena’s wording is the part bothering me. This also subtly keeps my Doctor role concealed."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_2": "agent_5",
+          "agent_3": "agent_5",
+          "agent_4": "agent_5",
+          "agent_5": "agent_3"
+        },
+        "justifications": {
+          "agent_2": "I said this morning that if someone could show me Elena's reading of Farid was innocent, I'd move — and no one has, including Elena, who had the floor first and used it to build a vote on a misquote. Farid named Devon and Elena together in the same breath; Elena carried only the half that pointed away from herself and called it \"the only concrete thing we have.\" That's not nerves, and I've never punished nerves. It's editing, and it happened while she was answering an exercise I proposed and simultaneously offering to protect me for proposing it. I don't enjoy this, Elena, truly — you've been kind all game and I hope I'm wrong. But four of us are left and there is no morning after this one to correct a soft choice. Devon, Carmen: I asked you both not to just echo me, and you didn't — you went back to the text yourselves. That's why I can cast this with a steady hand. My vote is Elena.",
+          "agent_3": "I already laid out my reasoning yesterday and today's discussion only reinforced it. Elena took Farid's dying words - which named both her and Devon - and quietly kept only the half that pointed away from herself. That's not fuzzy grief-talk, that's editing a dead man's testimony to build a vote against someone else while she had the floor first. Devon caught the same thing independently without prompting, which tells me it's not just Bruno and me imagining a pattern. Elena still hasn't given a real answer to 'was that a slip or a reshape' - she's had two chances now. Sticking with my read from this morning: Elena.",
+          "agent_4": "I’m voting Elena. Folks, this one has the shape of a fence post that’s been leaned on too many times: yesterday Farid’s words were turned into 'the only concrete thing we have' when he’d named both Devon and Elena, and that’s not a little mud on the boot — that’s a whole different path. Bruno and Carmen both checked the text independently and landed on the same concern, while Elena never really answered the straight question of whether it was a slip or a reshape. In a four-player game, I’d much rather take the hard cut on the player who’s been caught editing than let the night shrink us down to guesswork.",
+          "agent_5": ""
+        },
+        "eliminated": "agent_5",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Village",
+    "ended_round": 2,
+    "reason": "All Mafia eliminated."
+  },
+  "meta": {
+    "total_tokens": 101054,
+    "estimated_cost_usd": 0.273016,
+    "generation_duration_sec": 2006.0
+  }
+}

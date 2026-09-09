@@ -57,6 +57,16 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="If set, games are seeded seed_start, seed_start+1, ... for reproducibility.",
     )
+    parser.add_argument(
+        "--personas",
+        action="store_true",
+        help=(
+            "Assign each agent a random flavor persona (voice/temperament, "
+            "not correlated with role) for a more entertaining watch. "
+            "Default is off, which keeps every agent's prompt identical "
+            "except for role - the clean model-vs-model comparison mode."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -82,6 +92,7 @@ def main() -> int:
         n_games = min(n_games, args.max_games)
 
     print(f"Generating up to {n_games} game(s)...")
+    print(f"Personas: {'ON (flavor voices)' if args.personas else 'OFF (clean model comparison)'}")
     if args.budget_usd is not None:
         print(f"Budget cap: ${args.budget_usd:.2f}")
 
@@ -102,7 +113,7 @@ def main() -> int:
         start = time.monotonic()
 
         try:
-            result = me.run_one_game(client, seed=seed)
+            result = me.run_one_game(client, seed=seed, use_personas=args.personas)
         except Exception:
             games_failed += 1
             print("FAILED with exception:")

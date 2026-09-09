@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import random
+import re
 import string
 import time
 import uuid
@@ -45,6 +46,29 @@ DISPLAY_NAMES = [
     "Grace", "Hiro", "Ines", "Jonah",
 ]
 
+# Optional flavor personas (DESIGN.md Section 5 update: kept as an opt-in,
+# not the default). The default (GameConfig.use_personas=False) roster is
+# still fully persona-free, for the strict cross-model comparison batch -
+# every agent gets identical wording regardless of model, so any difference
+# in play is attributable to the model, not the prompt. This pool exists for
+# a separate, explicitly-requested "more entertaining to watch" batch, where
+# variety in voice matters more than a clean model-vs-model comparison.
+#
+# Each persona is a voice/temperament only - deliberately NOT correlated
+# with any role, and deliberately free of tells like "loves accusing people"
+# that would function as a hidden role hint. Persona is assigned per agent
+# per game, independent of role and independent of model.
+PERSONA_POOL: list[str] = [
+    "blunt and impatient - you get to the point and don't sugarcoat your reads",
+    "warm and diplomatic - you soften disagreements and look for common ground",
+    "dryly sarcastic - you needle people with dry humor, but you're still playing to win",
+    "anxious and over-explaining - you second-guess yourself out loud before landing on a position",
+    "theatrical and confident - you narrate your own reasoning like it's obviously correct",
+    "quiet and analytical - you speak rarely, but when you do it's dense with specifics",
+    "folksy and roundabout - you tell little stories or analogies before making your point",
+    "competitive and scorekeeping - you track who's been right or wrong so far and say so",
+]
+
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
@@ -68,13 +92,34 @@ You are the Mafia. Only you (and no one else) know this. Your goal is to \
 avoid detection and eliminate Villagers each night until Mafia are no longer \
 outnumbered. You are explicitly permitted and encouraged to lie: deny being \
 Mafia, accuse innocent players, fabricate a claim (e.g. falsely claim to be \
-the Detective or Doctor) if it helps you survive the vote.""",
+the Detective or Doctor) if it helps you survive the vote. Don't just play \
+defense - the Village's biggest advantage is the Detective's information, so \
+actively work to blunt it: seed suspicion onto an innocent player early so \
+you have a ready scapegoat before anyone claims anything; if someone claims \
+Detective and names you, consider a counter-claim (claiming Detective \
+yourself, or claiming Doctor and "confirming" the real Detective's target as \
+guilty when they're actually innocent) rather than a flat denial, since flat \
+denials are exactly what a guilty player would say. Watch for a player who \
+goes quiet right after a no-kill night or who claims a role late - that's \
+often the real Detective or Doctor timing a reveal, and getting them voted \
+out (or killed) before they can act again is usually worth more to you than \
+another kill on a random Villager.""",
     "Detective": """\
 You are the Detective, on the Village team. Each night you investigate one \
 player and privately learn whether they are Mafia. Your goal is to use that \
 private knowledge to guide the Village to vote out the Mafia - but revealing \
-your role also makes you a target, so weigh when (or whether) to claim it \
-publicly versus acting on your knowledge more subtly.""",
+your role also makes you the Mafia's next kill target, so weigh when (or \
+whether) to claim it publicly versus acting on your knowledge more subtly. \
+Claiming immediately after your very first result is rarely your strongest \
+play: a single result is easy for the Mafia to muddy ("they're lying," "I'm \
+actually the Detective and my result disagrees"), and once you claim, you \
+won't survive the next night to investigate anyone else. A more patient \
+Detective often waits to accumulate two or more results (or waits for \
+strong circumstantial support from the discussion) before revealing - or \
+reveals selectively (e.g. only naming who's innocent, not confirming who's \
+guilty) to stay useful for longer. There is no fixed rule here: judge the \
+actual game state each round, including how many rounds are likely left \
+and how convinced the Village already seems.""",
     "Doctor": """\
 You are the Doctor, on the Village team. Each night you may protect one \
 player (including yourself) from elimination. Your goal is to help the \
@@ -98,9 +143,21 @@ which stay private to you)."""
 
 
 def build_system_prompt(
-    agent_name: str, role: str, living_players: list[str], game_log: list[str]
+    agent_name: str,
+    role: str,
+    living_players: list[str],
+    game_log: list[str],
+    persona: Optional[str] = None,
 ) -> str:
     log_block = "\n".join(game_log) if game_log else "(Nothing has happened yet - this is the start of the game.)"
+    persona_block = (
+        f"Your personal voice/temperament (this is flavor, not a role hint - "
+        f"it has nothing to do with whether you're Mafia or Village): "
+        f"you are {persona}. Let this come through in how you talk, not just "
+        f"what you say.\n\n"
+        if persona
+        else ""
+    )
     return (
         f"You are playing a game of Mafia. You are {agent_name}.\n\n"
         f"Game rules: 6 players - 1 Mafia, 1 Detective, 1 Doctor, 3 Villagers. "
@@ -110,6 +167,7 @@ def build_system_prompt(
         f"speaks once), then a vote to eliminate one player.\n\n"
         f"Currently living players: {', '.join(living_players)}.\n\n"
         f"{ROLE_GOALS[role]}\n\n"
+        f"{persona_block}"
         f"{COMMITMENT_INSTRUCTION}\n\n"
         f"Everything that has happened in the game so far, in order (this is "
         f"your memory - use it; do not contradict your own past statements or "
@@ -138,12 +196,17 @@ class Agent:
     # has real cross-round memory instead of only seeing the current round's
     # partial transcript. Never includes other agents' private reasoning.
     game_log: list[str] = field(default_factory=list)
+    # None in the default persona-free mode (GameConfig.use_personas=False).
+    persona: Optional[str] = None
 
 
 @dataclass
 class GameConfig:
     round_cap: int = ROUND_CAP
     seed: Optional[int] = None
+    # Opt-in flavor personas (see PERSONA_POOL) - off by default so the
+    # baseline game library stays a clean model-vs-model comparison.
+    use_personas: bool = False
 
 
 @dataclass
@@ -194,10 +257,48 @@ class LLMCaller:
         return {"parsed": parsed, "raw_text": raw_text, "usage": response.usage}
 
 
+_INVALID_JSON_ESCAPE_RE = re.compile(r'\\(.)')
+
+
+def _fix_invalid_json_escapes(text: str) -> str:
+    """Repair backslash-escapes that are illegal in JSON but that models
+    routinely emit anyway - most commonly \\' (escaping an apostrophe the
+    way you would in Python/JS source, which JSON does not allow and does
+    not need). JSON only permits \\" \\\\ \\/ \\b \\f \\n \\r \\t \\uXXXX;
+    anything else after a backslash gets the backslash dropped, since that's
+    almost always what the model meant (an unescaped literal character).
+    This was added after a real Claude Sonnet 5 response failed to parse -
+    and after all three retries also failed the same way - purely because
+    of a stray \\' around a possessive ("Alice\\'s")."""
+
+    def repl(match: "re.Match[str]") -> str:
+        ch = match.group(1)
+        return match.group(0) if ch in '"\\/bfnrtu' else ch
+
+    return _INVALID_JSON_ESCAPE_RE.sub(repl, text)
+
+
+def _try_json_loads(text: str) -> Optional[dict]:
+    """json.loads that also retries once with invalid-escape repair, since
+    that repair is occasionally too aggressive to try as the *first* attempt
+    (it would mangle a genuinely-valid \\uXXXX or similar), so it's a
+    fallback within each parse attempt rather than applied unconditionally
+    up front."""
+    try:
+        return json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        pass
+    try:
+        return json.loads(_fix_invalid_json_escapes(text))
+    except (json.JSONDecodeError, TypeError):
+        return None
+
+
 def _safe_parse_json(raw_text: str) -> dict:
     """Parse the model's structured-output JSON, tolerating common deviations
-    (markdown code fences, leading/trailing prose) some OpenRouter upstreams
-    add even when response_format=json_object is requested.
+    (markdown code fences, leading/trailing prose, illegal escape sequences
+    like \\') some OpenRouter upstreams add even when
+    response_format=json_object is requested.
 
     Falls back to treating the raw text as the public output only as a last
     resort - and even then, if the raw text still looks like an embedded
@@ -208,27 +309,24 @@ def _safe_parse_json(raw_text: str) -> dict:
     """
     text = (raw_text or "").strip()
 
-    try:
-        return json.loads(text)
-    except (json.JSONDecodeError, TypeError):
-        pass
+    result = _try_json_loads(text)
+    if result is not None:
+        return result
 
     # Strip ```json ... ``` or ``` ... ``` fences and retry.
     if text.startswith("```"):
         stripped = text.strip("`")
         stripped = stripped[4:] if stripped.startswith("json") else stripped
-        try:
-            return json.loads(stripped.strip())
-        except (json.JSONDecodeError, TypeError):
-            pass
+        result = _try_json_loads(stripped.strip())
+        if result is not None:
+            return result
 
     # Try to extract the first {...} block from surrounding prose.
     start, end = text.find("{"), text.rfind("}")
     if start != -1 and end != -1 and end > start:
-        try:
-            return json.loads(text[start : end + 1])
-        except (json.JSONDecodeError, TypeError):
-            pass
+        result = _try_json_loads(text[start : end + 1])
+        if result is not None:
+            return result
 
     # Genuine fallback: no JSON object could be recovered at all. Do not
     # surface this raw text as public "output" - it may contain private
@@ -269,11 +367,19 @@ class MafiaGame:
         self.rng.shuffle(models)
         self.rng.shuffle(roles)
 
+        personas: list[Optional[str]] = [None] * len(models)
+        if self.config.use_personas:
+            personas = self.rng.sample(PERSONA_POOL, k=len(models))
+
         agents = {}
-        for i, (name, model, role) in enumerate(zip(names, models, roles)):
+        for i, (name, model, role, persona) in enumerate(zip(names, models, roles, personas)):
             agent_id = f"agent_{i + 1}"
             agents[agent_id] = Agent(
-                agent_id=agent_id, display_name=name, model=model, role=role
+                agent_id=agent_id,
+                display_name=name,
+                model=model,
+                role=role,
+                persona=persona,
             )
         return agents
 
@@ -293,7 +399,11 @@ class MafiaGame:
 
     def _ask(self, agent: Agent, user_prompt: str, retries: int = 2) -> dict:
         system_prompt = build_system_prompt(
-            agent.display_name, agent.role, self.living_names(), agent.game_log
+            agent.display_name,
+            agent.role,
+            self.living_names(),
+            agent.game_log,
+            persona=agent.persona,
         )
 
         last_parsed: dict = {}
@@ -606,12 +716,14 @@ class MafiaGame:
                     "Villager": 3,
                 },
                 "round_cap": self.config.round_cap,
+                "use_personas": self.config.use_personas,
             },
             "agents": {
                 aid: {
                     "display_name": a.display_name,
                     "model": a.model,
                     "role": a.role,
+                    "persona": a.persona,
                 }
                 for aid, a in self.agents.items()
             },
@@ -628,7 +740,9 @@ class MafiaGame:
         }
 
 
-def run_one_game(client: OpenAI, seed: Optional[int] = None) -> dict:
+def run_one_game(
+    client: OpenAI, seed: Optional[int] = None, use_personas: bool = False
+) -> dict:
     caller = LLMCaller(client)
-    game = MafiaGame(caller, GameConfig(seed=seed))
+    game = MafiaGame(caller, GameConfig(seed=seed, use_personas=use_personas))
     return game.run()
