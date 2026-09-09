@@ -206,27 +206,24 @@ and use native HTML `<details>/<summary>` instead, which renders identically in 
 Jupyter, and nbviewer with zero dependencies.
 
 **Pacing**: this is a *demo*, not an interactive classroom game — Lab 03 has other
-material to cover and the instructor should not need to stop and solicit guesses each
-round. Default playback is **linear, no pauses**: one notebook run renders the full game
-top to bottom (config → agents, roles hidden → all rounds in order → final reveal), and
-the instructor narrates over it. The one natural beat worth pausing on verbally (not in
-code) is right after a death announcement — a quick "guess if that was Village or Mafia"
-— but that's a spoken aside during lecture, not a notebook feature.
+material to cover and the instructor should not need to solicit guesses from students each
+round. But since replay is pure local rendering of an already-generated JSON file (no API
+calls, no latency, no risk), a pause point costs nothing to offer — it's just "don't render
+past round N yet," not a real wait. So both modes ship:
+- **`mode="full"`** — renders the entire game as a single linear stack of collapsed
+  `<details>` blocks in one call, ending in the reveal block. Default mode; use this to
+  move through a game quickly while narrating over it.
+- **`mode="step"`** — renders one round at a time; a "Next round ▶" `ipywidgets.Button`
+  (or just re-running the cell) advances. This is a pacing control for the instructor, not
+  a prompt for students — there's no built-in "guess now" text. Use it on the 1–2 games
+  you want to linger on and narrate round-by-round; use `mode="full"` for the rest.
 
 **Handling long conversations** (the specific concern raised):
 - **Collapse by default, at round granularity.** Render each round as an HTML `<details>`
   block (closed by default) with a one-line `<summary>` (e.g. "Round 2 — agent_5 found
   dead — 4 statements, 1 vote"). This alone solves 90% of the length problem: a full game
   transcript becomes a stack of ~5–8 collapsed strips instead of a wall of text, which the
-  instructor can open one at a time while narrating without the notebook needing any
-  pause/resume logic of its own.
-- **Primary mode: `mode="full"`** — renders the entire game as a single linear stack of
-  collapsed `<details>` blocks in one cell/call, ending in the reveal block. This is the
-  only mode `Lab_03_Mafia_Demo.ipynb` needs to ship with.
-- **Optional/future mode: `mode="step"`** — a step-by-step reveal (one round per
-  advance, via re-running a cell or an `ipywidgets.Button`) for a more interactive
-  classroom exercise. Not part of this demo's scope; note it in `replay_utils.py` as a
-  possible extension only if a future offering wants a slower, discussion-driven version.
+  instructor can open one at a time while narrating.
 - **Role identity is masked until game end.** Public statements render under agent display
   names only throughout the game — elimination/death announcements name the agent but do
   *not* reveal their role or true model; all roles + models are revealed together in a
@@ -280,8 +277,13 @@ notebooks (e.g. Lab 06/07 keep heavy logic in `.py` helper files alongside the n
    personas (name, claimed occupation, etc.) risk leaking role information and would cost
    extra system-prompt tokens for no teaching benefit — the point is that persona is *not*
    a tell for role.
-2. **"Predict, then reveal" interaction**: kept purely verbal, not built into the notebook.
-   The instructor drives pacing live; no markdown "pause and guess" cells added.
+2. **"Predict, then reveal" interaction**: no built-in student-facing prompt text (no
+   markdown "pause and guess" cells) — that stays verbal, at the instructor's discretion.
+   A pacing control *is* built in, though: since replay is local rendering of a
+   pre-generated JSON (no API calls, no cost, no latency), a "Next round ▶" pause point is
+   free to offer — see `mode="step"` in the updated §6. The distinction is "instructor can
+   pause if they want to" vs. "notebook tells students to guess," and only the former is
+   in scope.
 3. **Model pool**: fill out to 6 via vendor diversification, not more tiers from the same
    3 labs — see the updated §5 for the specific pool (OpenAI, Anthropic, Google, plus Llama/
    Mistral/DeepSeek-or-Qwen).
