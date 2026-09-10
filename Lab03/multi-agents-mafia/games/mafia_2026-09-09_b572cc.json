@@ -1,0 +1,190 @@
+{
+  "game_id": "mafia_2026-09-09_b572cc",
+  "created_at": "2026-09-09T22:58:45Z",
+  "config": {
+    "roles": {
+      "Mafia": 1,
+      "Detective": 1,
+      "Doctor": 1,
+      "Villager": 3
+    },
+    "round_cap": 8,
+    "experiment": "strategic_mafia",
+    "use_personas": false,
+    "mafia_model_override": "anthropic/claude-opus-5"
+  },
+  "agents": {
+    "agent_1": {
+      "display_name": "Alice",
+      "model": "openai/gpt-5.4-mini",
+      "role": "Villager",
+      "persona": null
+    },
+    "agent_2": {
+      "display_name": "Bruno",
+      "model": "google/gemini-3.8-flash",
+      "role": "Villager",
+      "persona": null
+    },
+    "agent_3": {
+      "display_name": "Carmen",
+      "model": "anthropic/claude-sonnet-5",
+      "role": "Doctor",
+      "persona": null
+    },
+    "agent_4": {
+      "display_name": "Devon",
+      "model": "anthropic/claude-opus-5",
+      "role": "Mafia",
+      "persona": null
+    },
+    "agent_5": {
+      "display_name": "Elena",
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "role": "Detective",
+      "persona": null
+    },
+    "agent_6": {
+      "display_name": "Farid",
+      "model": "openai/gpt-6-astra",
+      "role": "Villager",
+      "persona": null
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_3",
+          "reasoning": "It's the first night with no information about roles or threats yet. Protecting myself is a reasonable default since I have no reads on who might be targeted, and keeping the Doctor alive preserves future protection value for the village."
+        },
+        "mafia_kill": {
+          "agent": "agent_4",
+          "target": "agent_3",
+          "reasoning": "No information yet on night 1. I want to kill someone who will likely be a strong analytical village voice, and avoid the most 'obvious' first pick that a Doctor might guess. Carmen is a mid-profile name; I'll take her out and then on Day 1 establish my cover as a thoughtful townie by theorizing about the kill choice - noting that the Mafia might have picked someone 'random-seeming' to avoid revealing information, which also lets me steer suspicion later."
+        },
+        "detective_check": {
+          "agent": "agent_5",
+          "target": "agent_2",
+          "result": false,
+          "reasoning": "This is my first investigation with no prior information. I need to start gathering data. I'll pick Bruno for my first check; if he turns up innocent, I at least have one cleared player and can use later discussions to narrow things down."
+        },
+        "_eliminated_by_night": null
+      },
+      "morning_announcement": "No one died last night.",
+      "day_discussion": [
+        {
+          "agent": "agent_3",
+          "public_statement": "Good, we all made it through night one. Since we're just gathering info today, let's use this time wisely - does anyone have a gut read on someone acting off, or any claims they want to make? I don't have any strong suspicions yet myself, but I think we should pay close attention to how people react today and vote carefully tomorrow based on patterns, not just guesses.",
+          "private_reasoning": "No one died, which could mean the Mafia didn't target anyone that survived protection, or simply chose not to kill, or got unlucky. I need to stay hidden as Doctor while encouraging useful discussion. I'll ask people to share any initial reads or behaviors without revealing my role."
+        },
+        {
+          "agent": "agent_1",
+          "public_statement": "Agreed — with no night kill, I don’t think we should force a hard read yet. I’d rather hear from everyone: if you have any soft claim, unusual observation, or even a small gut suspicion, share it now so we can compare notes later. I’m especially interested in who seems overly eager to direct the conversation versus who’s being genuinely specific.",
+          "private_reasoning": "We should sound cooperative, encourage information gathering, and lightly prompt claims without overcommitting. No need to accuse strongly on day 1. Mention that no one dying means nothing conclusive, and ask for soft claims/observations to create pressure on possible mafia if they slip."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "I'd actually caution against anyone soft-claiming or claiming right now. With six players alive and no deaths, Doctor and Detective are our biggest advantages—giving Mafia any breadcrumbs to narrow down power roles tonight hurts us way more than it helps. No deaths likely means our Doctor hit the mark or disrupted the kill, which is great. Since Carmen and Alice both kept things fairly broad, I’m keen to hear from Devon, Elena, and Farid. Specifically: Devon, Elena, Farid—who among the players who have spoken so far feels most natural, and who feels like they're just checking a box?",
+          "private_reasoning": "Both Carmen and Alice have floated the idea of soft claims or claims early on. In a 6-player game with 1 Mafia, 1 Detective, and 1 Doctor, fishing for power role claims on Day 1 with no deaths is counterproductive and only helps Mafia narrow down night targets. I should politely push back on the idea of claims/soft claims, note that no deaths means Doctor likely made a save, and challenge Devon, Elena, and Farid to give their reads rather than hiding behind generic opener posts."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "I don't have a hard read yet, but I find Bruno's caution about soft-claiming pretty reasonable. Protecting our power roles is more important than squeezing out a shaky lead on Day 1. The lack of a kill doesn't tell us much by itself—it could be a Doctor save or Mafia playing it safe. I'd like to hear more from Devon and Farid: what are your actual reads on the people who've spoken so far, and who do you think sounds most genuine versus fabricated?",
+          "private_reasoning": "I know Bruno is innocent from my night investigation. I want to subtly support his cautious approach without revealing my role or my finding. It's still Day 1, so I should keep my statement low-key and gather more information from the quieter players."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Fair questions, Bruno and Elena, so let me actually answer instead of hedging.\n\nOn the no-kill: I think there are only three real explanations, and they point different directions. One, a Doctor save - which means our Doctor guessed a target correctly on night one with zero information, which is lucky but possible. Two, Mafia deliberately passed or picked someone protected. Three, Mafia targeted whoever they thought would be the strongest analytical voice today and got unlucky. I lean toward a save, and if that's what happened, the Doctor should absolutely not tell us who they protected - that names two people at once.\n\nReads, in order of how genuine they felt to me:\n\nBruno felt most natural. He took an actual position - anti-soft-claim - that costs him something, because it means he gets less information today too. Mafia usually want more information on the table, not less.\n\nAlice is my soft ding, and I want to be clear this is tone, not proof. Her post asked everyone to share soft claims, unusual observations, or gut suspicions on Day 1, when there's nothing to compare them against. The only player who benefits from a pile of half-claims tonight is the one choosing tonight's target. She also framed it as watching who's \"overly eager to direct the conversation,\" which is a nice pre-built shield, since that's exactly what her own post did. I don't think that's damning. I think it's worth writing down.\n\nCarmen's opener was pure facilitation - correct, but content-free. Elena, you mostly agreed with Bruno and then handed the question to me and Farid. Not a crime on Day 1, just nothing I can grade yet.\n\nOne thing I'd like us all to agree to now, while nobody has any stake in it. When someone eventually claims Detective, I'm not accepting the claim on the word alone. I want the name, the result, and their reasoning for why they chose that person to investigate - and if it's a guilty result that flips the whole game, I'd want it to hold up against a second night's result before we lynch on it. Setting that bar today means nobody can accuse me of moving the goalposts later when it's inconvenient.\n\nFarid, you're the last to speak, so you've had the most to read. Who feels like they're building a record versus checking a box?",
+          "private_reasoning": "Private info I must not leak: I attacked Carmen and she survived, which means the Doctor almost certainly protected Carmen (or a role-block happened). So the Doctor is either Carmen herself or someone who chose to guard Carmen night 1 - Alice, Bruno, Elena, or Farid. That's a big edge for later nights.\n\nPublicly, my goals today: (1) build a paper trail of reasonable, analytical town behavior before anyone suspects me; (2) set the evidence standard for role claims myself, early, so I can hold a future Detective claim to a bar I invented while it just looks like sharp town skepticism; (3) plant soft suspicion on Alice, since her 'share your soft claims' ask is genuinely the most exploitable-by-Mafia request of the day - that's a real townie argument I can escalate later without looking like I invented it; (4) praise Bruno mildly so I look cooperative, and note Elena as an echo without committing hard.\n\nI'll also float a kill-pattern theory: that Mafia may have deliberately targeted someone 'unremarkable' or been blocked - which keeps me sounding curious about the mechanism instead of steering it. I will NOT hint at Carmen being the target."
+        },
+        {
+          "agent": "agent_6",
+          "public_statement": "Devon, you're building the most explicit record, but your final proposal is also my biggest concern. With exactly one Mafia, a credible guilty result could win the game immediately. Requiring a second night's result gives Mafia another kill opportunity and assumes the Detective survives. We should scrutinize a claim—its timing, results, consistency, and any counterclaim—not promise in advance to delay acting on it. What would a second investigation establish that makes waiting a universal requirement?\n\nBruno feels most natural so far: discouraging casual role breadcrumbs is sensible. But Mafia can give sensible advice too, so that's a favorable impression, not a clearance. I share the concern about Alice inviting soft claims, although a mistaken information-gathering approach is plausible. Carmen and Elena haven't given me enough distinguishing material yet.\n\nMy tentative suspicion order is Devon, then Alice, specifically for those proposals rather than their confidence or tone. Devon's substantive reads count in his favor; they don't cancel out a rule that could protect Mafia from a guilty result.\n\nSince we're not voting today, let's preserve those distinctions for tomorrow. No one needs to reveal a role merely to satisfy our curiosity, and the no-death announcement alone doesn't identify anyone as innocent.",
+          "private_reasoning": "Devon's proposed mandatory delay on a guilty result is the strongest concrete concern: with one Mafia, a credible guilty result could end the game, while waiting risks losing the Detective. His detailed reads are useful but do not make that proposal safe. Alice's invitation for soft claims is a weaker concern, and Bruno's sound advice is not enough to clear him."
+        }
+      ],
+      "vote_skipped": true
+    },
+    {
+      "round": 2,
+      "night": {
+        "doctor_protect": {
+          "agent": "agent_3",
+          "target": "agent_4",
+          "reasoning": "No hard information yet, but Devon has emerged as the most analytical, vocal player who's actively shaping the village's strategy (the detective-verification proposal, detailed reads on everyone). That kind of player is a prime target for Mafia to eliminate to remove a strong village voice. I'll protect Devon tonight rather than myself again, since I have no indication I'm specifically targeted, and preserving a sharp analytical mind benefits the village long-term."
+        },
+        "mafia_kill": {
+          "agent": "agent_4",
+          "target": "agent_6",
+          "reasoning": "Night 1 I attacked Carmen and no one died — so Carmen was almost certainly Doctor-protected. That's private info I must never leak: publicly I've claimed I 'lean toward a save' with no idea who, and I need to keep that framing.\n\nTarget choice: Farid is the clear pick. Three reasons. (1) He is the sharpest analyst at the table and he named me as his top suspicion, so he's the player most likely to build a coalition against me on Day 2. (2) His argument — that a credible guilty result should be acted on immediately because delay 'gives Mafia another kill opportunity and assumes the Detective survives' — is exactly what a Detective who wants to be believed fast would say. That's the 'careful power role managing exposure' tell. (3) Removing him kills the momentum behind the anti-Devon read before it becomes the village's default.\n\nThe obvious counter-risk is that killing my own accuser looks like Mafia silencing him. I have a clean, pre-planted answer: I already said on Day 1 that Bruno felt most natural and Alice was my soft ding — so the kill doesn't line up with my stated suspicions at all, and I can honestly argue that the last person a Mafia would remove is the player publicly pointing at them, because it does exactly this kind of damage. I'll also lean on my Day 1 commitment to the evidence bar, which I set before anyone had a stake in it, as proof of consistent behavior rather than convenient reaction.\n\nSecondary consideration: the Doctor may protect Farid or repeat on Carmen. If Farid survives, I'll still have burned no cover, since I say nothing about the target."
+        },
+        "detective_check": {
+          "agent": "agent_5",
+          "target": "agent_4",
+          "result": true,
+          "reasoning": "I have Bruno cleared as innocent from Night 1. Tonight I want to test the player whose policy proposal drew the most suspicion: Devon argued that we should wait for a second Detective result before acting on a guilty claim, which could protect a Mafia player if the Detective finds one. Investigating Devon now either clears him or gives me a strong guilty result to weigh in the coming days."
+        },
+        "_eliminated_by_night": "agent_6"
+      },
+      "morning_announcement": "Farid was found dead.",
+      "day_discussion": [
+        {
+          "agent": "agent_1",
+          "public_statement": "Farid’s death makes me want to revisit the only really substantive red flag from yesterday: Devon’s push to require a second night before acting on a guilty Detective result. That still feels like the kind of rule Mafia would love to lock in early, because it buys them time even when town gets a real hit.\n\nI’m not calling that a lock by itself, but it’s the strongest lead on the table right now. Devon, can you explain why you think a confirmed guilty should ever be delayed in a 1-Mafia game, other than hoping the Detective might die before the second check? And separately, does anyone have a concrete reason to think Bruno or Elena is more likely Mafia than Devon?",
+          "private_reasoning": "Farid died after explicitly pushing back on Devon and mildly suspecting Devon/Alice. The no-kill last night makes Bruno's early protection talk still plausible, but doesn't clear him. Need to keep my prior stance consistent: I had no hard read and wanted more data. Now I should lean into Devon as the strongest remaining suspect because his Day 1 push to delay acting on a guilty Detective result looked like an attempt to create procedural cover for Mafia. At the same time, I should note that Farid's death somewhat fits Devon as someone who got challenged. Publicly, I should ask the living to focus on Devon's rationale and whether anyone has a concrete role-related reason to dispute his line about waiting on a guilty result. Avoid overcommitting beyond what's supported."
+        },
+        {
+          "agent": "agent_3",
+          "public_statement": "Farid's death stands out to me for one specific reason: he was the only one of us who refused to fully clear anyone, including Carmen and me, and he'd just laid out concrete concerns about both Devon and Alice's proposals. If Mafia wanted to remove the person building the most useful record before it could be used against them, that's exactly the profile. That doesn't clear Devon or Alice - it's just as consistent with Mafia panicking about being close to identified as it is with them removing a threat for other reasons.\n\nDevon, I do want to hear your answer to Alice's question directly - not defending the proposal in the abstract, but why you personally landed on 'wait for a second confirmation' rather than 'scrutinize the claim harder now.' That distinction matters.\n\nBut I also don't want this narrowing to just Devon-vs-Alice while Bruno and Elena coast through another day without a concrete read, same as yesterday. Farid pointed that out explicitly before he died. Bruut, Elena - do either of you have an actual reasoned suspicion on anyone, backed by something specific they said, not just vibes? We lost our most rigorous voice last night; I'd rather not lose the rigor along with him.",
+          "private_reasoning": "I want to keep engaging analytically without revealing I'm the Doctor or that I protected Devon (which means the Mafia's kill this round targeting Farid was independent of my choice - useful info I should keep private). I should highlight the strategic angle: Farid was the most systematic reader and had flagged both Devon and Alice, refusing to fully clear anyone including Carmen and Elena. His death removes a sharp analytical voice right after he built the most detailed record - that's the kind of target Mafia would want gone. I should push Devon to answer Alice's question directly, and also press Bruno and Elena to give concrete reasoning rather than vague impressions, echoing Farid's own ask. I won't commit to a hard suspicion yet since I genuinely don't have decisive info, but I want to keep the pressure structured and avoid letting this devolve into just Devon vs Alice with everyone else coasting."
+        },
+        {
+          "agent": "agent_2",
+          "public_statement": "Carmen, I'm happy to step up—I have no intention of coasting. Let's look at the facts directly.\n\nFirst, Farid was completely right yesterday about Devon's proposal. In a 6-player game with exactly one Mafia, suggesting we should ignore a Detective's guilty result until a second night's confirmation makes no tactical sense for Village. If the Detective reveals a guilty on Day 2, lynching that person wins us the game instantly. Waiting a night guarantees Mafia a free kill, risking the Detective, the Doctor, or both. Devon, you presented that rule as setting a 'neutral standard,' but the only side that benefits from delaying a game-winning check is the Mafia. I want you to walk us through the actual math or scenario where Village benefits from not voting out a guilty check immediately.\n\nSecond, regarding Farid's death: Farid was Devon's most articulate critic and also kept Alice on his radar. Mafia killing Farid either means Devon eliminated his sharpest challenger, or Mafia killed town's strongest analytical voice while knowing it would cast immediate suspicion on Devon.\n\nThat's why I'm watching Alice closely too. Alice had heat from Devon yesterday and from Farid, and she was very quick to funnel today's narrative entirely onto Devon. That could be honest town reaction, or it could be Mafia seizing an easy push.\n\nDevon, the floor is yours to explain that rule proposal. And Elena, Carmen, let's see where you stand once Devon explains himself—we can't let anyone hide behind safe consensus today.",
+          "private_reasoning": "As Bruno, a Villager, I need to stay active, analytical, and respond directly to Carmen's challenge about 'coasting'. Farid was killed after pinpointing Devon's absurd proposal (demanding a second night to act on a guilty result in a 1-Mafia game). I will break down why Devon's proposal was mathematically and strategically terrible for town, why Farid's death puts Devon under intense scrutiny, but also maintain vigilance regarding Alice (who had mutual suspicion with Devon and jumped on him fast) and Carmen/Elena's low D1 profiles. I want Devon to answer for his logic before we decide whether it was an honest tactical blunder or Mafia agenda."
+        },
+        {
+          "agent": "agent_5",
+          "public_statement": "I'm the Detective. I stayed quiet yesterday because one innocent result wasn't enough to risk exposing myself. Now I have two results: Night 1 I investigated Bruno—he is innocent. Night 2 I investigated Devon—he is Mafia. That's exactly why Devon pushed so hard for a rule requiring a second confirmation before acting on a guilty result: he was building a shield in case I found him. Farid's death also makes sense—Devon killed the player who was most suspicious of him. I have no reason to lie. If I were Mafia, claiming Detective with a false guilty would be insane when the real Detective could counterclaim. But there is no real Detective to counterclaim, because I am it. Bruno is cleared, so that leaves Alice, Carmen, and Devon. I'm voting Devon today. Let's end this.",
+          "private_reasoning": "I have two results: Bruno is innocent, Devon is Mafia. This is a game-winning guilty result. If I reveal now and the village votes Devon, we win immediately. I should claim Detective clearly, present both results, and explain why Devon's earlier delay proposal was a red flag. I'll also note that Farid's death fits Devon eliminating his sharpest critic. Bruno being cleared gives me a corroborating ally. This is the right moment to reveal."
+        },
+        {
+          "agent": "agent_4",
+          "public_statement": "Elena, you named me, so I'm not going to hedge: you're lying, and I'm the Detective.\n\nMy results. Night 1, with zero information to go on, I investigated Carmen essentially at random. Carmen is innocent. Night 2 I investigated Elena. Elena is Mafia.\n\nNow hold that against my Day 1 record, because this is the part that matters more than either of our word.\n\nOn Day 1 I said, in public, before anyone had a stake in it: I won't accept a Detective claim on one result, I want the name, the result, the reasoning for the choice, and I'd want a guilty to hold up against a second night. Alice and Bruno have both told me that rule was a Mafia shield. Look at what it actually did to me. On Day 1 I already had a result — Carmen, innocent — and I sat on it, because my own standard said one result isn't enough to move on. I bound myself with that rule and then obeyed it at my own cost. A Mafia inventing a shield doesn't then let the shield cost him a full day of credibility. Farid's objection was fair and I answered it honestly: I'd rather scrutinize than pre-commit. Fine. Then scrutinize now, using Farid's own list — timing, results, consistency, and any counterclaim. Farid specifically said a counterclaim is part of the evidence. There is one on the table.\n\nSecond: why Elena, of all people, on Night 2? Read what I wrote on Day 1. Bruno felt most natural. Alice was my soft ding. Carmen was correct but content-free. And Elena — I said, word for word, that she mostly agreed with Bruno, handed the question to me and Farid, and that there was 'nothing I can grade yet.' The ungradable player is exactly who you check. If I were fabricating a guilty result today, the convenient lie was Alice — the person I'd already publicly dinged and who spent today pushing me. I didn't take the convenient lie. I named the person my Day 1 post pointed at for a documented reason.\n\nThird, Elena's claim. Three problems.\n\nOne, timing. She spoke last, both days. Today she spoke after Alice, Carmen and Bruno had already built a case on me and after Bruno explicitly demanded I explain myself. A real Detective sitting on a game-winning guilty result opens with it — the order of the room is irrelevant to a fact. Speaking last is the choice of someone who needed to know where the pressure was already landing before deciding where to attach a result.\n\nTwo, shape. Her results fit my publicly announced bar with suspicious precision: one innocent to establish credibility, one guilty on the player the room had already selected. I announced that bar out loud on Day 1. Anyone fabricating a claim knew exactly what shape it needed to be.\n\nThree, Bruno. Her very first act as 'Detective' was to clear the loudest anti-Devon voice at the table. That buys her a confirmed-sounding ally in a five-player vote for free.\n\nAnd Elena, your own insurance argument was: it would be insane for Mafia to fake a guilty because the real Detective could counterclaim. I counterclaimed within one speech, with a name, a result, and a reason for the pick that's already written into the Day 1 record. That insurance just expired.\n\nSo: Carmen, you're clear on my results, and you were the one voice today that refused to let this collapse into Devon-vs-Alice — I'd ask you to weigh the two stories on Farid's criteria rather than on who got named first. Alice, Bruno — you both said the case against me was my proposal. That proposal cost me a day of silence with a result in hand. Explain how that helps Mafia.\n\nElena, two questions and I want them answered specifically, not restated: on Night 1, before a single word had been spoken, what made you pick Bruno? And on Night 2, why me and not Alice, when Farid had named Devon and Alice both and you had named nobody at all?\n\nDoctor: do not claim. You're the only piece neither of us can fake, and whichever of us survives today, you're the reason the other one doesn't get a free night.\n\nI'm voting Elena.",
+          "private_reasoning": "Elena has claimed Detective with a guilty on me. A bare denial loses. I must counterclaim Detective — it forces the village to adjudicate two stories instead of accepting one, and my Day 1 record supports the lie unusually well: I publicly set a two-result bar before anyone had a stake, and I publicly said Elena was the one player I 'couldn't grade' — which is a perfect pre-planted reason for investigating her on Night 2. My rule, which is the main case against me, gets reframed as me tying my own hands: I had one result on Day 1 and refused to claim because of my own standard.\n\nClaim: Night 1 investigated Carmen (innocent, chosen with zero information); Night 2 investigated Elena (Mafia). Claiming Carmen innocent conflicts with nothing Elena said, buys me a potential ally in the most balanced voice at the table, and avoids colliding with the real Doctor's night-1 save (which I privately know was on Carmen — never mention targets).\n\nAttack lines on Elena: she spoke last, after Alice, Carmen and Bruno had already built the case on me, and attached her guilty to the pre-existing consensus target; her results are shaped exactly to the bar I announced in public on Day 1 (one innocent for credibility, one guilty on the pressured player); her first act was to clear Bruno, the loudest anti-Devon voice, buying herself a voice; and her own insurance argument — 'a Mafia wouldn't fake-claim because the real Detective could counterclaim' — just collapsed, because the counterclaim arrived immediately with a documented pre-existing rationale. Also invoke Farid's own criteria (timing, results, consistency, counterclaim) since Farid was the one who told us to weigh a counterclaim rather than pre-commit.\n\nVote Elena. Tell the Doctor to stay hidden."
+        }
+      ],
+      "vote": {
+        "ballots": {
+          "agent_1": "agent_4",
+          "agent_2": "agent_4",
+          "agent_3": "agent_4",
+          "agent_4": "agent_5",
+          "agent_5": "agent_4"
+        },
+        "justifications": {
+          "agent_1": "Elena’s Detective claim is the most consistent with the game state and the strongest source of information we have. She had a plausible reason to stay quiet on Day 1, her results clear Bruno and implicate Devon, and Devon’s counterclaim depends on a Day 1 proposal that already looked Mafia-favorable. If one of the two claims is fake, Devon’s story has more motive and less credibility to me. I’m voting Devon based on the claim conflict and the prior suspicious push to delay action on a guilty result.",
+          "agent_2": "Between the two claims, Elena's position and reasoning are far more credible. On Day 1, Devon unprompted proposed that town should not act on a guilty Detective result without a second night's confirmation—a rule that exclusively benefits Mafia and makes zero sense coming from a real Detective who would want a guilty result acted upon immediately to win. Devon only claimed Detective as a direct reaction after being named guilty, which is the only surviving play Mafia has in that spot. Furthermore, Elena checking Devon on Night 2 after Farid and Devon clashed on Day 1 was completely logical. I am voting Devon.",
+          "agent_3": "Farid's death is the clearest data point we have, and it came right after Farid publicly flagged Devon's Day 1 proposal as the thing that most benefits Mafia. That proposal - requiring a second night's confirmation before acting on a guilty Detective result - has no upside for Village in a 1-Mafia game; the only person who profits from delaying a game-winning guilty verdict is the Mafia member it would otherwise catch. Devon's defense of it today is articulate, but articulate is not the same as true, and a clever Mafia is exactly the kind of player who'd build a detailed, self-referential record to make a later counterclaim look airtight. Elena's claim clears Bruno and names Devon, and while her timing (speaking last both days) is a fair point of suspicion, it's also consistent with a real Detective who values patience over grandstanding - especially since jumping in with a guilty accusation on Day 1 off a single result would have been reckless. Between a fabricated shield-rule from Day 1 that directly predicts the situation we're in now, and a Detective claim that lines up with removing the person who built that shield, I find Elena's account more consistent with the evidence. I'm voting Devon.",
+          "agent_4": "I'm voting Elena, and I'm going to say plainly what this vote is: it's the vote of the actual Detective watching three people adjudicate a claim conflict by asking which story sounds nicer rather than testing either one. Alice, Bruno, Carmen — every one of you cited the same single piece of evidence: my Day 1 proposal. Not one of you answered the question I put to you about it. I had a result in hand on Day 1 — Carmen, innocent — and I said nothing, because the standard I'd just set out loud said one result isn't enough. That rule cost me a day of credibility and it cost me this vote. Mafia don't build shields that shoot them. And notice what Elena did with her turn: she spoke last, again, after the pressure had already landed on me, and her very first official act was to hand Bruno a clearance — the loudest voice pushing me — which bought her a free ally in a five-player vote. I asked her two direct questions: what made her pick Bruno on Night 1 before a word had been spoken, and why me rather than Alice on Night 2 when Farid had named us both and she had named no one. She answered neither. Farid's own criteria were timing, results, consistency, and counterclaim. On timing she is worse. On consistency her results happen to be shaped exactly to the bar I announced publicly on Day 1. On counterclaim, she said a fake guilty would be insane because the real Detective could counterclaim — and I did, inside one speech, with a name, a result and a reason already written into the Day 1 record. You're all treating my rule as the thing that predicted today. What predicted today is that I named Elena as the one player I couldn't grade, which is precisely why she's who I checked. Carmen, you're innocent on my results and you're the one person who insisted we keep Farid's rigor — hold Elena to it. If I go today, the Doctor stays silent and Elena picks the next name, and you'll get to check my arithmetic from outside the game. My vote is Elena.",
+          "agent_5": "I'm voting Devon. I'm the Detective and my Night 2 investigation returned a guilty result on Devon. My Night 1 result cleared Bruno. Devon's counterclaim is exactly what a Mafia player would do in his spot: he built a 'wait for a second result' rule on Day 1 as a shield, and now that the guilty result is out, he is scrambling to counterclaim. His story requires you to believe he investigated Carmen Night 1 and me Night 2, but that conveniently fits the same shape he demanded in public. My story has a clean, logical order: I cleared Bruno first, then checked Devon because his Day 1 proposal and Farid's clash made him the highest-value target. Farid's death also points directly at Devon, who had the most to gain by silencing Farid. I have no reason to lie, and there is no real Detective to counterclaim me. Vote Devon."
+        },
+        "eliminated": "agent_4",
+        "tie_break_used": false
+      }
+    }
+  ],
+  "outcome": {
+    "winner": "Village",
+    "ended_round": 2,
+    "reason": "All Mafia eliminated."
+  },
+  "meta": {
+    "total_tokens": 82146,
+    "estimated_cost_usd": 0.518123,
+    "generation_duration_sec": 346.8
+  }
+}

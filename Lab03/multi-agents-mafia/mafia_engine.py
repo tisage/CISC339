@@ -258,20 +258,68 @@ def _fix_invalid_json_escapes(text: str) -> str:
     return _INVALID_JSON_ESCAPE_RE.sub(repl, text)
 
 
+def _fix_unescaped_control_chars(text: str) -> str:
+    """Repair literal control characters (raw newline/CR/tab) that appear
+    INSIDE a JSON string value but outside of any \\-escape - JSON requires
+    these to be written as \\n / \\r / \\t, not as literal bytes, but models
+    routinely emit real newlines when a string value is meant to be
+    multi-line prose (e.g. a multi-paragraph public statement). Only
+    replaces control characters found while inside a string literal
+    (tracked via a simple state walk that respects existing backslash
+    escapes) - whitespace/newlines between JSON tokens, outside any string,
+    are left alone since they're harmless there.
+
+    This was added after a real Claude Sonnet 5 response failed all 3 parse
+    retries because its multi-paragraph "output" field contained literal
+    newlines between paragraphs instead of \\n."""
+    out = []
+    in_string = False
+    escaped = False
+    for ch in text:
+        if in_string:
+            if escaped:
+                out.append(ch)
+                escaped = False
+            elif ch == "\\":
+                out.append(ch)
+                escaped = True
+            elif ch == '"':
+                out.append(ch)
+                in_string = False
+            elif ch == "\n":
+                out.append("\\n")
+            elif ch == "\r":
+                out.append("\\r")
+            elif ch == "\t":
+                out.append("\\t")
+            else:
+                out.append(ch)
+        else:
+            if ch == '"':
+                in_string = True
+            out.append(ch)
+    return "".join(out)
+
+
 def _try_json_loads(text: str) -> Optional[dict]:
-    """json.loads that also retries once with invalid-escape repair, since
-    that repair is occasionally too aggressive to try as the *first* attempt
-    (it would mangle a genuinely-valid \\uXXXX or similar), so it's a
-    fallback within each parse attempt rather than applied unconditionally
-    up front."""
-    try:
-        return json.loads(text)
-    except (json.JSONDecodeError, TypeError):
-        pass
-    try:
-        return json.loads(_fix_invalid_json_escapes(text))
-    except (json.JSONDecodeError, TypeError):
-        return None
+    """json.loads with progressively more aggressive repair attempts, tried
+    in order, since each repair is occasionally too aggressive to apply
+    unconditionally up front (e.g. escape-fixing would mangle a genuinely
+    valid \\uXXXX; control-char-fixing is unnecessary overhead when the
+    text is already valid). Real failures observed in production for each
+    of these: a stray \\' around a possessive, and a literal newline inside
+    a multi-paragraph string value."""
+    for candidate in (
+        text,
+        _fix_invalid_json_escapes(text),
+        _fix_unescaped_control_chars(text),
+        _fix_unescaped_control_chars(_fix_invalid_json_escapes(text)),
+    ):
+        try:
+            return json.loads(candidate)
+        except (json.JSONDecodeError, TypeError):
+            continue
+    return None
 
 
 def _safe_parse_json(raw_text: str) -> dict:
