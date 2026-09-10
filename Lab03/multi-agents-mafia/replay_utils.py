@@ -105,6 +105,11 @@ def _style_block(instance_id: str) -> str:
 <style>
 #{instance_id} {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
               max-width: 900px; }}
+#{instance_id} .game-id-banner {{ margin: 0 0 10px; font-size: 0.85em; opacity: 0.85; }}
+#{instance_id} .game-id-input {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                                  border: 1px solid rgba(128,128,128,0.4); border-radius: 6px;
+                                  padding: 2px 6px; font-size: 0.95em; width: 8em;
+                                  background: rgba(128,128,128,0.06); color: inherit; }}
 #{instance_id} .reveal-toggle-row {{ margin: 4px 0 14px; font-size: 0.9em; }}
 #{instance_id} .reveal-toggle-row label {{ cursor: pointer; user-select: none; }}
 #{instance_id} .role-reveal-checkbox {{ display: none; }}
@@ -146,6 +151,10 @@ def _style_block(instance_id: str) -> str:
 #{instance_id} .reveal-block {{ border: 2px solid #C44E52; border-radius: 10px;
                             padding: 14px 16px; margin-top: 18px; background: rgba(196,78,82,0.06); }}
 #{instance_id} .reveal-block h3 {{ margin-top: 0; }}
+#{instance_id} .winner-banner {{ font-size: 1.4em; font-weight: 800; text-align: center;
+                                  padding: 10px 12px; border-radius: 8px; margin-bottom: 10px; }}
+#{instance_id} .winner-banner.village {{ background: rgba(85,168,104,0.18); color: #2f6b40; }}
+#{instance_id} .winner-banner.mafia {{ background: rgba(196,78,82,0.18); color: #8a2c2f; }}
 #{instance_id} .night-action-row {{ margin: 3px 0; }}
 #{instance_id} .round-heading {{ font-size: 1.05em; font-weight: 700; margin: 18px 0 6px;
                                   border-bottom: 2px solid rgba(128,128,128,0.25); padding-bottom: 4px; }}
@@ -162,6 +171,27 @@ def _reveal_toggle_html(instance_id: str) -> str:
         f'<span class="toggle-label-hidden">Roles hidden — click to reveal roles</span>'
         f'<span class="toggle-label-shown">Roles shown — click to hide roles</span>'
         f"</label></div>"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Game ID banner
+# ---------------------------------------------------------------------------
+
+
+def _render_game_id_banner(game: dict) -> str:
+    """A copy-pasteable 'Game ID: xxxxx' line shown above every replay, so
+    students can cite exactly which game their HW answers refer to (see
+    HW3-5's request for a traceable game id) without having to dig the
+    filename out of a dropdown label or a code cell variable. Uses a
+    readonly <input> (not plain text) so triple-click / click-and-select
+    grabs just the id cleanly, with no surrounding label text included."""
+    short_id = short_game_id(game.get("game_id", "?"))
+    return (
+        '<div class="game-id-banner">'
+        f'Game ID: <input type="text" readonly value="{_esc(short_id)}" '
+        f'onclick="this.select()" class="game-id-input">'
+        "</div>"
     )
 
 
@@ -309,10 +339,14 @@ def _render_reveal_stage(game: dict) -> str:
             f'${meta["estimated_cost_usd"]:.4f} &middot; {meta.get("total_tokens", "?")} tokens</p>'
         )
 
+    winner = outcome["winner"]
+    winner_class = "village" if winner == "Village" else "mafia"
+    icon = "🏆" if winner == "Village" else "🔪"
+
     return (
         '<div class="reveal-block">'
-        f"<h3>Reveal &mdash; {_esc(outcome['winner'])} wins "
-        f"(round {_esc(outcome['ended_round'])})</h3>"
+        f'<div class="winner-banner {winner_class}">{icon} {_esc(winner)} wins! '
+        f"(round {_esc(outcome['ended_round'])})</div>"
         f"<p>{_esc(outcome['reason'])}</p>"
         f'<ul style="list-style:none;padding-left:0;">{"".join(rows)}</ul>'
         f"<p style=\"margin-top:12px;font-weight:700;\">Full night-action log:</p>"
@@ -445,6 +479,7 @@ def render_full(game: dict) -> str:
     final_dead = _dead_by_round_end(game, len(game["rounds"]) - 1) if game["rounds"] else set()
 
     parts = [_style_block(instance_id), f'<div id="{instance_id}">']
+    parts.append(_render_game_id_banner(game))
     parts.append(_reveal_toggle_html(instance_id))
     parts.append(_render_player_cards(game, final_dead))
     parts.extend(stages)
@@ -497,6 +532,7 @@ class StepReplay:
             return (
                 _style_block(self.instance_id)
                 + f'<div id="{self.instance_id}">'
+                + _render_game_id_banner(self.game)
                 + _reveal_toggle_html(self.instance_id)
                 + _render_player_cards(self.game, dead)
                 + "</div>"
@@ -564,21 +600,21 @@ def list_games(games_dir: str | Path = "games") -> list[Path]:
     return sorted(p for p in games_dir.glob("*.json") if p.is_file())
 
 
-def _game_summary_label(path: Path) -> str:
-    """One-line label for a game, safe to show before the reveal - outcome
-    (winner/round count/cost) is meta-game info, not a role/identity spoiler."""
-    try:
-        game = load_game(path)
-    except (json.JSONDecodeError, OSError):
-        return f"{path.name}  (could not read)"
+def short_game_id(game_id: str) -> str:
+    """Short, stable identifier for a game - the random suffix at the end
+    of its game_id (e.g. "mafia_2026-09-09_857669" -> "857669"), used both
+    in the dropdown label and the on-screen "Game ID" banner so students
+    can always tell which game their answers/observations refer to.
+    Deliberately excludes the embedded date - it's not meaningful to the
+    game itself and clutters the label."""
+    return game_id.rsplit("_", 1)[-1]
 
-    outcome = game.get("outcome", {})
-    meta = game.get("meta", {})
-    n_rounds = len(game.get("rounds", []))
-    winner = outcome.get("winner", "?")
-    cost = meta.get("estimated_cost_usd")
-    cost_str = f"${cost:.2f}" if isinstance(cost, (int, float)) else "?"
-    return f"{path.stem}  —  {n_rounds} round(s), {winner} won, {cost_str}"
+
+def _game_summary_label(path: Path) -> str:
+    """One-line dropdown label for a game. Deliberately shows ONLY the game
+    id - no round count, no winner, no cost - so picking a game from the
+    list can't hint at the outcome before you've actually watched it."""
+    return f"Game {short_game_id(path.stem)}"
 
 
 class GameBrowser:
