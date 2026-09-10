@@ -482,53 +482,42 @@ class StepReplay:
     def show(self) -> None:
         import ipywidgets as widgets
 
-        header_html = (
-            _style_block(self.instance_id)
-            + f'<div id="{self.instance_id}">'
-            + self._reveal_toggle_and_cards_placeholder()
-            + "</div>"
-        )
-        header = widgets.HTML(header_html)
-        output = widgets.Output()
-        button = widgets.Button(description="Next ▶", button_style="primary")
-
+        # The <style> block is scoped to #instance_id and only needs to be
+        # injected once per widget tree - it lives in cards_area (the first
+        # HTML widget shown) rather than being repeated into every stage
+        # update or a separate, never-displayed header widget.
         def render_current_cards() -> str:
             dead = _dead_ids_before_stage(self.game, self._stage_idx)
             return (
-                f'<div id="{self.instance_id}-cards">'
+                _style_block(self.instance_id)
+                + f'<div id="{self.instance_id}">'
                 + _reveal_toggle_html(self.instance_id)
                 + _render_player_cards(self.game, dead)
                 + "</div>"
             )
 
-        cards_area = widgets.HTML(
-            _style_block(self.instance_id) + f'<div id="{self.instance_id}">' + render_current_cards() + "</div>"
-        )
+        cards_area = widgets.HTML(render_current_cards())
+        output = widgets.Output()
+        button = widgets.Button(description="Next ▶", button_style="primary")
 
         def on_click(_):
+            # Show only the current stage - clear what was there before
+            # rather than appending, so the display doesn't grow unbounded
+            # as the instructor clicks through a game.
+            output.clear_output(wait=True)
             with output:
                 if self._stage_idx < len(self._stages):
                     display(HTML(f'<div id="{self.instance_id}">' + self._stages[self._stage_idx] + "</div>"))
                     self._stage_idx += 1
-                    cards_area.value = (
-                        _style_block(self.instance_id)
-                        + f'<div id="{self.instance_id}">'
-                        + render_current_cards()
-                        + "</div>"
-                    )
+                    cards_area.value = render_current_cards()
                     if self._stage_idx == len(self._stages):
                         button.description = "Done"
                         button.disabled = True
-                    elif "reveal-block" in self._stages[self._stage_idx] if self._stage_idx < len(self._stages) else False:
+                    elif "reveal-block" in self._stages[self._stage_idx]:
                         button.description = "Reveal ▶"
 
         button.on_click(on_click)
         display(cards_area, button, output)
-
-    def _reveal_toggle_and_cards_placeholder(self) -> str:
-        # Only used to size the initial header HTML widget; the live cards
-        # widget (cards_area) is what's actually shown/updated in show().
-        return _reveal_toggle_html(self.instance_id) + _render_player_cards(self.game, set())
 
 
 # ---------------------------------------------------------------------------
@@ -595,7 +584,12 @@ class GameBrowser:
         def on_change(change):
             if change["name"] != "value" or change["new"] is None:
                 return
-            output.clear_output()
+            # wait=True avoids a visible flash of emptiness, but the key
+            # fix is clearing at all: StepReplay.show() displays its own
+            # cards/button/output widgets into this output area on every
+            # call, so without clearing first, switching games N times
+            # left N stacked sets of "Next ▶" buttons behind.
+            output.clear_output(wait=True)
             with output:
                 game = load_game(change["new"])
                 if self.mode == "step":
