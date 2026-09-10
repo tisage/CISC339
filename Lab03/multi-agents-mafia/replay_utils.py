@@ -462,21 +462,27 @@ class StepReplay:
 
     Usage in a notebook cell:
         replay = StepReplay(game)
-        replay.show()   # renders player cards + a "Next ▶" button
+        replay.show()   # renders player cards + "◀ Previous" / "Next ▶" buttons
 
-    Each click reveals the next stage (night -> morning -> discussion ->
-    vote, per round, then the final reveal) in place below the button. This
-    is a pacing control for the instructor (pause where you want to talk),
-    not a "guess now" prompt baked into the notebook - see DESIGN.md Section
-    6/9 for that distinction. The role-reveal checkbox at the top is
-    independent of stage progression - an instructor can peek at roles
-    early for their own prep without that affecting what stage is showing.
+    "Next ▶" reveals the next stage (night -> morning -> discussion -> vote,
+    per round, then the final reveal); "◀ Previous" goes back one stage, in
+    case the instructor overshoots or a student wants to look at something
+    again. Only the current stage is ever shown - navigating doesn't grow
+    the display. This is a pacing control for the instructor (pause where
+    you want to talk), not a "guess now" prompt baked into the notebook -
+    see DESIGN.md Section 6/9 for that distinction. The role-reveal
+    checkbox at the top is independent of stage progression - an instructor
+    can peek at roles early for their own prep without that affecting what
+    stage is showing.
     """
 
     def __init__(self, game: dict):
         self.game = game
         self.instance_id = f"mafia-step-{uuid.uuid4().hex[:8]}"
         self._stages = _build_stage_htmls(game)
+        # 0 = nothing shown yet (only player cards, pre-Round-1). Otherwise
+        # _stage_idx is the 1-based count of stages revealed so far, i.e.
+        # self._stages[self._stage_idx - 1] is what's currently on screen.
         self._stage_idx = 0
 
     def show(self) -> None:
@@ -498,26 +504,48 @@ class StepReplay:
 
         cards_area = widgets.HTML(render_current_cards())
         output = widgets.Output()
-        button = widgets.Button(description="Next ▶", button_style="primary")
+        prev_button = widgets.Button(description="◀ Previous", disabled=True)
+        next_button = widgets.Button(description="Next ▶", button_style="primary")
 
-        def on_click(_):
-            # Show only the current stage - clear what was there before
-            # rather than appending, so the display doesn't grow unbounded
-            # as the instructor clicks through a game.
+        def render_current_stage() -> None:
+            # Single source of truth for what's on screen: re-derives
+            # everything from self._stage_idx so Next and Previous can
+            # never drift into inconsistent states with each other.
             output.clear_output(wait=True)
             with output:
-                if self._stage_idx < len(self._stages):
-                    display(HTML(f'<div id="{self.instance_id}">' + self._stages[self._stage_idx] + "</div>"))
-                    self._stage_idx += 1
-                    cards_area.value = render_current_cards()
-                    if self._stage_idx == len(self._stages):
-                        button.description = "Done"
-                        button.disabled = True
-                    elif "reveal-block" in self._stages[self._stage_idx]:
-                        button.description = "Reveal ▶"
+                if self._stage_idx > 0:
+                    display(
+                        HTML(
+                            f'<div id="{self.instance_id}">'
+                            + self._stages[self._stage_idx - 1]
+                            + "</div>"
+                        )
+                    )
+            cards_area.value = render_current_cards()
 
-        button.on_click(on_click)
-        display(cards_area, button, output)
+            prev_button.disabled = self._stage_idx == 0
+            at_end = self._stage_idx == len(self._stages)
+            next_button.disabled = at_end
+            next_button.description = "Done" if at_end else (
+                "Reveal ▶"
+                if self._stage_idx == len(self._stages) - 1
+                else "Next ▶"
+            )
+
+        def on_next(_):
+            if self._stage_idx < len(self._stages):
+                self._stage_idx += 1
+                render_current_stage()
+
+        def on_prev(_):
+            if self._stage_idx > 0:
+                self._stage_idx -= 1
+                render_current_stage()
+
+        next_button.on_click(on_next)
+        prev_button.on_click(on_prev)
+        button_row = widgets.HBox([prev_button, next_button])
+        display(cards_area, button_row, output)
 
 
 # ---------------------------------------------------------------------------
