@@ -516,9 +516,36 @@ class StepReplay:
     checkbox at the top is independent of stage progression - an instructor
     can peek at roles early for their own prep without that affecting what
     stage is showing.
+
+    Widget construction (cards_area/button_row/output) happens once, in
+    __init__ - only load_game() (see below) mutates state afterwards. This
+    matters for GameBrowser: switching the game dropdown reuses the same
+    StepReplay instance (via load_game) rather than building a brand-new
+    one. Repeatedly tearing down and recreating Button widgets inside a
+    just-cleared Output turned out to be unreliable in Colab specifically -
+    the Next/Previous buttons would silently fail to (re)appear after the
+    first game switch, even though the exact same code worked fine in
+    VS Code's notebook renderer. Keeping one long-lived set of widgets and
+    only ever updating their content/labels sidesteps that entirely.
     """
 
     def __init__(self, game: dict):
+        import ipywidgets as widgets
+
+        self.cards_area = widgets.HTML()
+        self.output = widgets.Output()
+        self.prev_button = widgets.Button(description="◀ Previous", disabled=True)
+        self.next_button = widgets.Button(description="Next ▶", button_style="primary")
+        self.next_button.on_click(self._on_next)
+        self.prev_button.on_click(self._on_prev)
+        self.button_row = widgets.HBox([self.prev_button, self.next_button])
+        self.load_game(game)
+
+    def load_game(self, game: dict) -> None:
+        """(Re)bind this replay to `game`, resetting progress to before
+        Round 1. Safe to call on an already-shown StepReplay - e.g. when a
+        GameBrowser dropdown switches to a different game - since it only
+        updates the existing widgets' content, never recreates them."""
         self.game = game
         self.instance_id = f"mafia-step-{uuid.uuid4().hex[:8]}"
         self._stages = _build_stage_htmls(game)
@@ -526,69 +553,60 @@ class StepReplay:
         # _stage_idx is the 1-based count of stages revealed so far, i.e.
         # self._stages[self._stage_idx - 1] is what's currently on screen.
         self._stage_idx = 0
+        self._render_current_stage()
 
-    def show(self) -> None:
-        import ipywidgets as widgets
-
+    def _render_current_cards(self) -> str:
         # The <style> block is scoped to #instance_id and only needs to be
         # injected once per widget tree - it lives in cards_area (the first
         # HTML widget shown) rather than being repeated into every stage
         # update or a separate, never-displayed header widget.
-        def render_current_cards() -> str:
-            dead = _dead_ids_before_stage(self.game, self._stage_idx)
-            return (
-                _style_block(self.instance_id)
-                + f'<div id="{self.instance_id}">'
-                + _render_game_id_banner(self.game)
-                + _reveal_toggle_html(self.instance_id)
-                + _render_player_cards(self.game, dead)
-                + "</div>"
-            )
+        dead = _dead_ids_before_stage(self.game, self._stage_idx)
+        return (
+            _style_block(self.instance_id)
+            + f'<div id="{self.instance_id}">'
+            + _render_game_id_banner(self.game)
+            + _reveal_toggle_html(self.instance_id)
+            + _render_player_cards(self.game, dead)
+            + "</div>"
+        )
 
-        cards_area = widgets.HTML(render_current_cards())
-        output = widgets.Output()
-        prev_button = widgets.Button(description="◀ Previous", disabled=True)
-        next_button = widgets.Button(description="Next ▶", button_style="primary")
-
-        def render_current_stage() -> None:
-            # Single source of truth for what's on screen: re-derives
-            # everything from self._stage_idx so Next and Previous can
-            # never drift into inconsistent states with each other.
-            output.clear_output(wait=True)
-            with output:
-                if self._stage_idx > 0:
-                    display(
-                        HTML(
-                            f'<div id="{self.instance_id}">'
-                            + self._stages[self._stage_idx - 1]
-                            + "</div>"
-                        )
-                    )
-            cards_area.value = render_current_cards()
-
-            prev_button.disabled = self._stage_idx == 0
-            at_end = self._stage_idx == len(self._stages)
-            next_button.disabled = at_end
-            next_button.description = "Done" if at_end else (
-                "Reveal ▶"
-                if self._stage_idx == len(self._stages) - 1
-                else "Next ▶"
-            )
-
-        def on_next(_):
-            if self._stage_idx < len(self._stages):
-                self._stage_idx += 1
-                render_current_stage()
-
-        def on_prev(_):
+    def _render_current_stage(self) -> None:
+        # Single source of truth for what's on screen: re-derives
+        # everything from self._stage_idx so Next and Previous can
+        # never drift into inconsistent states with each other.
+        self.output.clear_output(wait=True)
+        with self.output:
             if self._stage_idx > 0:
-                self._stage_idx -= 1
-                render_current_stage()
+                display(
+                    HTML(
+                        f'<div id="{self.instance_id}">'
+                        + self._stages[self._stage_idx - 1]
+                        + "</div>"
+                    )
+                )
+        self.cards_area.value = self._render_current_cards()
 
-        next_button.on_click(on_next)
-        prev_button.on_click(on_prev)
-        button_row = widgets.HBox([prev_button, next_button])
-        display(cards_area, button_row, output)
+        self.prev_button.disabled = self._stage_idx == 0
+        at_end = self._stage_idx == len(self._stages)
+        self.next_button.disabled = at_end
+        self.next_button.description = "Done" if at_end else (
+            "Reveal ▶"
+            if self._stage_idx == len(self._stages) - 1
+            else "Next ▶"
+        )
+
+    def _on_next(self, _):
+        if self._stage_idx < len(self._stages):
+            self._stage_idx += 1
+            self._render_current_stage()
+
+    def _on_prev(self, _):
+        if self._stage_idx > 0:
+            self._stage_idx -= 1
+            self._render_current_stage()
+
+    def show(self) -> None:
+        display(self.cards_area, self.button_row, self.output)
 
 
 # ---------------------------------------------------------------------------
@@ -663,21 +681,33 @@ class GameBrowser:
             value=None,
         )
         output = widgets.Output()
+        # For step mode, one StepReplay is built lazily on the first
+        # selection and then reused (via load_game) for every later
+        # dropdown switch - see StepReplay's docstring for why: recreating
+        # its Button widgets from scratch on every switch (the previous
+        # approach) was unreliable specifically in Colab, where the
+        # Next/Previous buttons would vanish after the first game switch.
+        step_replay_holder: dict[str, StepReplay] = {}
 
         def on_change(change):
             if change["name"] != "value" or change["new"] is None:
                 return
-            # wait=True avoids a visible flash of emptiness, but the key
-            # fix is clearing at all: StepReplay.show() displays its own
-            # cards/button/output widgets into this output area on every
-            # call, so without clearing first, switching games N times
-            # left N stacked sets of "Next ▶" buttons behind.
-            output.clear_output(wait=True)
-            with output:
-                game = load_game(change["new"])
-                if self.mode == "step":
-                    StepReplay(game).show()
+            game = load_game(change["new"])
+            if self.mode == "step":
+                if "replay" in step_replay_holder:
+                    step_replay_holder["replay"].load_game(game)
                 else:
+                    replay = StepReplay(game)
+                    step_replay_holder["replay"] = replay
+                    with output:
+                        replay.show()
+            else:
+                # wait=True avoids a visible flash of emptiness. "full"
+                # mode has no persistent widgets/state to preserve (it's
+                # just one HTML block per game), so clear-and-redisplay is
+                # simple and safe here.
+                output.clear_output(wait=True)
+                with output:
                     display(HTML(render_full(game)))
 
         dropdown.observe(on_change, names="value")
