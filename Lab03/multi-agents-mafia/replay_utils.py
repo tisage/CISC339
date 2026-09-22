@@ -120,7 +120,8 @@ def _style_block(instance_id: str) -> str:
 
 #{instance_id} .player-circle {{ display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 18px;
                                   justify-content: center; }}
-#{instance_id} .player-card {{ width: 108px; padding: 10px 8px; border-radius: 10px;
+#{instance_id} .player-card {{ width: 108px; min-height: 148px; box-sizing: border-box;
+                                padding: 10px 8px; border-radius: 10px;
                                 border: 2px solid rgba(128,128,128,0.25); text-align: center;
                                 transition: opacity 0.2s, filter 0.2s; position: relative; }}
 #{instance_id} .player-card.dead {{ opacity: 0.45; filter: grayscale(70%); }}
@@ -208,7 +209,12 @@ def _render_player_cards(game: dict, dead_ids: set[str]) -> str:
         badge_color = ROLE_BADGE_COLORS.get(role, "#8C8C8C")
         is_dead = aid in dead_ids
         dead_class = " dead" if is_dead else ""
-        dead_tag = '<span class="dead-tag">eliminated</span>' if is_dead else ""
+        # Always render the dead-tag span (just hidden via visibility when
+        # alive) so it reserves its line of space either way - otherwise a
+        # card's height changes the instant a player dies, which shifts
+        # every other card around it even though there's blank room below.
+        dead_tag_style = "" if is_dead else ' style="visibility:hidden"'
+        dead_tag = f'<span class="dead-tag"{dead_tag_style}>eliminated</span>'
         cards.append(
             f'<div class="player-card{dead_class}">'
             f'<div class="player-avatar" style="background:{color}">'
@@ -414,7 +420,9 @@ def _build_stage_htmls(game: dict) -> list[str]:
     stages: list[str] = []
     for round_log in game["rounds"]:
         round_num = round_log["round"]
-        stages.append(f'<div class="round-heading">Round {round_num}</div>')
+        # No separate "Round N" heading stage - _render_night_stage's own
+        # "Round N — Night" title already carries the round number, so a
+        # standalone heading in front of it would just repeat it.
         stages.append(_render_night_stage(round_num, round_log.get("night", {})))
         stages.append(_render_morning_stage(round_num, round_log["morning_announcement"]))
         if "day_discussion" in round_log:
@@ -438,8 +446,7 @@ def _dead_ids_before_stage(game: dict, stage_idx: int) -> set[str]:
     idx = 0
     for round_log in game["rounds"]:
         round_num = round_log["round"]
-        n_sub_stages = 1  # round heading
-        n_sub_stages += 1  # night
+        n_sub_stages = 1  # night
         n_sub_stages += 1  # morning
         has_discussion = "day_discussion" in round_log
         has_vote_block = "vote" in round_log or round_log.get("vote_skipped")
@@ -451,7 +458,7 @@ def _dead_ids_before_stage(game: dict, stage_idx: int) -> set[str]:
         round_start_idx = idx
         round_end_idx = idx + n_sub_stages - 1
 
-        if stage_idx >= round_start_idx + 2:  # past the morning-announcement stage
+        if stage_idx >= round_start_idx + 1:  # past the morning-announcement stage
             night_dead = round_log.get("night", {}).get("_eliminated_by_night")
             if night_dead:
                 dead.add(night_dead)
@@ -640,8 +647,20 @@ class GameBrowser:
             return
 
         options = [(_game_summary_label(p), str(p)) for p in self.paths]
+        # value=None at construction time is deliberate: the first game is
+        # rendered by setting dropdown.value *after* display() below, which
+        # fires this same on_change observer through the normal widget
+        # change-event path. Rendering it that way (rather than calling
+        # on_change(...) by hand right after display()) is what fixes an
+        # intermittent bug where the Next/Previous buttons silently failed
+        # to appear on first load (only showing up once you picked a game
+        # from the dropdown) - the manual call raced with the front-end
+        # still setting up this Output widget's comm, which is especially
+        # flaky for step mode since it displays a nested
+        # HTML+HBox(buttons)+Output tree into this Output.
         dropdown = widgets.Dropdown(
-            options=options, description="Game:", layout=widgets.Layout(width="600px")
+            options=options, description="Game:", layout=widgets.Layout(width="600px"),
+            value=None,
         )
         output = widgets.Output()
 
@@ -663,4 +682,4 @@ class GameBrowser:
 
         dropdown.observe(on_change, names="value")
         display(dropdown, output)
-        on_change({"name": "value", "new": dropdown.value})
+        dropdown.value = options[0][1]
