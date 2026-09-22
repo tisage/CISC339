@@ -643,12 +643,15 @@ class MafiaGame:
             if candidates:
                 result = self._ask(
                     detective,
-                    "It is night. Choose one living player to investigate. "
-                    "You will privately learn whether they are Mafia. Living "
-                    f"players: {', '.join(self.living_names())}. Set "
-                    "\"output\" to the exact name of the player you investigate.",
+                    "It is night. Choose one living player (not yourself) to "
+                    "investigate. You will privately learn whether they are "
+                    f"Mafia. Living players: {', '.join(self.living_names())}. "
+                    "Set \"output\" to the exact name of the player you "
+                    "investigate.",
                 )
-                target_id = self.name_to_id(result["output"]) or self.rng.choice(candidates)
+                target_id = self.name_to_id(result["output"])
+                if target_id not in candidates:
+                    target_id = self.rng.choice(candidates)
                 is_mafia = self.agents[target_id].role == "Mafia"
                 detective.private_knowledge[target_id] = is_mafia
                 night["detective_check"] = {
