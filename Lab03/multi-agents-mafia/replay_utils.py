@@ -536,9 +536,13 @@ class StepReplay:
         self.output = widgets.Output()
         self.prev_button = widgets.Button(description="◀ Previous", disabled=True)
         self.next_button = widgets.Button(description="Next ▶", button_style="primary")
+        self.restart_button = widgets.Button(description="⟲ Start Over", disabled=True)
         self.next_button.on_click(self._on_next)
         self.prev_button.on_click(self._on_prev)
-        self.button_row = widgets.HBox([self.prev_button, self.next_button])
+        self.restart_button.on_click(self._on_restart)
+        self.button_row = widgets.HBox(
+            [self.prev_button, self.next_button, self.restart_button]
+        )
         self.load_game(game)
 
     def load_game(self, game: dict) -> None:
@@ -584,9 +588,28 @@ class StepReplay:
                         + "</div>"
                     )
                 )
+            else:
+                # Explicit placeholder instead of leaving this area blank -
+                # this is what's on screen right after load_game() switches
+                # to a different game, or after "Start Over" - it's visible
+                # confirmation that the reset actually happened, even if the
+                # page is still scrolled down to wherever the previous
+                # content was (we can't reliably force-scroll the page back
+                # to the top - Colab renders this HTML in a sandboxed
+                # iframe, so scroll-into-view JS here can't reach it).
+                short_id = short_game_id(self.game.get("game_id", "?"))
+                display(
+                    HTML(
+                        f'<div id="{self.instance_id}">'
+                        f'<p><em>Game {_esc(short_id)} — ready. Click '
+                        f'"Next ▶" to begin Round 1.</em></p>'
+                        "</div>"
+                    )
+                )
         self.cards_area.value = self._render_current_cards()
 
         self.prev_button.disabled = self._stage_idx == 0
+        self.restart_button.disabled = self._stage_idx == 0
         at_end = self._stage_idx == len(self._stages)
         self.next_button.disabled = at_end
         self.next_button.description = "Done" if at_end else (
@@ -603,6 +626,11 @@ class StepReplay:
     def _on_prev(self, _):
         if self._stage_idx > 0:
             self._stage_idx -= 1
+            self._render_current_stage()
+
+    def _on_restart(self, _):
+        if self._stage_idx != 0:
+            self._stage_idx = 0
             self._render_current_stage()
 
     def show(self) -> None:
