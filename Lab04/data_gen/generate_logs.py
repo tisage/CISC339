@@ -32,6 +32,7 @@ load_dotenv(find_dotenv(usecwd=True))
 MODEL = "gpt-5-mini"
 BATCH_SIZE = 10
 DEFAULT_OUT = Path(__file__).resolve().parent / "data" / "logs.jsonl"
+MAX_RETRIES = 3
 
 
 class LogBatch(BaseModel):
@@ -67,23 +68,33 @@ async def generate_one_batch(
     client: AsyncOpenAI, scenarios: list[LogScenario], start_id: int, semaphore: asyncio.Semaphore
 ) -> list[LogEntry] | None:
     prompt = build_prompt(scenarios, start_id)
-    async with semaphore:
-        try:
-            resp = await client.chat.completions.parse(
-                model=MODEL,
-                messages=[{"role": "user", "content": prompt}],
-                response_format=LogBatch,
-                max_completion_tokens=4000,
-                reasoning_effort="minimal",
-            )
-        except Exception as e:
-            print(f"  [batch start_id={start_id}] API error: {e}")
-            return None
 
-    parsed = resp.choices[0].message.parsed
+    parsed = None
+    async with semaphore:
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                resp = await client.chat.completions.parse(
+                    model=MODEL,
+                    messages=[{"role": "user", "content": prompt}],
+                    response_format=LogBatch,
+                    max_completion_tokens=4000,
+                    reasoning_effort="minimal",
+                )
+                parsed = resp.choices[0].message.parsed
+                if parsed is None:
+                    raise ValueError(
+                        f"parse returned None, finish_reason="
+                        f"{resp.choices[0].finish_reason}"
+                    )
+                break
+            except Exception as e:
+                print(f"  [batch start_id={start_id}] attempt {attempt}/"
+                      f"{MAX_RETRIES} failed: {e}")
+                if attempt < MAX_RETRIES:
+                    await asyncio.sleep(2 ** attempt)
+
     if parsed is None:
-        print(f"  [batch start_id={start_id}] parse failed, finish_reason="
-              f"{resp.choices[0].finish_reason}")
+        print(f"  [batch start_id={start_id}] giving up after {MAX_RETRIES} attempts")
         return None
     return parsed.logs
 

@@ -48,6 +48,10 @@ BATCH_SIZE = 20            # flows requested per API call
 ATTACK_RATIO = 0.05        # fraction of records that are attacks (overall,
                            # not per-scenario - see scenarios.py for that)
 DEFAULT_OUT = Path(__file__).resolve().parent / "data" / "flows.jsonl"
+MAX_RETRIES = 3            # a lost batch silently skews the scenario mix
+                           # for the whole run, so retry transient
+                           # failures (network blips, rate limits) rather
+                           # than just dropping the batch
 
 
 class FlowBatch(BaseModel):
@@ -143,23 +147,32 @@ async def generate_one_batch(
         f"flow_{start_id + i:06d}": inst for i, inst in enumerate(instances)
     }
 
+    parsed = None
     async with semaphore:
-        try:
-            resp = await client.chat.completions.parse(
-                model=MODEL,
-                messages=[{"role": "user", "content": prompt}],
-                response_format=FlowBatch,
-                max_completion_tokens=8000,
-                reasoning_effort="minimal",
-            )
-        except Exception as e:
-            print(f"  [batch start_id={start_id}] API error: {e}")
-            return None
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                resp = await client.chat.completions.parse(
+                    model=MODEL,
+                    messages=[{"role": "user", "content": prompt}],
+                    response_format=FlowBatch,
+                    max_completion_tokens=8000,
+                    reasoning_effort="minimal",
+                )
+                parsed = resp.choices[0].message.parsed
+                if parsed is None:
+                    raise ValueError(
+                        f"parse returned None, finish_reason="
+                        f"{resp.choices[0].finish_reason}"
+                    )
+                break
+            except Exception as e:
+                print(f"  [batch start_id={start_id}] attempt {attempt}/"
+                      f"{MAX_RETRIES} failed: {e}")
+                if attempt < MAX_RETRIES:
+                    await asyncio.sleep(2 ** attempt)  # 2s, 4s
 
-    parsed = resp.choices[0].message.parsed
     if parsed is None:
-        print(f"  [batch start_id={start_id}] parse failed, finish_reason="
-              f"{resp.choices[0].finish_reason}")
+        print(f"  [batch start_id={start_id}] giving up after {MAX_RETRIES} attempts")
         return None
 
     pairs = []
