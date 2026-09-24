@@ -55,8 +55,12 @@ class NetworkFlow(BaseModel):
     flow_id: str = Field(description="Unique id, e.g. 'flow_000001'.")
     timestamp: str = Field(description="ISO-8601 timestamp, synthetic.")
 
-    src_ip: str = Field(description="Synthetic private-range source IP.")
-    dst_ip: str = Field(description="Synthetic private-range destination IP.")
+    src_ip: str = Field(description="Synthetic private-range source IP (the internal host).")
+    dst_ip: str = Field(
+        description="Synthetic destination IP - private-range for internal "
+        "traffic, or public-range for a host connecting out to an external "
+        "service (e.g. a public DNS resolver, a CDN, an attacker's C2 IP)."
+    )
     dst_port: int = Field(ge=0, le=65535)
     protocol: Protocol
 
@@ -66,11 +70,25 @@ class NetworkFlow(BaseModel):
     packet_count: int = Field(ge=0)
 
     # Discrete fields matching the existing HW4-3 Bayesian Network nodes.
+    #
+    # IMPORTANT semantic note: `traffic_level` is NOT a restatement of
+    # `label`. It represents what a simple, numeric-threshold monitoring
+    # rule would flag from the flow's own byte/packet/duration counts
+    # alone (see validators.py) - i.e. surface-level anomaly, not ground
+    # truth. A stealthy attack (BruteForce, Botnet beaconing, slow
+    # Exfiltration) can and often does have traffic_level="Normal" while
+    # label="attack", because its numeric footprint doesn't look extreme -
+    # that's exactly what makes it stealthy. This gap between
+    # `traffic_level` (what naive monitoring sees) and `label` (ground
+    # truth) is intentional: it's the reason Bayesian-network-style
+    # reasoning over multiple weak signals (Traffic, Firewall, Alert) is
+    # more useful than thresholding any single field.
     traffic_level: TrafficLevel
     firewall_action: FirewallAction
     alert_triggered: AlertTriggered
 
     # Ground-truth label (what the BN/ML model is ultimately predicting).
+    # Independent of traffic_level - see note above.
     label: Label
     attack_type: AttackType = "none"
 
