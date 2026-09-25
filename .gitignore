@@ -151,8 +151,9 @@ Lab03/multi-agents-mafia/games/test/
 # responses, written for local debugging only (see _dump_parse_failure)
 Lab03/multi-agents-mafia/parse_failures/
 
-# Lab 04 synthetic network-data generator - bulk generated data is too
-# large/expensive-to-regenerate for git; keep only small curated samples
-# (e.g. *_sample.csv) explicitly un-ignored per file as needed.
-Lab04/data_gen/data/*
-!Lab04/data_gen/data/.gitkeep
+# Lab 04 synthetic network-data generator - final data files (flows.jsonl,
+# sessions.jsonl, flows_bn_sample.csv, logs.jsonl) are committed: they're
+# small (well under GitHub's limits), the teaching notebook downloads them
+# by raw GitHub URL, and re-generating flows.jsonl isn't free (costs OpenAI
+# credits) or exactly reproducible (LLM output isn't deterministic even
+# with the same scenario seed). Nothing to ignore here currently.
