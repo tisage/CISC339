@@ -1,0 +1,371 @@
+Nisreen Abu-Khalil had worked in collections at Hayat Thermal Systems for eleven years, and in all that time no one had ever asked her opinion about a water heater.
+
+She sat on the third floor of a building in Shmeisani that had been beige once and was now the colour of weak tea. Her desk faced a window that looked onto the back of a bank, where a man in a blue uniform smoked at exactly ten-fifteen every morning, and beside the window was the filing cabinet she had inherited from her predecessor, a widower named Abu Tariq. He had retired to Madaba with a parting warning that the second drawer stuck in winter. It did. She kept a ledger in it, a real one, green cloth over cardboard, that duplicated everything in the computer system. The system had been installed in 2016 and had lost data twice. The ledger had never lost anything.
+
+Her job was simple. When a client did not pay, she called them. When they still did not pay, she called them again. She was polite, she was patient, and she kept a record of every excuse she was given, because excuses, she had learned, were the most honest thing a client ever told you. People lied about when the cheque was coming. They rarely lied about why they didn't want to send it.
+
+"The tank leaks," a dairy farmer in Mafraq would tell her. "Why should I pay for a tank that leaks?"
+
+And Nisreen would write in the ledger: *Mafraq, Haj Salem, 300L Hayat Classic, leak at lower weld, fourteen months.* Then she would forward the complaint to technical services and wait for them to ignore it.
+
+By her eleventh year the ledger held, among other things, the most complete record in the Hashemite Kingdom of how and when Hayat Thermal's products broke.
+
+---
+
+It started with the Coral Sands Hotel in Aqaba.
+
+The Coral Sands owed Hayat eighteen thousand dinars for a rooftop installation of forty solar collectors and four large storage tanks. The invoice was ninety-two days overdue, which put it into what Nisreen privately called the red pages. She called on a Tuesday, and the operations manager, a man named Hisham Daoud, picked up on the first ring, which was unusual, and began shouting immediately, which was not.
+
+"You want money? I'll give you money when my guests stop complaining. Do you know what it is to have a German couple at the front desk in a bathrobe telling you the shower is cold? In Aqaba? In August? We are four hundred metres from the sun, madam."
+
+Nisreen opened the ledger. She did not have the Coral Sands under complaints yet, but she had the Golden Tulip in Madaba, the Hotel Rania in Salt, and a hostel in Wadi Musa run by a Belgian woman who had written Nisreen a three-page letter in French.
+
+"How many rooms do you have, Mr. Hisham?"
+
+"What?"
+
+"Rooms. How many."
+
+"Eighty-six."
+
+"And the salesman sold you the four 500-litre tanks?"
+
+"He said it was ample. He used that word. *Ample.*"
+
+Nisreen ran her finger down a page. The 500-litre tanks were fine for a villa, adequate for a small guesthouse, and catastrophic for anywhere people showered at the same time. Every hotel that had bought them had complained between seven and nine in the morning and again between six and eight at night. She had seen it so many times that she no longer bothered forwarding those complaints to technical services, who would only say the units were operating within specification. They were. The specification was the problem.
+
+"Mr. Hisham," she said, "you were sold the wrong tanks. For eighty-six rooms with that many collectors, you need two of the 2000-litre commercial units, with the circulation pump. Not four small ones. The collectors are fine. You have more sun than you can use. You just have nowhere to keep the hot water."
+
+There was a silence on the line.
+
+"Who is this?"
+
+"Nisreen Abu-Khalil. Accounts receivable."
+
+"Accounts receivable," he repeated, as if she'd said she was calling from the moon. "And the salesman didn't know this?"
+
+Nisreen thought about Kareem Haddad, the salesman in question, who drove a white Mercedes that he parked diagonally across two spaces and who had once asked her, in the elevator, whether collections was "the department with the old lady." She had been thirty-nine at the time.
+
+"I can't speak for him," she said. "I can only tell you what I see. Every hotel over sixty rooms that bought the small tanks has called me. None that bought the large ones have called me. I am the person they call when they don't want to pay. So I think it's fair to say I'd know."
+
+Another silence. Then: "How much for the large tanks?"
+
+"I don't know. I'm not in sales."
+
+"Find out."
+
+She put him on hold, walked down the hall to the sales department, and found the price list pinned to a corkboard beside the coffee machine. She wrote the number on the back of her hand with a ballpoint, walked back, and read it off to him.
+
+"And if I order these, and the swap is done properly, you'll stop calling me about the eighteen thousand?"
+
+"If you pay the eighteen thousand, I will stop calling you about the eighteen thousand."
+
+He laughed. It was the first time anyone from a red-page account had laughed with her in some years. "Send me the order form."
+
+She did not know where the order forms were. She asked Rawan, the receptionist, who found one in a drawer under a box of dates someone had brought back from Umrah. Nisreen filled it out in her careful, upright handwriting, faxed it to Aqaba because the Coral Sands still had a fax, and when Hisham faxed it back signed, along with a confirmation that the eighteen thousand would be transferred Thursday, she walked it to the sales office and left it in Kareem's tray.
+
+The sales system required an employee number in the box marked *Originating Agent*. She had written her own, because that was what one wrote in boxes on forms. She did not think about it again.
+
+---
+
+Fadi Saleh, the Director of Sales, thought about it a great deal.
+
+Fadi was forty-four, had an MBA from a university in Leicester, and wore a lapel pin shaped like a sun that he'd had made himself. He had a dashboard on his second monitor that showed monthly sales by agent, and he looked at it the way some men look at football scores. When the Coral Sands order, nearly twenty-nine thousand dinars, appeared in the column of an agent number he didn't recognise, he assumed it was a data error. He called IT. IT said it wasn't.
+
+He came to find her on a Wednesday morning, at ten-fifteen, while the man behind the bank was smoking.
+
+"You're Nisreen?"
+
+"Yes."
+
+"The Coral Sands."
+
+"They paid," she said. "Thursday, they said. I'll confirm when it clears."
+
+"Not the payment. The order. You sold them two commercial units."
+
+"I didn't sell them anything. They had the wrong tanks. I told them which ones they needed."
+
+Fadi looked at her for a long moment. He had the expression of a man trying to decide whether he was being made fun of. Then he smiled, very broadly.
+
+"That," he said, "is the best description of consultative selling I've ever heard."
+
+---
+
+Nisreen thought that would be the end of it. It was not.
+
+Two weeks later, a man named Sheikh Abdelrahim called the general number from a mosque in Zarqa. The mosque's committee had raised money for a solar heating system for the ablution area, and they wanted to know what they should buy. Rawan, who was eating her lunch, transferred him to the first extension on the list on her screen. Fadi had sent around a memo asking that "consultation inquiries" go to Nisreen, and someone in IT had added her to the routing queue without telling her.
+
+"How many men pray at your mosque, Sheikh?"
+
+"On Friday, perhaps four hundred. On a normal day, at fajr, thirty. Forty in winter. More men are pious when it's cold." He chuckled.
+
+"Do they need hot water for wudu at fajr?"
+
+"In January? Madam, you have not felt the water in Zarqa in January."
+
+Nisreen flipped through the ledger. The mosque in Russeifa had bought a large system and complained that it overheated in summer and cracked a pipe. The mosque in Jabal Hussein had bought the smallest system and complained only that the committee chairman had been greedy and bought it from his brother-in-law, which was not technically a product complaint but which she had written down anyway.
+
+"You don't need a big system," she said. "You need hot water at dawn, mostly in winter, for about forty men. Friday you'll have four hundred men, but at midday, and the sun will already have heated everything. Get the 300-litre Classic with the electric backup. Not the Classic Plus. The Plus has a better warranty but the backup element burns out in hard water, and Zarqa's water is very hard. I have six complaints from Zarqa about that element."
+
+"The salesman I spoke with before said the Plus."
+
+"The Plus has a higher commission."
+
+She regretted that as soon as she said it. It was the kind of thing one thought and did not say. But the Sheikh only made a small sound, a sort of satisfied grunt, like a man who has finally been told the thing he already suspected.
+
+"May God reward you," he said. "Who do I send the money to?"
+
+---
+
+The mosque in Zarqa told the mosque in Russeifa, whose committee was considering a replacement after the cracked pipe, and the mosque in Russeifa told the Islamic school next door, and the school's director told her cousin, who was the facilities manager for a chain of four bakeries. Bakeries use enormous amounts of hot water. The facilities manager called the general line and asked for "the honest one."
+
+Rawan, who had by now heard the story of the Sheikh from Fadi three times, put him through to Nisreen without asking.
+
+By the end of the quarter, Nisreen's agent number had generated a hundred and four thousand dinars in orders. Kareem's, for the same period, was ninety-one.
+
+She had not made a single outgoing sales call. She had made, by her own count in the ledger, two hundred and seventeen collections calls, and fielded thirty-one inquiries that had been routed to her without her consent, and on every one of them she had done the same thing she always did. She had asked people what had gone wrong before, or what they were afraid would go wrong, and checked it against the green book, and told them.
+
+---
+
+Fadi called a meeting. It was held in the conference room on the fifth floor, which had a view of the Royal Cultural Centre and a long table made of some dark wood that the company had bought from a bankrupt law firm. Eleven salespeople attended. Nisreen attended because Fadi had sent her an invitation with the subject line *MANDATORY: Knowledge Transfer*, and she did not know how to decline something marked mandatory.
+
+"I want everyone to understand what's happening here," Fadi said. He had a projector going, and on the screen was a bar graph in which one bar, labelled with her name, stood above the others like a minaret. "Nisreen has never had sales training. She's never been to one of our workshops. She has no client list. And she's outperforming every one of you. So I've asked her to share her methodology."
+
+Everyone looked at her.
+
+Nisreen had worn her grey abaya, the one with the small embroidery at the cuff, and she sat very straight. She was aware that her hands were in her lap and that she had tucked them there like a schoolgirl.
+
+"I don't have a methodology," she said.
+
+"Just tell us what you do," Fadi said. "Walk us through a call."
+
+She thought about it. "I call people who owe us money."
+
+There was a pause, and then laughter, though not unkind laughter. A young salesman named Yazan, who had joined only that spring, actually wrote it down.
+
+"No," Nisreen said, "I mean that's my job. I call people who haven't paid. And when they haven't paid, there's usually a reason, and they tell me the reason, and I write it down." She hesitated. "After eleven years you have a lot of reasons written down."
+
+"Treat every client as though they already owe you," said Kareem slowly, from the far end of the table. He said it with the tone of a man trying an expensive suit on in a mirror. "Because, in a sense, they do. They owe you their trust."
+
+"That isn't what I—"
+
+"No, that's good," said Fadi. "That's very good, Kareem. Write that down, everyone."
+
+Everyone wrote it down.
+
+Nisreen tried again. "What I mean is, I know which products break."
+
+Fadi's smile flickered, just slightly, the way a lightbulb does before it decides to stay on. "Let's take that offline," he said.
+
+---
+
+She received, at the end of the quarter, a commission cheque for four thousand two hundred dinars. Her salary in collections was six hundred and fifty a month.
+
+She took it home to Jabal al-Weibdeh, to the flat she shared with her mother on the second floor of a stone building with a fig tree in the courtyard, and she put it on the kitchen table. Her mother, who was seventy-three and had worked thirty years as a primary school teacher in Irbid and had opinions on everything, put on her reading glasses and looked at it for a long time.
+
+"Is this a mistake?"
+
+"I don't think so."
+
+"What did you do?"
+
+"I told people not to buy things."
+
+Her mother took off her glasses. "And they paid you for this?"
+
+"The company paid me. Because the people bought other things instead."
+
+"Hm," said her mother. She picked the cheque up and held it to the light, as if checking a banknote for a watermark. "When your father sold carpets in the souk in Irbid, he used to say the best thing you can tell a customer is, 'This one is not for you.' Then they trust you with everything else." She set the cheque down. "Of course, he was a terrible businessman. We nearly lost the house twice."
+
+"I know, Mama."
+
+"Buy a new water heater," said her mother. "Ours makes a noise."
+
+---
+
+The noise, it turned out, was a failing thermostat, a known fault in the Hayat Classic manufactured between 2014 and 2017. Nisreen had nineteen complaints about it. She had never connected it to the clanking in her own kitchen, which she had assumed, all those years, was simply what water heaters did.
+
+---
+
+In the second quarter Fadi moved her desk.
+
+He did not ask her. She arrived on a Sunday and found that the filing cabinet with the sticking drawer had been carried up to the fifth floor and placed beside a glass-walled office with her name on the door, on a brass plate. The plate said *Nisreen Abu-Khalil, Senior Consultative Sales Advisor*. Someone had put a potted plant on her new desk, a pothos with a ribbon around the pot.
+
+Her collections work had been handed to a young man named Bassam, who had a degree in finance and who did not know the second drawer stuck.
+
+"I don't want to be in sales," she told Fadi.
+
+"You're not in sales. You're a consultative advisor."
+
+"What's the difference?"
+
+He thought about this. "About three thousand dinars a quarter," he said, and laughed, and patted the doorframe as he left.
+
+She went down to the third floor at lunch and found Bassam staring at his screen with an expression of slow despair.
+
+"The Haj in Mafraq says he won't pay because the tank leaks," Bassam said. "I told him that's not a reason not to pay. He hung up on me."
+
+"It's a reason," said Nisreen. "Did you write it down?"
+
+"Write it down where?"
+
+She went back upstairs, unstuck the second drawer, took out the green ledger, and carried it down and set it on his desk.
+
+"Everything goes in here," she said. "Every reason."
+
+He opened it, and turned the pages, and turned them again, and she watched his face change, the way hers must once have changed when Abu Tariq first showed it to her. Abu Tariq had started it. She had only kept it going.
+
+"This is—" Bassam said.
+
+"Yes."
+
+"Does Fadi know about this?"
+
+"I tried to tell him," said Nisreen.
+
+---
+
+In the third quarter came the Al-Shifa Hospital Group.
+
+Al-Shifa was building a new two-hundred-bed facility in Irbid and renovating two older hospitals in Ramtha and Jerash. The tender for hot water systems across all three sites was worth, by Fadi's estimate, somewhere between eight hundred thousand and a million dinars. Hayat Thermal had never landed a contract larger than two hundred thousand. Fadi had been chasing Al-Shifa for three years, and Kareem had taken their purchasing director to dinner at a restaurant in Abdoun where the bill had been the subject of a long, unpleasant memo from finance.
+
+The purchasing director was a woman named Dr. Ghada Mansour, who had been a hospital pharmacist for twenty years before moving into administration, and who was said to have reduced a German medical-equipment salesman to tears with a single question about sterilisation cycles.
+
+"She asked for you," Fadi said. He was standing in Nisreen's glass doorway with his hands in his pockets, and he looked, for the first time since she had known him, slightly afraid. "By name. Somebody at the bakeries told somebody at Al-Shifa. She's coming in on Thursday. She said she doesn't want a presentation. She wants to talk to the honest one."
+
+Nisreen looked at the pothos. It was doing well. She had been watering it.
+
+"Fadi," she said, "if she asks me which of our products she should buy for a hospital, I'm going to tell her."
+
+"Good. Tell her."
+
+"I'm going to tell her the truth."
+
+"Of course."
+
+"You don't understand," Nisreen said. "I don't think she should buy most of them."
+
+He took his hands out of his pockets.
+
+---
+
+She thought about it for three nights.
+
+She lay awake in the room she had slept in since she was nineteen and listened to her mother's water heater clank, because she had not yet replaced it. She thought that if she were honest with Dr. Ghada, Fadi would lose the contract, and she would lose the glass office, and then they would send her back down to the third floor. And it occurred to her somewhere around two in the morning, with a kind of guilty relief, that this was what she wanted.
+
+She did not like the fifth floor. She did not like the pothos, though she had become fond of it in the way one becomes fond of a houseguest's cat. She did not like that Kareem now said *treat every client as though they owe you* in meetings and that Yazan had it printed on a mug. She did not like that her old phone rang on Bassam's desk and that Bassam, good boy that he was, now walked the ledger up to her twice a day to ask her what things meant, which meant he had not yet learned to read it on his own, which meant she had not taught him properly, because she had been upstairs, being consulted.
+
+So on Thursday she would tell Dr. Ghada everything. She would hand her the list of every failure. Hayat would lose the contract, and Fadi would see that the honest one was a liability in the end, and she would go home.
+
+On Wednesday evening she went down to the third floor after everyone had left, unstuck the second drawer of Bassam's cabinet—it was winter again, nearly—and took the ledger home in a cloth shopping bag.
+
+---
+
+Dr. Ghada Mansour was a small, sharp-faced woman in her late fifties with silver-framed glasses and a navy hijab pinned with a plain pearl. She arrived precisely on time, declined coffee, accepted water, and sat down across from Nisreen in the fifth-floor conference room with the dark table from the bankrupt law firm. Fadi had wanted to sit in. Dr. Ghada had looked at him in the doorway until he excused himself.
+
+"I've had nine vendors present to me," she said. "All of them had slides. All of them told me their systems are the best in the region. One of them gave me a fountain pen." She took a pen out of her bag, looked at it, and put it on the table between them as though it were an exhibit at trial. "I don't want a pen. I'm told you are the person who tells people not to buy things."
+
+"Sometimes."
+
+"So tell me what not to buy."
+
+Nisreen put the ledger on the table.
+
+She had marked pages with strips of torn paper the night before. She opened it to the first strip.
+
+"Our Classic Plus line uses an electric backup element that fails in hard water. Irbid's water is hard. Ramtha's is harder. I have forty-one complaints. Average failure at nineteen months."
+
+Dr. Ghada's eyebrows rose very slightly. She took a small notebook out of her bag and began to write.
+
+"Our commercial 2000-litre tanks are good. I have three complaints in six years, and two of them were installation errors. But our circulation pumps—we don't make them, we buy them from a supplier in Turkey—have a seal that fails after about two years in continuous operation. A hotel runs the pump eighteen hours a day. A hospital runs it twenty-four. You would be replacing seals every year."
+
+"Can the seals be replaced with a better part?"
+
+Nisreen paused. Nobody had ever asked her that. She turned to a later page.
+
+"The Golden Tulip in Madaba replaced theirs with an Italian pump. Grundfos, I think. Their maintenance man told me when I called about an overdue invoice. They've had no problems since. But you'd have to buy the pumps separately."
+
+Dr. Ghada wrote that down.
+
+"Our Classic, the basic model, before 2017, had a thermostat fault. I have one at home. It clanks. After 2017 they fixed it." Nisreen turned a page. "Our flat-plate collectors are fine. Our evacuated-tube collectors are better in winter, but in Irbid, in that valley, you'll get hail every two or three years, and the tubes break. I have hail complaints from Irbid in 2019 and 2022. The flat plates don't break."
+
+She went on. It took forty minutes. She told Dr. Ghada which mounting brackets corroded in the Jordan Valley humidity and which ones didn't. She told her which installation subcontractor had been fired and quietly rehired under his cousin's name. She told her that the warranty on the commercial tanks said ten years, but that technical services had, in practice, refused six warranty claims on the grounds of "improper maintenance," and that all six had come from clients who had not bought the service contract, so if Al-Shifa did not buy the service contract they should assume the warranty was decorative.
+
+When she finished, she closed the ledger and sat with her hands on top of it.
+
+Dr. Ghada was silent for a long time. Then she tore three pages out of her small notebook, laid them side by side, and turned them around so that Nisreen could read them.
+
+It was a list. Flat-plate collectors, so many per site. Commercial 2000-litre tanks, so many per site. No Classic Plus. No evacuated tubes. A line that said *pumps—source separately—Italian*. A line that said *service contract—mandatory*. A line that said *brackets—stainless, not galvanised, confirm in writing*.
+
+"I've spent three years," said Dr. Ghada, "trying to find out what is actually wrong with what I'm being sold. My job is to buy things for buildings where people are sick. I can't afford to discover a fault on the third night of a heating failure in the paediatric ward. I have asked every company in this country to show me their failure data, and every company has told me they don't track it, or it's proprietary, or their failure rate is less than one percent." She tapped the ledger with one finger. "You have it in a notebook."
+
+"It isn't company data," said Nisreen. "It's just my notes."
+
+"It's the only honest document anybody has shown me in three years." She pushed the pages across the table. "Price that. Exactly that. If it's within the range we've budgeted, it's yours. All three sites."
+
+Nisreen looked down at the pages.
+
+"Dr. Ghada," she said, "I was trying to lose this."
+
+Dr. Ghada took off her glasses, polished them on the end of her hijab, and put them back on. For the first time, she smiled. It was a dry smile, and brief.
+
+"I know," she said. "That's why."
+
+---
+
+The final contract was for nine hundred and sixty thousand dinars, minus the pumps.
+
+Fadi did not speak for nearly a minute when she brought him the three handwritten pages, and when he did, it was only to say, "Italian pumps?" in a faint voice. He had been told, he said, by Kareem, that she had spent forty minutes in there telling Al-Shifa everything that was wrong with the company. Kareem had listened at the door.
+
+"I did," said Nisreen.
+
+Fadi sat down on the edge of his desk. He looked at the lapel pin shaped like a sun. He took it off and turned it over in his fingers.
+
+"Where did all that come from?"
+
+So she told him about the green ledger, and Abu Tariq, and the second drawer, and the excuses. He listened. She could see him wanting to interrupt, the way he always did, with a phrase he could put on a slide. Each time, he stopped himself.
+
+When she finished, he said, "Technical services told me our warranty claim rate was under two percent."
+
+"Technical services rejects the claims," said Nisreen. "So they don't count them."
+
+Fadi was quiet. Then he said, "I want a copy of that book."
+
+"It's not mine," she said. "It belongs to collections."
+
+---
+
+The commission on the Al-Shifa contract was large enough that Nisreen's mother, upon seeing the figure, said nothing at all for the first time in Nisreen's memory, and then went to her room and came back with the old prayer beads that had belonged to Nisreen's father and pressed them into her daughter's hand without explanation.
+
+Nisreen bought a new water heater, a basic Classic, post-2017, 200 litres, flat-plate collector, stainless brackets. She had it installed by the subcontractor who had not been fired. The clanking stopped. For a week her mother kept waking at night, startled by the quiet.
+
+She also asked to go back to the third floor.
+
+Fadi did not argue as much as she had expected. He said she could keep the title, and the commission structure, and that he would route the consultation inquiries down to her old desk. And he said one more thing, looking at the corkboard by the coffee machine as he said it, as though addressing the price list. Technical services had been told that from now on, every rejected warranty claim would be reviewed by collections before it was closed.
+
+"By Bassam," Nisreen said.
+
+"By whoever has the book."
+
+Kareem left in the spring for a company that sold commercial generators. He took the white Mercedes. Yazan kept the mug, though Nisreen noticed he'd started turning the printed side toward the wall.
+
+---
+
+The filing cabinet with the sticking drawer came back down in the elevator, carried by two men from the building's maintenance crew who complained about the weight the whole way. The pothos came too. Bassam had moved to the desk beside the window, so that Nisreen could have her old one back, and he had put the green ledger on top of the cabinet, where it could be reached without fighting the drawer.
+
+On her first morning back, Nisreen opened the receivables queue on her screen. The red pages had shrunk. The hotels had stopped calling. The mosques paid on time. The four bakeries had bought the right tanks and were paying in instalments, early. The Haj in Mafraq had received a new tank under warranty—the first warranty claim to be approved under the new review—and had sent a cheque, along with a tin of white cheese wrapped in cloth, which was now in the office refrigerator with a note on it in Rawan's handwriting that said DO NOT TOUCH.
+
+There was almost nothing for her to do.
+
+At ten-fifteen, the man behind the bank lit his cigarette.
+
+Nisreen opened the ledger to the most recent page. She ran her finger down it until she found the Coral Sands Hotel, Aqaba, two 2000-litre commercial units, paid in full, no complaints. She looked at it for a while. Then she picked up the phone and dialled.
+
+"Coral Sands, operations."
+
+"Mr. Hisham? It's Nisreen Abu-Khalil. From Hayat."
+
+There was a pause, and then a wary voice. "We paid. I have the receipt. I can fax it."
+
+"I know you paid," she said. "I'm not calling about the money." She pulled the ledger a little closer, and uncapped her pen. "I'm calling to ask about the hot water. Is it working?"
