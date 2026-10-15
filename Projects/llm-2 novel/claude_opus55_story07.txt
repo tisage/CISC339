@@ -1,0 +1,321 @@
+Title: claude_opus55_story07
+
+================================================================================
+
+The uranine came in a brown plastic jar no bigger than a coffee tin, and when Zuzana Ondrejková unscrewed the lid and tipped it into the bucket of water, the powder bloomed a red so dark it was nearly black. Then, as it dissolved, the color turned. By the time she had stirred it with a length of PVC pipe, the bucket held a green so vivid it seemed to give off its own light, though it was ten in the morning and the sky over the Gemer hills was the color of wet cement.
+
+"Like a nuclear accident," said Tibor Fazekas, the man from the waste company. He said it in Hungarian first, to the two drillers, and then in Slovak for her benefit, and everyone laughed except Zuzana, who had heard the joke at every tracer test she had run in twenty-six years.
+
+"It's what they put in ophthalmology drops," she said. "You could drink it."
+
+"After you, pani doktorka."
+
+She funneled the bucket into the borehole. The drillers followed it with a thousand liters from the water truck to push the dye down past the clay and into the limestone, and for a few minutes the five of them stood at the edge of the steel casing and listened to the water go down. It made a sound like a long swallow. Below them, somewhere in the dark, the karst opened into fissures and conduits that no one had ever mapped, because no one had ever needed to. The plateau above the village of Lúčka pod Skalou was sheep pasture and juniper scrub, and for thirty years it had also been the Bukovina landfill, a terraced hill of compacted municipal waste wrapped in high-density polyethylene. The company wanted to add a fourth cell to the east. The environmental assessment required a hydrogeological test proving that whatever might seep from the new cell would not reach the springs that fed the village water supply.
+
+Proving, Zuzana thought, was the wrong word. She had said so to Pavol when he brought her the contract. You don't prove a negative with dye. You set out your detectors, you wait, and either the water tells you something or it doesn't.
+
+"Then let it not tell us anything," Pavol had said, and smiled, and signed the cover page.
+
+---
+
+Five springs were listed in the contract, with coordinates, and she spent the rest of the day placing charcoal packets in them. Each packet was a small sachet of nylon mesh filled with activated carbon, tied with fishing line to a stake or a stone so that it hung in the current. The carbon would drink whatever passed through the water and hold it. Every two days she would collect the packets, replace them, and take the old ones back to the lab in Rožňava, where she would wash the carbon in an alkaline alcohol solution and run the eluate through the spectrofluorometer. If uranine had reached the spring, it would show as a peak at 515 nanometers, sharp and unmistakable, like a single raised hand in a lecture hall.
+
+The five springs were the municipal ones. Two were capped in concrete chambers with iron lids, which she opened with a key borrowed from the mayor's office. One fed a trough on the edge of a pasture. Two emerged from the limestone in the forest above the village and had been captured in plastic pipes that led to a reservoir. She knew them already. She had walked this valley in 1994 as a graduate student with a hammer and a compass, and her old field notebooks, which she had brought along mostly out of sentiment, were in the glovebox of the institute's Škoda with the spine taped twice.
+
+It was on the way back down, at four in the afternoon, that she saw the women at the bend of the river.
+
+The road from the reservoir came down through beech forest and then out along the Slaná, past the last houses of Lúčka, and past the settlement, which the village called "the colony" and which the regional development plan called a "marginalized community" and which consisted of perhaps forty houses of cinder block and corrugated metal on a strip of floodplain between the road and the water. Zuzana had driven past it a dozen times that week and noticed it the way one notices weather. Now she saw three women and a boy coming up from the riverbank with plastic jerrycans, two in each hand, the kind that had once held engine oil or cleaning concentrate, and she saw that they were not coming from the river itself but from a spot a little upstream, where a willow leaned over a pool.
+
+She pulled onto the verge. She took the notebook out of the glovebox and turned the pages until she found it: a sketch from August 1994, the river, the willow, a circle with a dot in it. *Periodic spring, discharge est. 0.5 l/s, temp. 9.2°C, dry in late summer some years. Local name "Jazierko."* A little pond.
+
+It wasn't in the contract. It wasn't connected to the municipal network. It was below the village, not above it, which was why nobody had thought of it; the contract assumed that the danger, if any, would come down the slope the way water seems to. But the karst did not care about slopes. She had seen dye go uphill, in the sense that it surfaced in a valley no one had expected, on the far side of a ridge.
+
+She had six packets left in the box on the back seat. She took one and a stake and walked down.
+
+The pool was clear, the bottom a mosaic of pale stones and black leaves. Water welled up in a slow pulse at one end, shaking the sand, and ran out the other end in a trickle to the river. Someone had laid a short length of drainpipe at the outflow so a jerrycan could be filled under it. A woman in a purple fleece was kneeling there with the last can, and she watched Zuzana come down the bank without getting up.
+
+"Dobrý deň," Zuzana said.
+
+"Dobrý." The woman looked at the stake and the little mesh bag. "What's that?"
+
+"It's for measuring the water."
+
+"Measuring what?"
+
+Zuzana found that she didn't want to say *landfill*, and felt a small embarrassment at not wanting to. "Where it comes from," she said. "We put a color into the ground up on the hill, and we see where it comes out."
+
+"Color." The woman stood, wiping her hands on her jeans. She was perhaps thirty-five, though Zuzana had learned not to trust her own guesses about people who did hard work outdoors. "Will it come out here?"
+
+"Probably not."
+
+"But you're putting one here."
+
+"Just to be thorough."
+
+The woman considered this. She looked up the hill, toward where the landfill sat behind the ridge, invisible from here. Then she looked at Zuzana with an expression that Zuzana would think about for a long time afterward. It was not suspicion, exactly. It was the look of someone who has been told many things by people in clean jackets and has learned to wait and see which ones turn out to be true.
+
+"Erika," the woman said, and offered her hand, which was cold from the water.
+
+"Zuzana."
+
+"You'll tell us? If it comes out?"
+
+"It won't be anything dangerous," Zuzana said. "The color itself, I mean. It's harmless."
+
+"That's not what I asked," said Erika, and picked up her cans.
+
+---
+
+The first collection came back clean. So did the second. Zuzana ran the eluates on the old Perkin-Elmer in the basement lab, which had a fan that shrieked when it started and a habit of drifting in the afternoons, so she calibrated it every morning against standards she made herself. She plotted the curves on her laptop. Five flat lines, with the small background hump that all natural water had. And the sixth: flat as well.
+
+Pavol came down on the fourth day with two coffees from the machine upstairs. He was sixty-three, heavy, with the kind of mustache that had gone out of fashion in 1989 and that he refused on principle to shave. He had been her supervisor for her doctorate and her director for eleven years, and for the last six he had kept the regional office of the institute alive more or less by force of personality, signing contracts for municipalities and quarries and wind-farm developers while Bratislava cut the budget and cut it again.
+
+"So," he said. "Our friends at Bukovina."
+
+"Nothing yet."
+
+"Beautiful." He put the coffee by her elbow. "You know what Fazekas told me? They want the report by the end of October so they can file before the new year. If it's clean, it goes to the district office, the district office signs, and they break ground in spring. And then, Zuzka, I will have a nice relationship with a company that has four more sites in Košice region needing exactly this kind of work."
+
+"It's day four," she said. "The karst here can be slow. I'd want to sample for six weeks at least."
+
+"The contract says thirty days."
+
+"I know what the contract says."
+
+He looked at her screen. "What's number six?"
+
+"An extra point. The spring by the colony."
+
+"We're not being paid for an extra point."
+
+"It's one packet. I bought the charcoal myself."
+
+He laughed and patted her shoulder and went back upstairs, and she sat for a while drinking the coffee, which was too sweet, and looking at the six flat lines, and feeling something she could not name and did not like, which was relief.
+
+---
+
+On the eleventh day the sixth line was not flat.
+
+She saw it come up on the screen while the scan was still running, the trace climbing past the background and then climbing more, and she sat back from the desk and let it finish. The peak was at 514 nanometers. It was not large, but it was not ambiguous either. It was the shape of a thing she had seen a hundred times on a hundred screens, the shape that meant *here*.
+
+Her first thought was that she had done it herself.
+
+It was the correct first thought, and she took it seriously. She had handled the uranine on the plateau. She had stirred it with her own hands, in nitrile gloves, but gloves leak and dust travels. Uranine was absurdly potent; a few micrograms on a thumb could contaminate a sample. She went back through her logbook. She had changed her clothes after the injection. She had placed the sixth packet on the same afternoon, with the same hands. Had she washed them? She had. She believed she had.
+
+The other five were clean, and she had handled those as well.
+
+She ran the eluate again. Same peak. She ran a blank, a packet she had kept sealed in her desk drawer since the start, and the blank was flat. She cleaned the cuvettes with acid and ran it a third time.
+
+It was after eight in the evening when she turned off the machine. The building was empty except for the guard watching a football match on his phone in the lobby. She drove home to her flat on Šafárikova Street, and she did not call anyone, and she did not sleep well, and at six the next morning she was back in the Škoda with a box of fresh packets, new gloves, a cooler, and a sealed bottle of distilled water for a field blank.
+
+---
+
+Erika's son was at the pool when she arrived, though it was a school day. He was eleven or twelve, thin, in a Barcelona shirt three sizes too big, and he was sitting on the bank throwing pebbles at the drainpipe with great accuracy.
+
+"Mama's at the doctor," he said, before she could ask. "With my sister."
+
+"Shouldn't you be in school?"
+
+"Bus didn't come." He shrugged. "It doesn't, sometimes. If it rains."
+
+It had not rained in four days. She did not say so. She knelt by the pool and drew out the old packet on its fishing line, and then she did something she had never done in a field test before. She asked the boy his name, which was Denis, and she asked him if he would help her, and when he came over she had him write the date and the time on the label of each bag in his own handwriting, and then she photographed him holding the bag, with the pool and the willow behind him, and her phone's timestamp in the corner.
+
+"What's it for?" he asked.
+
+"So that someone else knows I didn't cheat."
+
+"Who'd think you cheat?"
+
+"Lots of people, maybe."
+
+He liked that. He wrote the next label with his tongue between his teeth.
+
+She took a water sample as well, a grab sample in an amber bottle, and a field blank, and she put a fresh packet in, and then she drove up to the five other springs and did the same thing, and then she went back to the pool, because she couldn't think of a reason not to, and sat on the bank beside Denis for a while.
+
+"Is it in there?" he said. "The color?"
+
+"Maybe. A little."
+
+He leaned over the water. "I don't see anything."
+
+"You wouldn't. It's too little to see."
+
+"Then how do you know?"
+
+She tried to explain. The charcoal, the alcohol, the machine that shone a particular light and measured another light coming back. He listened with polite incomprehension. Then she remembered the UV torch in the bottom of her field bag, which she carried for checking dye at injection sites, and she took it out and showed him how it made his white shoelaces glow blue. He was delighted. He shone it on his fingernails, on her teeth, on the inside of his own mouth.
+
+"Can you shine it on the water?"
+
+"It won't show anything," she said. But she did it anyway, because it was a gray morning and the willow made a deep shade over the pool, and she cupped her hand around the lens and pointed it down to where the spring welled up through the sand.
+
+Nothing. Pale stones, black leaves. The faint violet of the lamp.
+
+"Nothing," said Denis, disappointed.
+
+"Good," she said, and then, because she was a scientist and the word was not accurate, she said, "Nothing we can see."
+
+---
+
+The second sample was positive. The concentration in the grab sample was higher than she'd guessed: eleven parts per billion. Not visible to the eye in daylight, but close to it. The packets from the five municipal springs remained clean. The field blank was clean.
+
+She ran it twice more and then sent a split of the grab sample, by courier, to a university lab in Bratislava, to a man named Igor whom she had known since her doctorate and whose only virtue, as far as she had ever been able to tell, was that he was meticulous to the point of insanity. She told him nothing about where the sample came from. She asked him to screen for xanthene dyes.
+
+Then she went upstairs and knocked on Pavol's door.
+
+He listened without interrupting, which was not like him. When she had finished he took off his glasses and rubbed his eyes with the heels of his hands.
+
+"The colony," he said.
+
+"Jazierko. Yes."
+
+"Which is not in the contract."
+
+"Pavol."
+
+"I'm just stating the facts. You're the one who's always telling me to state the facts." He put his glasses back on. "And the five contracted points are clean."
+
+"So far."
+
+"So far. And the contract asks one question: does the proposed cell pose a risk to the municipal water supply of Lúčka pod Skalou. And the answer, based on thirty days of monitoring, at the points specified by the district office, is no."
+
+"The answer is that the dye went somewhere," she said, "and we know where it went. It went under the river terrace and came up in the spring that forty houses drink from."
+
+"Forty houses that are not connected to the municipal supply."
+
+"Because the mayor won't connect them."
+
+"That," Pavol said, "is a political question, and we are not politicians."
+
+She sat down in the chair across from his desk, the one with the split vinyl seat that every visitor had to perch on carefully. Through the window behind him she could see the cathedral tower and, beyond it, the brown shoulder of the hills.
+
+"Do you remember Jelšava?" she said.
+
+He was quiet.
+
+"You came to the house once. In 1991, when you were doing the dust survey. My father made you drink slivovica in the kitchen and told you that the magnesite works had been coating the town in white for forty years and the doctors said it was nothing. Remember? Every windowsill. Every car. The snow was gray. You took samples off our balcony."
+
+"I remember."
+
+"And you published."
+
+"I published," he said, "in a journal that eleven people read, and nothing happened, and the plant kept running until the market killed it, and your father died of emphysema anyway, Zuzka. I'm sorry. I am. But don't make this into that."
+
+"I'm not making it into anything."
+
+"You are." He leaned forward. "Listen to me. Here is what we do. We write the report as contracted. Five points, clean, thirty days. And we add an appendix. 'During the course of the study, an additional, non-contracted monitoring point was established at an unregistered spring. Elevated fluorescence was recorded. Further investigation recommended.' Fine. It's on paper. It's honest. Nobody can say we hid it."
+
+"Nobody will read the appendix."
+
+"That isn't our responsibility."
+
+"Then whose is it?"
+
+He spread his hands. It was a gesture she had seen him make at a hundred meetings with ministry officials, the gesture of a reasonable man surrounded by an unreasonable world.
+
+"You know what our budget is next year," he said. "You know what it's going to be if the Bukovina people take their business to Geoconsult in Košice, which they will, and then tell the other four sites to do the same. You know your contract comes up for renewal in March."
+
+"Is that a threat?"
+
+"It's arithmetic," he said, and for the first time he sounded tired rather than reasonable. "I'm not threatening you. I'm sixty-three. I'm trying to keep a light on in this building until I'm sixty-five. That's all I'm trying to do."
+
+---
+
+Tibor Fazekas called her two days later, on her personal number, which she had not given him.
+
+He was friendly. He was always friendly. He said that Pavol had mentioned there was some question about an additional sampling point, and he wanted her to know that the company took community relations very seriously. He said that the settlement's water situation was, frankly, a disgrace, and that the company had for some time been discussing with the mayor's office a goodwill initiative to fund a connection to the municipal main. A pipe, a standpipe, maybe two. It would cost, he said, less than she would think. It was the kind of thing the company liked to do. It would be good for everyone.
+
+"And the new cell?" she said.
+
+"The new cell will have a double liner and leachate collection to European standard," he said. "Better than the old ones. You've seen the designs."
+
+"I've seen the designs for the old ones too."
+
+There was a pause. "Pani doktorka," he said, still friendly. "I'm offering to give these people clean water. I'm not sure what else you want."
+
+After he had hung up she stood at her kitchen window for a long time. It would be good, she thought. A standpipe at the edge of the settlement. Erika would not have to carry jerrycans up the bank. Denis would not drink from the pool. And the dye would still come out at Jazierko, and nobody would be drinking it, and the cell would be built, and in ten years or twenty, when the liner did what liners did, the leachate would follow the same fissures the uranine had found, into the same water, under the same river terrace, and come out wherever it came out. Maybe only at Jazierko. Maybe at the municipal springs too, which the thirty-day test had not reached, but which nobody could promise a forty-day test or a ninety-day test would not reach.
+
+She did not know. That was the thing she kept returning to. She did not know, and the only honest thing she had was the not-knowing and the one peak at 514 nanometers that said the ground under Lúčka was more open than anyone had wanted it to be.
+
+She called the mayor's office the next morning and asked, as a matter of background for her report, whether there were any plans to connect the settlement to the water main. The secretary put her through to the mayor, Ladislav Kereš, who told her in a voice like a closing door that the settlement was built on land of uncertain ownership, that many of the structures were not legally registered, that connection would require a feasibility study the municipality could not afford, and that in any case he had heard nothing from any company about funding anything.
+
+---
+
+Igor's results came by email on a Sunday night. *Uranine (sodium fluorescein), confirmed by HPLC and fluorescence. 10.6 µg/L. What on earth are you doing, Zuzka?*
+
+She wrote the report over the next nine days. She wrote it the way she had been taught to write, in the passive voice and the past tense, with every claim tied to a figure and every figure tied to a sample number. She described the injection and the five contracted monitoring points and their results. She described the sixth point. She did not put it in an appendix. She put it in Section 4, Results, and she gave it a breakthrough curve built from the samples she had kept taking every two days, the concentration rising, peaking on day fifteen, and beginning its long slow tail. She included Igor's confirmation. She included Denis's handwriting and her photographs. She included the 1994 notebook page, scanned. In Section 5, Interpretation, she wrote that the data demonstrated a direct hydraulic connection between the proposed cell site and a spring used as a primary drinking water source by an estimated one hundred and sixty residents, with a peak travel time of approximately fifteen days, and that the absence of tracer at the contracted municipal points within the thirty-day study period could not be taken as evidence that no connection existed to those points over longer time frames. In Section 6, Recommendations, she wrote three sentences, and then deleted two of them, and left the one that said the proposed cell should not be approved on the basis of the present study.
+
+She took it upstairs.
+
+Pavol read it at his desk while she waited. He read all of it, every page, which took forty minutes. Then he squared the stack, slid it back across the desk to her, and said, "I won't sign this."
+
+"I know."
+
+"It's a good report."
+
+"I know that too."
+
+"It's the best thing you've written in years." He looked at the window. "If I sign it, Fazekas goes to Geoconsult, and Geoconsult runs a thirty-day test at five points and finds nothing, because there is nothing at those five points, and they file it, and the district office approves it. Do you understand? This changes nothing except who gets paid."
+
+"Then it changes nothing," she said. "But it'll exist."
+
+He did not answer.
+
+"I'll submit it as principal investigator," she said. "Under my name. The institute doesn't have to endorse it."
+
+"The contract is with the institute."
+
+"Then I'll send it to the district office and the environmental inspectorate and the water authority separately. As a citizen. They can do what they want with it."
+
+"They'll do nothing with it."
+
+"Probably," she said.
+
+He sat back. For a moment he looked very old to her, older than her father had been at the end, and she thought he might say something about Jelšava, about the balcony and the white dust and the eleven people who had read his paper. But he only said, "March," and she said, "Yes," and went back down to the basement.
+
+---
+
+She sent it on a Thursday. She sent a copy, as well, to the mayor of Lúčka, and to a reporter at the regional paper in Košice whose name she found on a story about a cyanide spill in Rožňava district three years before, and, after some hesitation, to an office in Bratislava that worked on Roma community rights, whose address she found on a pamphlet in the waiting room of the hospital where her father had died.
+
+For two weeks nothing happened.
+
+Then several things happened at once. The reporter called and asked her to repeat, on the record, the number of residents drinking from the spring, and she repeated it, and the story ran on page five under a photograph of the landfill taken from the air. Fazekas's company issued a statement calling the study unauthorized, methodologically unsound, and outside the contracted scope. The district office announced that its review of the expansion would be "extended pending additional information." The regional office of the institute received a letter from the company's lawyers, which Pavol did not show her, though she knew about it because the secretary told her. And the water authority sent a technician named Marek, a young man with a ponytail and a hard plastic case, who took his own samples at Jazierko and came back with his own results, which were lower than hers because the tail of the curve was lower by then, but which were not zero.
+
+A week after that, someone from the authority came and hammered a metal sign into the bank beside the willow. VODA NEVHODNÁ NA PITIE. Water unfit for drinking.
+
+---
+
+Her contract was not renewed in March. Pavol told her himself, in his office, with the door closed. He had found her a three-month extension through a European project on soil moisture monitoring, which was the most he could do, and he had written her a reference that she later read and found generous to the point of embarrassment. He did not apologize and she did not ask him to. Geoconsult took over the Bukovina work. The expansion was approved in June, with conditions: a triple liner, a monitoring well program, quarterly sampling at seven points, including Jazierko. Zuzana read the conditions in the district office's online bulletin, at her kitchen table, with a cup of tea going cold beside her, and she could not decide whether they were a victory, and after a while she stopped trying to decide.
+
+In September, between applications, she drove out to Lúčka.
+
+The sign was still there by the willow. Someone had spray-painted over the last word, so that it said only WATER UNFIT FOR, which seemed to her a fair summary of a great deal. The pool was low; it was late summer, the dry part of the year, and the spring barely shook the sand.
+
+Up by the road, at the edge of the settlement, there was a standpipe. It was a gray iron post with a lever tap, set in a small concrete pad, and a hose ran from it across the dirt to a blue plastic tank on a pallet. There was a queue: four women, two men, a girl with a pushchair full of empty bottles. Erika was third in line. She saw Zuzana getting out of the car and lifted her chin in greeting but did not leave her place.
+
+Zuzana walked over.
+
+"The village put it in," Erika said. "In May. After the newspaper. The mayor came himself and cut a ribbon." She smiled without much warmth. "There's one tap for everyone. It runs slow. In the morning you wait an hour."
+
+"I'm sorry."
+
+"For what? It's clean." She shifted her cans. "Denis said you lost your job."
+
+"Something like that."
+
+"Because of us?"
+
+Zuzana thought about it. "Because of the water," she said.
+
+Erika looked at her for a moment with that same expression from the first day, the waiting one, and then something in it settled, the way sediment settles in a jar. She didn't say anything. The man at the tap finished and stepped aside, and the next woman stepped up, and the line moved.
+
+Denis came running from somewhere behind the houses, taller, in a different football shirt, this one actually his size. He stopped in front of her, out of breath.
+
+"Do you still have the light?" he said. "The purple one?"
+
+She did. It was in her bag, where it always was. She gave it to him, and he shone it on his shoelaces, on his fingernails, on the white letters of the sign down by the willow, and then he went down the bank and crouched over the pool and pointed it at the water, his hand cupped around the lens the way she had shown him.
+
+"Nothing," he called up.
+
+"Nothing you can see," said Zuzana.
+
+She stood by the standpipe until Erika had filled her cans. Then, because the girl with the pushchair was struggling with the lever, she held it down for her, and the water came out cold and slow and clear into the first of the bottles, and she watched it rise.
