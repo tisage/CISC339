@@ -1,0 +1,698 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>CISC 339 Final Report Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* layout concept: a left "notebook spine" rail of numbered checkpoints that the
+   whole page scrolls past, like marginalia down the side of an annotated paper draft */
+:root{
+  color-scheme: light;
+  --ink: #2b2620;
+  --ink-soft: #5c5346;
+  --paper: #faf6ee;
+  --paper-raised: #f1ead9;
+  --rule: #d9cdb4;
+  --accent: #a14b2e;
+  --accent-soft: #e8d2c4;
+  --good: #3f6b4f;
+  --good-soft: #dce8de;
+  --bad: #9c3b3b;
+  --bad-soft: #f1dad7;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Source Sans 3", -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ink: #ece4d4;
+    --ink-soft: #b9ad99;
+    --paper: #221f1a;
+    --paper-raised: #2b2721;
+    --rule: #453f34;
+    --accent: #e08658;
+    --accent-soft: #4a3327;
+    --good: #7fb894;
+    --good-soft: #27362b;
+    --bad: #e08484;
+    --bad-soft: #3a2626;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ink: #ece4d4;
+  --ink-soft: #b9ad99;
+  --paper: #221f1a;
+  --paper-raised: #2b2721;
+  --rule: #453f34;
+  --accent: #e08658;
+  --accent-soft: #4a3327;
+  --good: #7fb894;
+  --good-soft: #27362b;
+  --bad: #e08484;
+  --bad-soft: #3a2626;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+}
+img{max-width:100%;}
+[hidden]{display:none!important;}
+
+.wrap{
+  max-width:860px;
+  margin:0 auto;
+  padding-block: 2.5rem 5rem;
+}
+
+/* ---------- header ---------- */
+.masthead{
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 2.5rem;
+}
+.masthead .eyebrow{
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.masthead h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 5vw, 2.7rem);
+  line-height:1.08;
+  margin:0;
+  text-wrap: balance;
+}
+.masthead p.sub{
+  margin:0;
+  max-width: 62ch;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+}
+.masthead .meta{
+  display:flex;
+  gap:1.2rem;
+  flex-wrap:wrap;
+  margin-top:.4rem;
+  font-family: var(--font-mono);
+  font-size:.78rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- section scaffolding ---------- */
+section.block{
+  position:relative;
+  padding-left: 3.1rem;
+  margin-bottom: 3.2rem;
+}
+section.block::before{
+  content: attr(data-step);
+  position:absolute;
+  left:0;
+  top:.1rem;
+  width:2.3rem;
+  height:2.3rem;
+  border-radius:50%;
+  border:2px solid var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family: var(--font-display);
+  font-weight:600;
+  font-size:1.05rem;
+  background: var(--paper);
+}
+section.block::after{
+  content:"";
+  position:absolute;
+  left: 1.14rem;
+  top: 2.5rem;
+  bottom: -1.8rem;
+  width:2px;
+  background: var(--rule);
+}
+section.block:last-of-type::after{ display:none; }
+
+section.block h2{
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 .2rem;
+  text-wrap: balance;
+}
+section.block .tag{
+  font-family: var(--font-mono);
+  font-size:.72rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color: var(--ink-soft);
+  margin-bottom: .9rem;
+  display:block;
+}
+section.block > p{ max-width: 64ch; }
+
+/* ---------- paper picker cards ---------- */
+.paper-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:1rem;
+  margin-top:1rem;
+}
+@media (max-width:620px){ .paper-grid{ grid-template-columns:1fr; } }
+.paper-card{
+  background: var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:1.1rem 1.2rem;
+}
+.paper-card .letter{
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  color:var(--accent);
+  letter-spacing:.08em;
+}
+.paper-card h3{
+  font-family: var(--font-display);
+  font-size:1.08rem;
+  margin:.3rem 0 .4rem;
+  line-height:1.3;
+}
+.paper-card p{ margin:0; font-size:.92rem; color:var(--ink-soft); }
+.paper-card .fit{
+  display:inline-block;
+  margin-top:.6rem;
+  font-size:.8rem;
+  font-weight:600;
+  color: var(--accent);
+}
+
+/* ---------- citation style comparison ---------- */
+.cite-table{
+  margin-top:1rem;
+  border:1px solid var(--rule);
+  border-radius:4px;
+  overflow:hidden;
+}
+.cite-row{
+  display:grid;
+  grid-template-columns: 90px 1fr;
+  border-top:1px solid var(--rule);
+}
+.cite-row:first-child{ border-top:none; }
+.cite-row .label{
+  padding:.75rem .8rem;
+  background: var(--paper-raised);
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  letter-spacing:.06em;
+  color: var(--ink-soft);
+  display:flex;
+  align-items:center;
+}
+.cite-row .sample{
+  padding:.75rem 1rem;
+  font-size:.88rem;
+  font-family: var(--font-mono);
+  line-height:1.5;
+  overflow-x:auto;
+}
+.cite-row .sample mark{
+  background: var(--accent-soft);
+  color: var(--ink);
+  padding:.05em .15em;
+  border-radius:2px;
+}
+
+/* ---------- good vs weak comparison ---------- */
+.qcard{
+  background: var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:1.1rem 1.2rem;
+  margin-top:1.1rem;
+}
+.qcard .qnum{
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  color:var(--accent);
+  letter-spacing:.06em;
+}
+.qcard .qtext{
+  font-family: var(--font-display);
+  font-size:1.05rem;
+  margin:.3rem 0 .8rem;
+  line-height:1.35;
+}
+.compare{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:.8rem;
+}
+@media (max-width:620px){ .compare{ grid-template-columns:1fr; } }
+.ex{
+  border-radius:4px;
+  padding:.7rem .85rem;
+  font-size:.88rem;
+  line-height:1.5;
+}
+.ex.weak{ background: var(--bad-soft); border:1px solid color-mix(in srgb, var(--bad) 35%, transparent); }
+.ex.strong{ background: var(--good-soft); border:1px solid color-mix(in srgb, var(--good) 35%, transparent); }
+.ex .exlabel{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  margin-bottom:.4rem;
+  font-weight:600;
+}
+.ex.weak .exlabel{ color: var(--bad); }
+.ex.strong .exlabel{ color: var(--good); }
+.ex .exlabel .dot{ width:.5rem; height:.5rem; border-radius:50%; background:currentColor; }
+.ex p{ margin:0; color: var(--ink); }
+.ex .why{ margin-top:.5rem; font-style:italic; color: var(--ink-soft); font-size:.82rem; }
+
+/* ---------- AI policy strip ---------- */
+.policy-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:1rem;
+  margin-top:1rem;
+}
+@media (max-width:620px){ .policy-grid{ grid-template-columns:1fr; } }
+.policy-col{
+  border-radius:4px;
+  padding:1rem 1.1rem;
+}
+.policy-col.ok{ background: var(--good-soft); }
+.policy-col.no{ background: var(--bad-soft); }
+.policy-col h4{
+  margin:0 0 .6rem;
+  font-family:var(--font-mono);
+  font-size:.78rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.policy-col.ok h4{ color: var(--good); }
+.policy-col.no h4{ color: var(--bad); }
+.policy-col ul{ margin:0; padding-left:1.1rem; font-size:.9rem; }
+.policy-col li{ margin-bottom:.4rem; }
+.policy-col li:last-child{ margin-bottom:0; }
+
+/* ---------- researchgate sketch walkthrough ---------- */
+.sketch-strip{
+  display:flex;
+  flex-direction:column;
+  gap:1.4rem;
+  margin-top:1.2rem;
+}
+.sketch{
+  border:1.5px solid var(--ink);
+  border-radius:6px;
+  background: var(--paper-raised);
+  padding:1rem;
+}
+.sketch svg{ display:block; width:100%; height:auto; }
+.sketch-cap{
+  display:flex;
+  gap:.7rem;
+  align-items:flex-start;
+  margin-top:.6rem;
+}
+.sketch-cap .n{
+  flex:none;
+  width:1.6rem; height:1.6rem;
+  border-radius:50%;
+  background:var(--accent);
+  color:#fff;
+  font-family:var(--font-mono);
+  font-size:.78rem;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:600;
+}
+.sketch-cap p{ margin:0; font-size:.92rem; color:var(--ink-soft); }
+.sketch-cap p b{ color:var(--ink); font-weight:600; }
+
+/* ---------- grading rubric ---------- */
+.rubric{
+  margin-top:1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.6rem;
+}
+.rubric-row{
+  display:grid;
+  grid-template-columns: 170px 1fr;
+  gap:.9rem;
+  align-items:start;
+  padding:.65rem 0;
+  border-bottom:1px solid var(--rule);
+}
+.rubric-row:last-child{ border-bottom:none; }
+.rubric-row .what{
+  font-family: var(--font-display);
+  font-weight:600;
+  font-size:.95rem;
+}
+.rubric-row .detail{ font-size:.88rem; color:var(--ink-soft); }
+@media (max-width:560px){
+  .rubric-row{ grid-template-columns:1fr; gap:.2rem; }
+}
+
+/* ---------- checklist ---------- */
+.checklist{
+  list-style:none;
+  margin:1rem 0 0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:.55rem;
+}
+.checklist li{
+  display:flex;
+  gap:.7rem;
+  align-items:flex-start;
+  font-size:.94rem;
+  padding:.6rem .8rem;
+  background: var(--paper-raised);
+  border:1px solid var(--rule);
+  border-radius:4px;
+}
+.checklist li::before{
+  content:"";
+  flex:none;
+  width:1rem; height:1rem;
+  margin-top:.15rem;
+  border:1.5px solid var(--ink-soft);
+  border-radius:3px;
+}
+
+footer.endnote{
+  margin-top:3rem;
+  padding-top:1.2rem;
+  border-top:2px solid var(--ink);
+  font-size:.86rem;
+  color:var(--ink-soft);
+}
+footer.endnote a{ color:var(--accent); }
+
+code.inline{
+  font-family:var(--font-mono);
+  background:var(--paper-raised);
+  padding:.1em .35em;
+  border-radius:3px;
+  font-size:.9em;
+}
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <span class="eyebrow">CISC 339 · Final Assessment</span>
+    <h1>How to Read a Research Paper and Write Your Final Report</h1>
+    <p class="sub">A walkthrough with annotated examples, so you can see exactly what a strong citation,
+      a strong answer, and a finished ResearchGate upload actually look like — not just read about them.</p>
+    <div class="meta">
+      <span>2&ndash;3 pages</span>
+      <span>6+ citations</span>
+      <span>PDF + ResearchGate link</span>
+    </div>
+  </div>
+
+  <section class="block" data-step="1">
+    <span class="tag">Pick your paper</span>
+    <h2>Two papers, one choice</h2>
+    <p>Both are written by your instructor. Neither is the "right" answer — pick the one whose problem
+      you'd rather spend two weeks thinking about.</p>
+    <div class="paper-grid">
+      <div class="paper-card">
+        <span class="letter">PAPER A</span>
+        <h3>Can Synthetic Spam Beat Real-World Detectors?</h3>
+        <p>LLMs playing both sides of a security problem: generating spam/phishing text, and detecting it.</p>
+        <span class="fit">Best fit: cybersecurity, adversarial ML, AI safety</span>
+      </div>
+      <div class="paper-card">
+        <span class="letter">PAPER B</span>
+        <h3>SAGE: Hierarchical LLM-Based Literary Evaluation</h3>
+        <p>A system that judges creative writing along structured literary dimensions instead of one vague "is this good?" prompt.</p>
+        <span class="fit">Best fit: NLP, LLM evaluation, creative AI</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-step="2">
+    <span class="tag">Citations</span>
+    <h2>Same citation, four styles</h2>
+    <p>Pick one style and stay consistent for all 6+ citations. Here's Paper A's own citation in each —
+      notice what changes: punctuation, name order, and where the year goes.</p>
+    <div class="cite-table">
+      <div class="cite-row">
+        <div class="label">APA</div>
+        <div class="sample">Wang, T., Zhou, N., &amp; Chen, Z. <mark>(2026)</mark>. Can synthetic spam beat real-world detectors? Evaluating LLMs&rsquo; dual role in spam generation and detection. <i>ICISSP (1)</i>, 73&ndash;84.</div>
+      </div>
+      <div class="cite-row">
+        <div class="label">MLA</div>
+        <div class="sample">Wang, Tianyu, et al. &ldquo;Can Synthetic Spam Beat Real-World Detectors? Evaluating LLMs&rsquo; Dual Role in Spam Generation and Detection.&rdquo; <i>ICISSP</i>, vol. 1, <mark>2026</mark>, pp. 73&ndash;84.</div>
+      </div>
+      <div class="cite-row">
+        <div class="label">IEEE</div>
+        <div class="sample">T. Wang, N. Zhou, and Z. Chen, &ldquo;Can synthetic spam beat real-world detectors? Evaluating LLMs&rsquo; dual role in spam generation and detection,&rdquo; in <i>Proc. ICISSP</i>, vol. 1, <mark>2026</mark>, pp. 73&ndash;84.</div>
+      </div>
+      <div class="cite-row">
+        <div class="label">Chicago</div>
+        <div class="sample">Wang, Tianyu, Nianjun Zhou, and Zhixiong Chen. &ldquo;Can Synthetic Spam Beat Real-World Detectors? Evaluating LLMs&rsquo; Dual Role in Spam Generation and Detection.&rdquo; In <i>ICISSP</i>, vol. 1, 73&ndash;84, <mark>2026</mark>.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-step="3">
+    <span class="tag">Required questions</span>
+    <h2>What a real answer looks like</h2>
+    <p>These pairs aren't full sample paragraphs &mdash; copying a full example is exactly the shortcut this
+      assignment is designed to catch. Instead, see the <i>difference in kind</i> between an answer that
+      restates the abstract and one that shows you actually understood it.</p>
+
+    <div class="qcard">
+      <span class="qnum">Q2 &middot; UNDERSTANDING THE METHOD</span>
+      <p class="qtext">&ldquo;What is the paper's main method, in your own words?&rdquo;</p>
+      <div class="compare">
+        <div class="ex weak">
+          <div class="exlabel"><span class="dot"></span>Too generic</div>
+          <p>The paper proposes a novel framework that leverages large language models to generate and detect spam, achieving strong performance on the benchmark dataset.</p>
+          <p class="why">Why it's weak: this is just the abstract's vocabulary rearranged. No one can tell from this whether you read past the abstract.</p>
+        </div>
+        <div class="ex strong">
+          <div class="exlabel"><span class="dot"></span>Shows understanding</div>
+          <p>They basically put an LLM on offense and defense at once: one prompt role writes spam designed to dodge known filters, then a separate detector role (sometimes the same model, sometimes a different one) has to catch it. The twist is they measure whether a detector trained only on <i>human-written</i> spam still works once the spam is LLM-written.</p>
+          <p class="why">Why it's strong: specific mechanism, in plain language, and names the actual comparison the paper is making.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <span class="qnum">Q5 &middot; YOUR REACTION</span>
+      <p class="qtext">&ldquo;What's one thing you found surprising, confusing, or disagreed with?&rdquo;</p>
+      <div class="compare">
+        <div class="ex weak">
+          <div class="exlabel"><span class="dot"></span>Too generic</div>
+          <p>I found this paper very interesting and it taught me a lot about how LLMs can be used for security purposes.</p>
+          <p class="why">Why it's weak: a generic compliment. Could be copy-pasted onto any paper about any topic.</p>
+        </div>
+        <div class="ex strong">
+          <div class="exlabel"><span class="dot"></span>Shows understanding</div>
+          <p>I was surprised the detector's accuracy barely dropped against LLM-generated spam &mdash; I expected synthetic spam to be much harder to catch. I'd push back on treating that as reassuring, though, since their generator was the same era of model as off-the-shelf tools; a model fine-tuned specifically to evade filters might tell a different story.</p>
+          <p class="why">Why it's strong: a specific, falsifiable reaction, plus a reason &mdash; this is a claim you could actually defend if asked.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-step="4">
+    <span class="tag">AI-use policy</span>
+    <h2>Where the line is</h2>
+    <p>Use AI the way you'd use it for any other assignment this term &mdash; as a research assistant, not a ghostwriter.</p>
+    <div class="policy-grid">
+      <div class="policy-col ok">
+        <h4>OK to do</h4>
+        <ul>
+          <li>Find and summarize candidate related papers before you pick your 5</li>
+          <li>Explain a confusing term or method in simpler language</li>
+          <li>Give feedback on a draft you already wrote</li>
+          <li>Help format citations correctly</li>
+        </ul>
+      </div>
+      <div class="policy-col no">
+        <h4>Not OK to do</h4>
+        <ul>
+          <li>Copy-pasting AI-generated paragraphs as your answers</li>
+          <li>Asking AI to write the report and submitting it with minor edits</li>
+          <li>Citing a paper you never actually looked at</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-step="5">
+    <span class="tag">ResearchGate</span>
+    <h2>Posting your report, step by step</h2>
+    <p>These are schematic walkthroughs of the upload flow &mdash; not screenshots &mdash; since the exact
+      layout can change. The buttons and fields you're looking for will be in roughly these places.</p>
+
+    <div class="sketch-strip">
+
+      <div class="sketch">
+        <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ResearchGate profile page with Add new button highlighted">
+          <rect x="0" y="0" width="760" height="170" fill="none"/>
+          <rect x="8" y="8" width="744" height="46" rx="4" fill="none" stroke="var(--ink-soft)" stroke-width="1.5"/>
+          <circle cx="34" cy="31" r="12" fill="none" stroke="var(--ink-soft)" stroke-width="1.5"/>
+          <text x="56" y="36" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--ink-soft)">researchgate.net/profile/you</text>
+          <rect x="606" y="16" width="130" height="30" rx="5" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+          <text x="671" y="35" font-family="Source Sans 3, sans-serif" font-size="13" font-weight="600" fill="var(--accent)" text-anchor="middle">+ Add new</text>
+          <rect x="8" y="66" width="230" height="96" rx="4" fill="none" stroke="var(--ink-soft)" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <circle cx="123" cy="104" r="26" fill="none" stroke="var(--ink-soft)" stroke-width="1.2"/>
+          <text x="123" y="109" font-family="Source Sans 3, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">photo</text>
+          <text x="123" y="150" font-family="Source Sans 3, sans-serif" font-size="11" fill="var(--ink-soft)" text-anchor="middle">Your profile</text>
+          <path d="M 671 50 L 671 68 L 300 100" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/>
+            </marker>
+          </defs>
+          <text x="420" y="135" font-family="Source Sans 3, sans-serif" font-style="italic" font-size="12" fill="var(--ink)">Click &ldquo;+ Add new&rdquo; from your profile page</text>
+        </svg>
+        <div class="sketch-cap">
+          <span class="n">1</span>
+          <p><b>Create your account and go to your profile.</b> A school email works fine. Fill in your name, institution, and major.</p>
+        </div>
+      </div>
+
+      <div class="sketch">
+        <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dropdown menu with Research option highlighted">
+          <rect x="250" y="10" width="200" height="34" rx="5" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="2"/>
+          <text x="350" y="32" font-family="Source Sans 3, sans-serif" font-size="13" font-weight="600" fill="var(--ink)" text-anchor="middle">+ Add new</text>
+          <rect x="250" y="48" width="260" height="110" rx="4" fill="var(--paper)" stroke="var(--ink-soft)" stroke-width="1.5"/>
+          <rect x="258" y="56" width="244" height="30" rx="3" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2"/>
+          <text x="270" y="76" font-family="Source Sans 3, sans-serif" font-size="12" font-weight="700" fill="var(--ink)">Research</text>
+          <text x="440" y="76" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--accent)">&larr; pick this</text>
+          <text x="270" y="106" font-family="Source Sans 3, sans-serif" font-size="12" fill="var(--ink-soft)">Project</text>
+          <text x="270" y="134" font-family="Source Sans 3, sans-serif" font-size="12" fill="var(--ink-soft)">Question</text>
+        </svg>
+        <div class="sketch-cap">
+          <span class="n">2</span>
+          <p><b>From the dropdown, choose &ldquo;Research&rdquo;</b> (not Project or Question) &mdash; that's the upload type for a document.</p>
+        </div>
+      </div>
+
+      <div class="sketch">
+        <svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Upload form with file drop zone, title field, and publication type dropdown">
+          <rect x="8" y="8" width="744" height="174" rx="4" fill="none" stroke="var(--ink-soft)" stroke-width="1.2"/>
+          <rect x="24" y="24" width="150" height="60" rx="4" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="99" y="48" font-family="Source Sans 3, sans-serif" font-size="10" fill="var(--accent)" text-anchor="middle">drop PDF</text>
+          <text x="99" y="62" font-family="Source Sans 3, sans-serif" font-size="10" fill="var(--accent)" text-anchor="middle">here</text>
+          <text x="200" y="38" font-family="Source Sans 3, sans-serif" font-size="11" fill="var(--ink-soft)">Title</text>
+          <rect x="200" y="44" width="520" height="26" rx="3" fill="none" stroke="var(--ink-soft)" stroke-width="1.2"/>
+          <text x="208" y="61" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--ink)">CISC 339 Final Report: [your title] &mdash; A Response to [Paper]</text>
+          <text x="200" y="90" font-family="Source Sans 3, sans-serif" font-size="11" fill="var(--ink-soft)">Publication type</text>
+          <rect x="200" y="96" width="220" height="26" rx="3" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="2"/>
+          <text x="310" y="113" font-family="Source Sans 3, sans-serif" font-size="12" font-weight="600" fill="var(--ink)" text-anchor="middle">Preprint / Technical Report</text>
+          <text x="440" y="113" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--accent)">&larr; not &ldquo;Article&rdquo;</text>
+          <rect x="24" y="100" width="150" height="60" rx="4" fill="var(--good-soft)" stroke="var(--good)" stroke-width="1.5"/>
+          <text x="99" y="128" font-family="Source Sans 3, sans-serif" font-size="9" fill="var(--good)" text-anchor="middle">report.pdf</text>
+          <text x="99" y="142" font-family="Source Sans 3, sans-serif" font-size="9" fill="var(--good)" text-anchor="middle">uploaded &#10003;</text>
+        </svg>
+        <div class="sketch-cap">
+          <span class="n">3</span>
+          <p><b>Upload your PDF and set the publication type to &ldquo;Preprint&rdquo; or &ldquo;Technical Report.&rdquo;</b> Not &ldquo;Article&rdquo; &mdash; this isn't peer-reviewed.</p>
+        </div>
+      </div>
+
+      <div class="sketch">
+        <svg viewBox="0 0 760 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Published page with copy link button highlighted">
+          <rect x="8" y="8" width="744" height="124" rx="4" fill="none" stroke="var(--good)" stroke-width="1.5"/>
+          <circle cx="40" cy="38" r="12" fill="none" stroke="var(--good)" stroke-width="2"/>
+          <path d="M34,38 l4,5 l9,-11" fill="none" stroke="var(--good)" stroke-width="2"/>
+          <text x="62" y="43" font-family="Source Sans 3, sans-serif" font-size="13" font-weight="600" fill="var(--good)">Published</text>
+          <rect x="24" y="64" width="500" height="28" rx="3" fill="none" stroke="var(--ink-soft)" stroke-width="1.2"/>
+          <text x="34" y="83" font-family="JetBrains Mono, monospace" font-size="11" fill="var(--ink-soft)">researchgate.net/publication/39xxxxxxx_your_report</text>
+          <rect x="536" y="64" width="90" height="28" rx="3" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2"/>
+          <text x="581" y="83" font-family="Source Sans 3, sans-serif" font-size="12" font-weight="600" fill="var(--accent)" text-anchor="middle">Copy link</text>
+          <text x="636" y="83" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--accent)">&larr; paste this on Blackboard</text>
+        </svg>
+        <div class="sketch-cap">
+          <span class="n">4</span>
+          <p><b>Copy the publication URL.</b> This is the link you submit alongside your PDF &mdash; the whole flow takes about 10&ndash;15 minutes.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block" data-step="6">
+    <span class="tag">Grading</span>
+    <h2>What earns the grade</h2>
+    <div class="rubric">
+      <div class="rubric-row">
+        <div class="what">Understanding (Q1&ndash;3)</div>
+        <div class="detail">Problem, method, and findings explained accurately in your own words &mdash; not the abstract restated.</div>
+      </div>
+      <div class="rubric-row">
+        <div class="what">Citations</div>
+        <div class="detail">6+ total, one consistent style, every source genuinely relevant.</div>
+      </div>
+      <div class="rubric-row">
+        <div class="what">Reflection (Q4&ndash;5)</div>
+        <div class="detail">A specific, real reaction &mdash; something you could defend if someone pushed back on it.</div>
+      </div>
+      <div class="rubric-row">
+        <div class="what">Forward-looking (Q6)</div>
+        <div class="detail">A concrete open problem or next step, not &ldquo;more research is needed.&rdquo;</div>
+      </div>
+      <div class="rubric-row">
+        <div class="what">Format</div>
+        <div class="detail">2&ndash;3 pages, proofread, organized.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" data-step="7">
+    <span class="tag">Before you submit</span>
+    <h2>Submission checklist</h2>
+    <ul class="checklist">
+      <li>Report is 2&ndash;3 pages, PDF, one citation style used throughout</li>
+      <li>6+ citations total, with a formatted reference list at the end</li>
+      <li>All six required questions answered somewhere in the report</li>
+      <li>Report uploaded to ResearchGate as Preprint / Technical Report</li>
+      <li>PDF + ResearchGate link both submitted on Blackboard</li>
+    </ul>
+  </section>
+
+  <footer class="endnote">
+    Questions about whether a source counts as &ldquo;related enough,&rdquo; or anything else here &mdash;
+    ask on the discussion board or in office hours. This page is a visual companion to the full written
+    guide; the written guide is the one with binding detail if the two ever disagree.
+  </footer>
+
+</div>
