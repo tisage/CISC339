@@ -1,0 +1,824 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Did AI Just Prove a 167-Year-Old Math Problem?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* layout concept: top-level tab switcher (What Happened / The Math / How AI
+   Did It / What It Means), each tab a short panel stack so no single tab
+   requires much scrolling -- instructor's first-person voice throughout,
+   heavy on click-to-reveal interaction (step-through pipeline, flip cards,
+   vote-then-reveal FAQ) instead of long paragraphs */
+:root{
+  color-scheme: light;
+  --ink:#232a2e;
+  --ink-soft:#5b6b70;
+  --paper:#f6f4ee;
+  --panel:#ffffff;
+  --panel-line:#dcd6c8;
+  --accent:#2f6f5e;
+  --accent-soft:#d9ebe4;
+  --warn:#b8562f;
+  --warn-soft:#f5ddce;
+  --grid:#e4decf;
+  --prime:#1a6fb0;
+  --prime-soft:#d8e9f5;
+  --lean:#8a5fb0;
+  --lean-soft:#e7def2;
+  --font-display:"Fraunces", Georgia, serif;
+  --font-body:"Source Sans 3", -apple-system, "Segoe UI", sans-serif;
+  --font-mono:"JetBrains Mono", "Courier New", monospace;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ink:#eceae3; --ink-soft:#a7b0ac; --paper:#1b1d1a; --panel:#24261f;
+    --panel-line:#3c3d33; --accent:#5fb89d; --accent-soft:#223630;
+    --warn:#e08457; --warn-soft:#3a2a20; --grid:#34362c;
+    --prime:#5a9fd4; --prime-soft:#223241;
+    --lean:#b79be0; --lean-soft:#332a44;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ink:#eceae3; --ink-soft:#a7b0ac; --paper:#1b1d1a; --panel:#24261f;
+  --panel-line:#3c3d33; --accent:#5fb89d; --accent-soft:#223630;
+  --warn:#e08457; --warn-soft:#3a2a20; --grid:#34362c;
+  --prime:#5a9fd4; --prime-soft:#223241;
+  --lean:#b79be0; --lean-soft:#332a44;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+}
+.wrap{ max-width:920px; margin:0 auto; padding-block:2.2rem 4rem; }
+
+header.top{ margin-bottom:1.3rem; }
+header.top .eyebrow{
+  font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--accent);
+}
+header.top h1{
+  font-family:var(--font-display); font-weight:600;
+  font-size:clamp(1.6rem,4.5vw,2.3rem); margin:.3rem 0 .5rem; text-wrap:balance;
+}
+header.top p{ margin:0; max-width:68ch; color:var(--ink-soft); font-size:1rem; line-height:1.55; }
+
+/* topic switcher */
+.topic-switch{
+  display:inline-flex; flex-wrap:wrap; border:1px solid var(--panel-line); border-radius:8px;
+  overflow:hidden; margin-top:1.1rem;
+}
+.topic-switch button{
+  font-family:var(--font-mono); font-size:.8rem; font-weight:700;
+  padding:.6rem 1rem; border:none; background:var(--panel); color:var(--ink-soft);
+  cursor:pointer;
+}
+.topic-switch button.active{ background:var(--ink); color:var(--paper); }
+.topic-switch button:not(.active):hover{ background:var(--accent-soft); }
+
+.story{
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+  border-radius: 0 4px 4px 0;
+}
+.story p{ margin:0; font-family: var(--font-display); font-style: italic; font-size: 1.05rem; line-height: 1.55; }
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--panel-line);
+  border-radius:8px;
+  padding:1.3rem 1.4rem;
+  margin-bottom:1.3rem;
+}
+.panel h2{
+  font-family:var(--font-display); font-size:1.25rem; font-weight:600;
+  margin:0 0 .4rem;
+}
+.panel .subcap{ font-size:.9rem; color:var(--ink-soft); margin:0 0 1rem; line-height:1.5; }
+.panel p{ line-height:1.6; font-size:.98rem; }
+.panel p + p{ margin-top:.8rem; }
+
+.legend-row{ display:flex; gap:1.2rem; flex-wrap:wrap; margin-top:1rem; font-size:.8rem; color:var(--ink-soft); font-family:var(--font-mono); }
+.legend-row span{ display:inline-flex; align-items:center; gap:.4rem; }
+.swatch{ width:14px; height:14px; border-radius:3px; display:inline-block; }
+
+.fact-strip{ display:flex; gap:.9rem; flex-wrap:wrap; margin:1.1rem 0 0; }
+.fact-chip{
+  background:var(--paper); border:1px solid var(--panel-line); border-radius:8px;
+  padding:.7rem .9rem; flex:1 1 150px; min-width:130px;
+}
+.fact-chip .fc-k{ font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); display:block; margin-bottom:.25rem; }
+.fact-chip .fc-v{ font-family:var(--font-mono); font-weight:700; font-size:1.05rem; color:var(--ink); }
+
+/* ===== zeros-on-a-line explainer ===== */
+.zeta-stage{ overflow-x:auto; padding:.5rem 0 .2rem; }
+.zeta-stage svg{ min-width:600px; display:block; }
+
+/* ===== small inline explainer diagrams (GRH scope, RSA, quantum, unlock) ===== */
+.mini-diagram{ overflow-x:auto; margin-top:.9rem; padding-top:.2rem; }
+.mini-diagram svg{ min-width:420px; display:block; }
+
+/* ===== pipeline diagram: step-through ===== */
+.pipeline-stage{ overflow-x:auto; padding:.8rem 0 .2rem; }
+.pipeline-stage svg{ min-width:640px; display:block; }
+.pipe-detail{
+  margin-top:1rem; padding:1rem 1.1rem; background:var(--paper);
+  border:1px solid var(--panel-line); border-radius:6px; height:6.4rem; overflow-y:auto;
+}
+.pipe-detail .pd-step{ font-family:var(--font-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); display:block; margin-bottom:.3rem; }
+.pipe-detail .pd-text{ font-size:.94rem; line-height:1.55; }
+.pipe-nav{ display:flex; gap:.6rem; margin-top:1rem; }
+button.act{
+  font-family:var(--font-body); font-weight:600; font-size:.88rem;
+  border:1px solid var(--panel-line); background:var(--panel); color:var(--ink);
+  padding:.55rem 1rem; border-radius:6px; cursor:pointer;
+}
+button.act.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+button.act:disabled{ opacity:.4; cursor:not-allowed; }
+button.act.primary#pipe-next{ min-width:9rem; }
+
+/* ===== flip cards for "why it matters" ===== */
+.card-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem; margin-top:.8rem; }
+@media (max-width:540px){ .card-grid{ grid-template-columns:1fr; } }
+.flip-card{
+  background:var(--paper); border:1px solid var(--panel-line); border-radius:8px;
+  padding:1rem 1.1rem; cursor:pointer; transition:background .2s ease, border-color .2s ease;
+  min-height:7.8rem;
+}
+.flip-card:hover{ background:var(--accent-soft); }
+.flip-card.open{ background:var(--accent-soft); border-color:var(--accent); cursor:default; }
+.flip-card .fc-head{ display:flex; align-items:center; gap:.7rem; }
+.flip-card .fc-icon{
+  width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-weight:700; font-size:.95rem; flex:0 0 auto;
+  background:var(--panel); color:var(--accent); border:1px solid var(--panel-line);
+}
+.flip-card.open .fc-icon{ background:var(--accent); color:#fff; border-color:var(--accent); }
+.flip-card h3{ font-family:var(--font-display); font-size:1rem; font-weight:600; margin:0; }
+.flip-card .fc-hint{ font-family:var(--font-mono); font-size:.7rem; color:var(--ink-soft); margin:.5rem 0 0; }
+.flip-card .fc-detail{ font-size:.88rem; line-height:1.5; color:var(--ink); margin:.7rem 0 0; display:none; }
+.flip-card.open .fc-detail{ display:block; }
+.flip-card.open .fc-hint{ display:none; }
+
+/* ===== vote-then-reveal FAQ ===== */
+.vote-item{
+  border:1px solid var(--panel-line); border-radius:8px; margin-bottom:.9rem;
+  background:var(--paper); padding:1rem 1.1rem;
+}
+.vote-item .vq{ font-weight:600; font-size:.98rem; margin-bottom:.8rem; }
+.vote-row{ display:flex; gap:.6rem; flex-wrap:wrap; }
+.vote-btn{
+  font-family:var(--font-mono); font-weight:700; font-size:.85rem;
+  border:1.5px solid var(--panel-line); background:var(--panel); color:var(--ink);
+  padding:.55rem 1.3rem; border-radius:20px; cursor:pointer; flex:0 0 auto;
+}
+.vote-btn:hover{ background:var(--accent-soft); }
+.vote-item.answered .vote-btn{ cursor:default; pointer-events:none; opacity:.5; }
+.vote-item.answered .vote-btn.chosen{ opacity:1; }
+.vote-item.answered .vote-btn.chosen.right{ background:var(--accent); color:#fff; border-color:var(--accent); }
+.vote-item.answered .vote-btn.chosen.wrong{ background:var(--warn); color:#fff; border-color:var(--warn); }
+.vote-item.answered .vote-btn.correct-answer:not(.chosen){ border-color:var(--accent); color:var(--accent); }
+.vote-reveal{
+  margin-top:.9rem; padding-top:.9rem; border-top:1px solid var(--panel-line);
+  display:none;
+}
+.vote-item.answered .vote-reveal{ display:block; }
+.vote-reveal .vr-verdict{
+  display:inline-block; font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase;
+  letter-spacing:.04em; font-weight:700; padding:.2rem .55rem; border-radius:10px; margin-bottom:.5rem;
+}
+.vote-reveal .vr-verdict.no{ background:var(--accent-soft); color:var(--accent); }
+.vote-reveal .vr-verdict.nuance{ background:var(--warn-soft); color:var(--warn); }
+.vote-reveal p{ margin:0; font-size:.9rem; line-height:1.55; }
+
+footer.end{
+  margin-top:2rem; padding-top:1rem; border-top:1px solid var(--panel-line);
+  font-size:.82rem; color:var(--ink-soft); line-height:1.6;
+}
+.course-credit{
+  margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--panel-line);
+  font-family:var(--font-mono); font-size:.76rem; color:var(--ink-soft);
+  text-align:center; letter-spacing:.02em;
+}
+[hidden]{ display:none !important; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">CISC 339 &middot; AI in the News</span>
+    <h1 id="page-title">Did AI Just Prove a 167-Year-Old Math Problem?</h1>
+    <p id="page-sub">On November 20, 2026, an Anthropic mathematician working with Claude announced a proof of the Riemann Hypothesis. I want to walk you through what actually happened and why I think it's worth five minutes of class time.</p>
+    <div class="topic-switch" role="tablist" aria-label="Topic">
+      <button id="tab-happened" class="active" role="tab" aria-selected="true">What Happened</button>
+      <button id="tab-math" role="tab" aria-selected="false">The Math</button>
+      <button id="tab-lean" role="tab" aria-selected="false">How AI Proved It</button>
+      <button id="tab-means" role="tab" aria-selected="false">What It Means</button>
+    </div>
+  </header>
+
+  <!-- ================= TAB 1: What Happened ================= -->
+  <div id="section-happened">
+    <div class="story"><p>A problem that's resisted every mathematician since 1859 may have just been cracked &mdash; not by a human holding a pencil, but by a human and an AI together, writing a proof so long no person could ever read all of it themselves.</p></div>
+
+    <div class="panel">
+      <h2>Here's what I know so far</h2>
+      <p>A mathematician at Anthropic, <b>Levent Alpöge</b>, posted a note saying that working with Claude, he'd found a proof of the Riemann Hypothesis &mdash; technically the broader <i>Generalized</i> Riemann Hypothesis, which covers more ground than the original 1859 conjecture. I want to be upfront with you about the caveat I'd put on anything this new: it's not a short, elegant argument on paper. It's a <b>formal proof</b>, written in a language called Lean, about <b>17 million lines long</b>, spread across more than 175,000 files. No single human has read the whole thing, and nobody ever will &mdash; that's not how this kind of proof gets checked.</p>
+      <p>The day after, the communities that maintain Lean's proof library checked the code and certified it compiles with no logical gaps. An MIT mathematician re-verified it independently with a different tool and said the odds of a hidden error are "approximately zero." What hasn't happened yet is a plain-English explanation of <i>why</i> the proof works &mdash; the logic checks out, but nobody has translated the idea into something a human can follow start to finish. I'll tell you honestly: that's the part that makes me want to wait before I call this "settled."</p>
+      <div class="fact-strip">
+        <div class="fact-chip"><span class="fc-k">Announced</span><span class="fc-v">Nov 20, 2026</span></div>
+        <div class="fact-chip"><span class="fc-k">Proof length</span><span class="fc-v">~17M lines</span></div>
+        <div class="fact-chip"><span class="fc-k">Lean files</span><span class="fc-v">175,187</span></div>
+        <div class="fact-chip"><span class="fc-k">Problem's age</span><span class="fc-v">167 years</span></div>
+      </div>
+      <div class="mini-diagram" id="grh-diagram"></div>
+    </div>
+
+    <footer class="end">
+      Everything in this tab is drawn from contemporaneous reporting in November 2026 (Scientific American, Phys.org, and the Lean/Mathlib community's own joint statement). I'll update this page if the story changes.
+    </footer>
+  </div>
+
+  <!-- ================= TAB 2: The Math ================= -->
+  <div id="section-math" hidden>
+    <div class="story"><p>I'm not going to put a single equation on this page. Here's the whole idea in one picture.</p></div>
+
+    <div class="panel">
+      <h2>What the Riemann Hypothesis actually says</h2>
+      <p>Primes look scattered and unpredictable the farther out you count them. In the 1800s, Riemann found a function &mdash; the <b>zeta function</b> &mdash; whose behavior secretly encodes exactly how primes are distributed. His conjecture is about one very specific property of that function: that all of its important "zero points" line up perfectly on a single line, instead of scattering randomly.</p>
+      <p>If that's true, the apparent randomness of primes isn't random at all &mdash; it's governed by a hidden, precise order. That's the entire hypothesis, in one sentence I give every class: <b>chaos on the surface, structure underneath.</b></p>
+      <div class="zeta-stage" id="zeta-stage"></div>
+      <div class="legend-row">
+        <span><span class="swatch" style="background:var(--warn)"></span>if scattered: primes stay unpredictable</span>
+        <span><span class="swatch" style="background:var(--prime)"></span>if aligned (the conjecture): hidden order governs every prime</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Why I've always told you this problem matters</h2>
+      <p class="subcap">Click a card to see why I'd put each of these on an exam.</p>
+      <div class="card-grid" id="why-cards"></div>
+    </div>
+
+    <footer class="end">
+      The zeros-on-a-line diagram above is a simplified teaching illustration, not derived from the actual 17-million-line proof.
+    </footer>
+  </div>
+
+  <!-- ================= TAB 3: How AI Proved It ================= -->
+  <div id="section-lean" hidden>
+    <div class="story"><p>This wasn't Claude writing an essay-style proof. It was Claude writing code that a machine checks line by line &mdash; that distinction is the whole lecture.</p></div>
+
+    <div class="panel">
+      <h2>What I mean by "formal proof"</h2>
+      <p><b>Lean</b> is a <i>proof assistant</i>: every statement has to be built up from basic logical axioms, and a separate program &mdash; the "Lean kernel" &mdash; mechanically checks that every step follows validly from the last. There's no room for a hand-wavy "and then it's obvious that...". I tell my students this is the opposite failure mode from asking an LLM to just write out a proof in English: a plausible-sounding but wrong argument can slip past a human reader. It can't slip past Lean's kernel.</p>
+      <p>Step through the pipeline below &mdash; this is the same four-stage process every formally verified proof goes through, not just this one.</p>
+      <div class="pipeline-stage" id="pipeline-stage"></div>
+      <div class="pipe-detail" id="pipe-detail"></div>
+      <div class="pipe-nav">
+        <button class="act" id="pipe-prev">&larr; Back</button>
+        <button class="act primary" id="pipe-next">Next step &rarr;</button>
+      </div>
+    </div>
+
+    <footer class="end">
+      Claude didn't invent this in isolation — it built on real precursor work earlier in 2026, including a formally verified result that more than two-thirds of the zeta function's zeros satisfy the hypothesis. The November proof extended that line of work using the same approach, just at a far larger scale.
+    </footer>
+  </div>
+
+  <!-- ================= TAB 4: What It Means ================= -->
+  <div id="section-means" hidden>
+    <div class="story"><p>I already know the first question you're going to ask me, so let's just get it out of the way.</p></div>
+
+    <div class="panel">
+      <h2>Before you ask &mdash; vote, then I'll tell you</h2>
+      <p class="subcap">Pick an answer. I'll reveal what's actually true and why.</p>
+      <div id="vote-list"></div>
+    </div>
+
+    <div class="panel">
+      <h2>What I actually want you to take from this</h2>
+      <p>Here's my honest take, as someone who's been teaching this material for a while. The headline isn't really about prime numbers &mdash; most commentators covering this agree the real story is that an AI system can now assist in research-level mathematical discovery that I'd have told you, a year ago, was decades away.</p>
+      <p>Three things I want stuck in your head from this lecture: First, <b>formal verification is turning into a real engineering discipline</b>, not just a theory-class topic &mdash; the same idea behind Lean already underlies safety-critical software, and I expect AI-assisted formal verification to show up in security engineering well before it's common in pure math. Second, <b>this is what AI-assisted research looks like</b> &mdash; a human mathematician steering and checking, an AI generating formal artifacts at a scale no person could produce alone. That pattern is coming to security research before it's finished maturing in mathematics. Third, and this is the one I'll actually put on an exam: <b>the reason anyone believes this proof is that independent humans and independent tools re-checked it from first principles</b> &mdash; not because an AI said so. That's the same standard I expect you to apply to any security claim in this course. Don't trust. Verify.</p>
+    </div>
+
+    <footer class="end">
+      As of this page being written, the proof is certified as logically sound by formal verification tools, but a human-readable explanation of the underlying mathematical ideas has not yet been published, and full acceptance by the broader mathematics community is expected to take further time.
+    </footer>
+  </div>
+
+  <div class="course-credit">CISC 339 &middot; Artificial Intelligence &middot; Dr. Tianyu Wang</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const el = id => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  // ======================================================================
+  // TOP-LEVEL TAB SWITCHING
+  // ======================================================================
+  let topic = "happened"; // happened | math | lean | means
+
+  const PAGE_META = {
+    happened: { title: "Did AI Just Prove a 167-Year-Old Math Problem?", sub: "On November 20, 2026, an Anthropic mathematician working with Claude announced a proof of the Riemann Hypothesis. I want to walk you through what actually happened and why I think it's worth five minutes of class time." },
+    math:     { title: "What Is the Riemann Hypothesis, Actually?", sub: "No equations — just the shape of the idea, and why I've always told you it matters." },
+    lean:     { title: "How Do You “Prove” Something With AI?", sub: "Claude didn't write an essay. It wrote code a machine checks line by line — and that difference is the whole point." },
+    means:    { title: "What This Actually Means for Us", sub: "The question I know you want to ask, and the three things I actually want you to remember." },
+  };
+
+  const SECTIONS = { happened:"section-happened", math:"section-math", lean:"section-lean", means:"section-means" };
+  const TABS = { happened:"tab-happened", math:"tab-math", lean:"tab-lean", means:"tab-means" };
+
+  function applyTopicUI(){
+    Object.keys(TABS).forEach(key => {
+      const btn = el(TABS[key]);
+      btn.classList.toggle("active", key===topic);
+      btn.setAttribute("aria-selected", key===topic);
+      const section = el(SECTIONS[key]);
+      if (key===topic){
+        section.removeAttribute("hidden");
+        section.style.display = "block";
+      } else {
+        section.setAttribute("hidden", "");
+        section.style.display = "none";
+      }
+    });
+    el("page-title").textContent = PAGE_META[topic].title;
+    el("page-sub").textContent = PAGE_META[topic].sub;
+  }
+
+  Object.keys(TABS).forEach(key => {
+    el(TABS[key]).addEventListener("click", () => { if(topic!==key){ topic=key; applyTopicUI(); }});
+  });
+
+  // ======================================================================
+  // TAB 2: zeros-on-a-line explainer
+  // ======================================================================
+  function renderZetaStage(){
+    const stage = el("zeta-stage");
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--ink").trim();
+    const inkSoft = css.getPropertyValue("--ink-soft").trim();
+    const warn = css.getPropertyValue("--warn").trim();
+    const prime = css.getPropertyValue("--prime").trim();
+    const primeSoft = css.getPropertyValue("--prime-soft").trim();
+    const panel = css.getPropertyValue("--panel").trim();
+    const grid = css.getPropertyValue("--grid").trim();
+
+    const W = 600, H = 230;
+    const svgRoot = svgEl("svg", {viewBox:`0 0 ${W} ${H}`, width:"100%", height:"auto", style:"overflow:visible"});
+
+    const leftX0 = 30, leftX1 = 260, leftY = 70;
+    svgRoot.appendChild(svgEl("line", {x1:leftX0, y1:leftY, x2:leftX1, y2:leftY, stroke:inkSoft, "stroke-width":1.5}));
+    const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41];
+    const maxP = 41;
+    primes.forEach(p => {
+      const x = leftX0 + (p/maxP)*(leftX1-leftX0);
+      svgRoot.appendChild(svgEl("circle", {cx:x, cy:leftY, r:4, fill:warn}));
+    });
+    const leftLabel = svgEl("text", {x:(leftX0+leftX1)/2, y:leftY+28, "text-anchor":"middle", "font-size":11, fill:inkSoft, "font-family":"JetBrains Mono, monospace"});
+    leftLabel.textContent = "primes: gaps look irregular";
+    svgRoot.appendChild(leftLabel);
+    const leftTitle = svgEl("text", {x:(leftX0+leftX1)/2, y:leftY-22, "text-anchor":"middle", "font-size":12, "font-weight":700, fill:ink, "font-family":"JetBrains Mono, monospace"});
+    leftTitle.textContent = "On the surface: chaos";
+    svgRoot.appendChild(leftTitle);
+
+    svgRoot.appendChild(svgEl("line", {x1:280, y1:leftY, x2:320, y2:leftY, stroke:inkSoft, "stroke-width":2, "marker-end":"url(#zeta-arrow)"}));
+    const defs = svgEl("defs", {});
+    const marker = svgEl("marker", {id:"zeta-arrow", markerWidth:8, markerHeight:8, refX:6, refY:4, orient:"auto"});
+    marker.appendChild(svgEl("path", {d:"M0,0 L8,4 L0,8 Z", fill:inkSoft}));
+    defs.appendChild(marker);
+    svgRoot.appendChild(defs);
+
+    const rightCx = 450, rightY0 = 30, rightY1 = 190;
+    svgRoot.appendChild(svgEl("rect", {x:rightCx-60, y:rightY0-10, width:120, height:rightY1-rightY0+20, fill:panel, stroke:grid, "stroke-width":1, rx:4}));
+    svgRoot.appendChild(svgEl("line", {x1:rightCx, y1:rightY0, x2:rightCx, y2:rightY1, stroke:prime, "stroke-width":2.5}));
+    const zeroYs = [45, 68, 95, 118, 145, 168];
+    zeroYs.forEach(y => {
+      svgRoot.appendChild(svgEl("circle", {cx:rightCx, cy:y, r:5, fill:primeSoft, stroke:prime, "stroke-width":2}));
+    });
+    const rightLabel = svgEl("text", {x:rightCx, y:rightY1+28, "text-anchor":"middle", "font-size":11, fill:inkSoft, "font-family":"JetBrains Mono, monospace"});
+    rightLabel.textContent = "zeta zeros: all on one line";
+    svgRoot.appendChild(rightLabel);
+    const rightTitle = svgEl("text", {x:rightCx, y:rightY0-18, "text-anchor":"middle", "font-size":12, "font-weight":700, fill:ink, "font-family":"JetBrains Mono, monospace"});
+    rightTitle.textContent = "Underneath: structure";
+    svgRoot.appendChild(rightTitle);
+    const lineCaption = svgEl("text", {x:rightCx+16, y:(rightY0+rightY1)/2, "font-size":10, fill:prime, "font-family":"JetBrains Mono, monospace", "font-style":"italic"});
+    lineCaption.textContent = "the critical line";
+    svgRoot.appendChild(lineCaption);
+
+    stage.innerHTML = "";
+    stage.appendChild(svgRoot);
+  }
+
+  // ======================================================================
+  // Shared small inline diagrams (GRH scope, RSA, quantum, unlock)
+  // ======================================================================
+  function renderMiniDiagram(container, kind){
+    const fns = { grh: drawGRHScope, rsa: drawRSA, quantum: drawQuantum, unlock: drawUnlock };
+    const fn = fns[kind];
+    if (!fn) return;
+    container.innerHTML = "";
+    container.appendChild(fn());
+  }
+
+  // GRH vs RH: nested-circle scope diagram -- classical RH only covers the
+  // zeta function; GRH extends the same statement to the whole family of
+  // Dirichlet L-functions (zeta is just one member of that family).
+  function drawGRHScope(){
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--ink").trim();
+    const inkSoft = css.getPropertyValue("--ink-soft").trim();
+    const prime = css.getPropertyValue("--prime").trim();
+    const primeSoft = css.getPropertyValue("--prime-soft").trim();
+    const accent = css.getPropertyValue("--accent").trim();
+    const accentSoft = css.getPropertyValue("--accent-soft").trim();
+
+    const W = 600, H = 230;
+    const svgRoot = svgEl("svg", {viewBox:`0 0 ${W} ${H}`, width:"100%", height:"auto", style:"overflow:visible"});
+
+    const outerCx = 320, outerCy = 120, outerR = 80;
+    svgRoot.appendChild(svgEl("circle", {cx:outerCx, cy:outerCy, r:outerR, fill:accentSoft, stroke:accent, "stroke-width":2}));
+    const outerLabel = svgEl("text", {x:outerCx, y:outerCy-outerR-14, "text-anchor":"middle", "font-size":12.5, "font-weight":700, fill:accent, "font-family":"JetBrains Mono, monospace"});
+    outerLabel.textContent = "GRH: all Dirichlet L-functions";
+    svgRoot.appendChild(outerLabel);
+
+    const innerCx = 270, innerCy = 128, innerR = 34;
+    svgRoot.appendChild(svgEl("circle", {cx:innerCx, cy:innerCy, r:innerR, fill:primeSoft, stroke:prime, "stroke-width":2}));
+    const innerLabel1 = svgEl("text", {x:innerCx, y:innerCy-4, "text-anchor":"middle", "font-size":10.5, "font-weight":700, fill:prime, "font-family":"JetBrains Mono, monospace"});
+    innerLabel1.textContent = "classical RH";
+    svgRoot.appendChild(innerLabel1);
+    const innerLabel2 = svgEl("text", {x:innerCx, y:innerCy+11, "text-anchor":"middle", "font-size":9, fill:prime, "font-family":"JetBrains Mono, monospace"});
+    innerLabel2.textContent = "(zeta only)";
+    svgRoot.appendChild(innerLabel2);
+
+    const noteText = svgEl("text", {x:30, y:H-16, "font-size":11, fill:inkSoft, "font-family":"Source Sans 3, sans-serif"});
+    noteText.textContent = "Nov 2026 proof: the big circle — every function in the family, not just one.";
+    svgRoot.appendChild(noteText);
+
+    return svgRoot;
+  }
+
+  // RSA: what it actually relies on (factoring), explicitly NOT the same
+  // axis as where primes are distributed (Riemann Hypothesis).
+  function drawRSA(){
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--ink").trim();
+    const inkSoft = css.getPropertyValue("--ink-soft").trim();
+    const accent = css.getPropertyValue("--accent").trim();
+    const accentSoft = css.getPropertyValue("--accent-soft").trim();
+    const warn = css.getPropertyValue("--warn").trim();
+    const warnSoft = css.getPropertyValue("--warn-soft").trim();
+    const panel = css.getPropertyValue("--panel").trim();
+
+    const W = 440, H = 150;
+    const svgRoot = svgEl("svg", {viewBox:`0 0 ${W} ${H}`, width:"100%", height:"auto", style:"overflow:visible"});
+
+    // Left box: RSA security
+    const lx = 20, ly = 15, bw = 190, bh = 100;
+    svgRoot.appendChild(svgEl("rect", {x:lx, y:ly, width:bw, height:bh, rx:8, fill:accentSoft, stroke:accent, "stroke-width":2}));
+    const lTitle = svgEl("text", {x:lx+bw/2, y:ly+26, "text-anchor":"middle", "font-size":11.5, "font-weight":700, fill:accent, "font-family":"JetBrains Mono, monospace"});
+    lTitle.textContent = "RSA security depends on:";
+    svgRoot.appendChild(lTitle);
+    const lBody = svgEl("text", {x:lx+bw/2, y:ly+52, "text-anchor":"middle", "font-size":10.5, fill:ink, "font-family":"Source Sans 3, sans-serif"});
+    lBody.textContent = "factoring a huge number";
+    svgRoot.appendChild(lBody);
+    const lBody2 = svgEl("text", {x:lx+bw/2, y:ly+70, "text-anchor":"middle", "font-size":10.5, fill:ink, "font-family":"Source Sans 3, sans-serif"});
+    lBody2.textContent = "into its two prime factors";
+    svgRoot.appendChild(lBody2);
+    const lBody3 = svgEl("text", {x:lx+bw/2, y:ly+90, "text-anchor":"middle", "font-size":9.5, "font-style":"italic", fill:inkSoft, "font-family":"Source Sans 3, sans-serif"});
+    lBody3.textContent = "(computationally hard)";
+    svgRoot.appendChild(lBody3);
+
+    // Right box: Riemann Hypothesis
+    const rx = W-20-bw, ry = 15;
+    svgRoot.appendChild(svgEl("rect", {x:rx, y:ry, width:bw, height:bh, rx:8, fill:warnSoft, stroke:warn, "stroke-width":2}));
+    const rTitle = svgEl("text", {x:rx+bw/2, y:ry+26, "text-anchor":"middle", "font-size":11.5, "font-weight":700, fill:warn, "font-family":"JetBrains Mono, monospace"});
+    rTitle.textContent = "Riemann Hypothesis is about:";
+    svgRoot.appendChild(rTitle);
+    const rBody = svgEl("text", {x:rx+bw/2, y:ry+52, "text-anchor":"middle", "font-size":10.5, fill:ink, "font-family":"Source Sans 3, sans-serif"});
+    rBody.textContent = "where prime numbers fall";
+    svgRoot.appendChild(rBody);
+    const rBody2 = svgEl("text", {x:rx+bw/2, y:ry+70, "text-anchor":"middle", "font-size":10.5, fill:ink, "font-family":"Source Sans 3, sans-serif"});
+    rBody2.textContent = "along the number line";
+    svgRoot.appendChild(rBody2);
+    const rBody3 = svgEl("text", {x:rx+bw/2, y:ry+90, "text-anchor":"middle", "font-size":9.5, "font-style":"italic", fill:inkSoft, "font-family":"Source Sans 3, sans-serif"});
+    rBody3.textContent = "(distribution, not factoring)";
+    svgRoot.appendChild(rBody3);
+
+    // Center: "no shared axis" mark
+    const cx = W/2, cy = ly+bh/2;
+    svgRoot.appendChild(svgEl("line", {x1:lx+bw+8, y1:cy, x2:rx-8, y2:cy, stroke:inkSoft, "stroke-width":2, "stroke-dasharray":"4 4"}));
+    svgRoot.appendChild(svgEl("circle", {cx, cy, r:14, fill:panel, stroke:inkSoft, "stroke-width":1.5}));
+    const xMark = svgEl("text", {x:cx, y:cy+5, "text-anchor":"middle", "font-size":14, "font-weight":700, fill:inkSoft, "font-family":"JetBrains Mono, monospace"});
+    xMark.textContent = "≠";
+    svgRoot.appendChild(xMark);
+
+    const noteText = svgEl("text", {x:W/2, y:H-12, "text-anchor":"middle", "font-size":10.5, fill:inkSoft, "font-family":"Source Sans 3, sans-serif"});
+    noteText.textContent = "Two different questions about primes — solving one says nothing about the other.";
+    svgRoot.appendChild(noteText);
+
+    return svgRoot;
+  }
+
+  // Quantum: Shor's algorithm (the real threat to RSA) vs. this proof --
+  // different machines, different math, no overlap.
+  function drawQuantum(){
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--ink").trim();
+    const inkSoft = css.getPropertyValue("--ink-soft").trim();
+    const accent = css.getPropertyValue("--accent").trim();
+    const accentSoft = css.getPropertyValue("--accent-soft").trim();
+    const warn = css.getPropertyValue("--warn").trim();
+    const warnSoft = css.getPropertyValue("--warn-soft").trim();
+
+    const W = 440, H = 165;
+    const svgRoot = svgEl("svg", {viewBox:`0 0 ${W} ${H}`, width:"100%", height:"auto", style:"overflow:visible"});
+
+    const rows = [
+      { label:"This proof (Lean + Claude)", sub:"Classical computer, formal logic", threat:"No threat to encryption", color:accent, colorSoft:accentSoft, y:35 },
+      { label:"Shor's algorithm", sub:"Quantum computer, number theory", threat:"Real future threat to RSA", color:warn, colorSoft:warnSoft, y:110 },
+    ];
+
+    rows.forEach(r => {
+      svgRoot.appendChild(svgEl("rect", {x:20, y:r.y-28, width:W-40, height:56, rx:8, fill:r.colorSoft, stroke:r.color, "stroke-width":2}));
+      const lbl = svgEl("text", {x:36, y:r.y-6, "font-size":11.5, "font-weight":700, fill:r.color, "font-family":"JetBrains Mono, monospace"});
+      lbl.textContent = r.label;
+      svgRoot.appendChild(lbl);
+      const sub = svgEl("text", {x:36, y:r.y+12, "font-size":10, fill:ink, "font-family":"Source Sans 3, sans-serif"});
+      sub.textContent = r.sub;
+      svgRoot.appendChild(sub);
+      const threat = svgEl("text", {x:W-36, y:r.y+3, "text-anchor":"end", "font-size":10, "font-weight":700, fill:r.color, "font-family":"Source Sans 3, sans-serif"});
+      threat.textContent = r.threat;
+      svgRoot.appendChild(threat);
+    });
+
+    return svgRoot;
+  }
+
+  // Unlock: theorems chained to "assuming RH is true" become unconditional
+  // once RH is proven -- a padlock opening metaphor.
+  function drawUnlock(){
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--ink").trim();
+    const inkSoft = css.getPropertyValue("--ink-soft").trim();
+    const accent = css.getPropertyValue("--accent").trim();
+    const accentSoft = css.getPropertyValue("--accent-soft").trim();
+    const panel = css.getPropertyValue("--panel").trim();
+
+    const W = 440, H = 160;
+    const svgRoot = svgEl("svg", {viewBox:`0 0 ${W} ${H}`, width:"100%", height:"auto", style:"overflow:visible"});
+
+    // Padlock made of simple shapes
+    const lockCx = 70, lockCy = 80;
+    svgRoot.appendChild(svgEl("rect", {x:lockCx-22, y:lockCy-6, width:44, height:36, rx:6, fill:accentSoft, stroke:accent, "stroke-width":2.5}));
+    svgRoot.appendChild(svgEl("path", {d:`M ${lockCx-14} ${lockCy-6} v-14 a14 14 0 0 1 28 0 v14`, fill:"none", stroke:accent, "stroke-width":3}));
+    svgRoot.appendChild(svgEl("circle", {cx:lockCx, cy:lockCy+12, r:4, fill:accent}));
+    const lockLabel = svgEl("text", {x:lockCx, y:lockCy+48, "text-anchor":"middle", "font-size":10, "font-weight":700, fill:accent, "font-family":"JetBrains Mono, monospace"});
+    lockLabel.textContent = "RH proven → unlocked";
+    svgRoot.appendChild(lockLabel);
+
+    // Chained theorems
+    const theorems = ["Prime gap bounds", "Error terms in &pi;(x)", "Dozens more theorems"];
+    const startX = 160;
+    theorems.forEach((t, i) => {
+      const y = 25 + i*42;
+      svgRoot.appendChild(svgEl("line", {x1:lockCx+22, y1:lockCy+6, x2:startX-6, y2:y+14, stroke:inkSoft, "stroke-width":1.5, "stroke-dasharray":"3 3", opacity:0.6}));
+      svgRoot.appendChild(svgEl("rect", {x:startX, y:y, width:W-startX-16, height:28, rx:6, fill:panel, stroke:inkSoft, "stroke-width":1.3}));
+      const tLabel = svgEl("text", {x:startX+12, y:y+18, "font-size":10.5, fill:ink, "font-family":"Source Sans 3, sans-serif"});
+      tLabel.innerHTML = "";
+      tLabel.textContent = t.replace("&pi;","π");
+      svgRoot.appendChild(tLabel);
+      const condLabel = svgEl("text", {x:W-20, y:y+18, "text-anchor":"end", "font-size":8.5, "font-style":"italic", fill:inkSoft, "font-family":"Source Sans 3, sans-serif"});
+      condLabel.textContent = "was: “assuming RH”";
+      svgRoot.appendChild(condLabel);
+    });
+
+    return svgRoot;
+  }
+
+  // ======================================================================
+  // TAB 2: click-to-expand "why it matters" cards
+  // ======================================================================
+  const WHY_CARDS = [
+    { icon:"&pi;", title:"Prime number theory", detail:"This gives us the tightest possible guarantee on how evenly primes are spread out — the single most-cited open question in number theory. It's the question I'd ask if I only got one." },
+    { icon:"&Sigma;", title:"Hundreds of “conditional” proofs", detail:"I can think of dozens of theorems that are only proven “assuming the Riemann Hypothesis is true.” Those results become unconditionally solid overnight, which is a bigger deal to working mathematicians than any single new fact.", diagram:"unlock" },
+    { icon:"&psi;", title:"Physics &amp; quantum chaos", detail:"The spacing between the zeta function's zeros statistically matches the spacing between energy levels in certain quantum systems. Nobody fully understands why — it's one of the strangest unsolved bridges between number theory and physics, and I bring it up every time I teach this." },
+    { icon:"AI", title:"A signal about AI itself", detail:"Honestly, I think this is the part that matters most to this class. Most commentators agree the real headline isn't about primes — it's that an AI system can now assist in research-level discovery I'd have called years away." },
+  ];
+
+  function renderWhyCards(){
+    const grid = el("why-cards");
+    grid.innerHTML = WHY_CARDS.map((c, i) => `
+      <div class="flip-card" data-idx="${i}">
+        <div class="fc-head">
+          <span class="fc-icon">${c.icon}</span>
+          <h3>${c.title}</h3>
+        </div>
+        <p class="fc-hint">Click to see why</p>
+        <p class="fc-detail">${c.detail}</p>
+        ${c.diagram ? `<div class="mini-diagram fc-detail" data-diagram="${c.diagram}"></div>` : ""}
+      </div>
+    `).join("");
+    grid.querySelectorAll(".flip-card").forEach((card, i) => {
+      card.addEventListener("click", () => {
+        card.classList.toggle("open");
+        const diagramEl = card.querySelector("[data-diagram]");
+        if (diagramEl && card.classList.contains("open") && !diagramEl.dataset.rendered){
+          renderMiniDiagram(diagramEl, diagramEl.dataset.diagram);
+          diagramEl.dataset.rendered = "1";
+        }
+      });
+    });
+  }
+
+  // ======================================================================
+  // TAB 3: step-through verification pipeline
+  // ======================================================================
+  const PIPE_STEPS = [
+    { label:"Mathematical idea", sub:"Alpöge + Claude", colorVar:"--accent", text:"Alpöge, a trained mathematician, directs the strategy. Claude helps generate and structure the formal argument. This stage is entirely human-guided — nothing here is “automatic.”" },
+    { label:"Lean code", sub:"~17M lines", colorVar:"--lean", text:"The argument gets translated into Lean: every statement built from basic logical axioms, with no step a reader is just supposed to “trust.” This is the stage that took the proof from an idea to something a machine can check." },
+    { label:"Lean kernel check", sub:"every step verified", colorVar:"--lean", text:"A separate program — the Lean kernel — mechanically re-derives every single step from the axioms up. If even one step doesn't follow validly, the kernel rejects the whole proof. This is the step an LLM writing prose can't offer you." },
+    { label:"Independent re-check", sub:"MIT, separate tool", colorVar:"--accent", text:"An MIT mathematician re-verified the result with an entirely separate checking tool and called the odds of a hidden error “approximately zero.” This is the step that makes me comfortable calling the logic — not yet the full math community's verdict — settled." },
+  ];
+
+  let pipeIdx = 0;
+
+  function renderPipeline(){
+    const stage = el("pipeline-stage");
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--ink").trim();
+    const inkSoft = css.getPropertyValue("--ink-soft").trim();
+    const panelBg = css.getPropertyValue("--panel").trim();
+
+    const W = 680, H = 118;
+    const boxW = 142, boxH = 64, gap = (W - 40 - PIPE_STEPS.length*boxW) / (PIPE_STEPS.length-1);
+    const svgRoot = svgEl("svg", {viewBox:`0 0 ${W} ${H}`, width:"100%", height:"auto", style:"overflow:visible"});
+
+    const defs = svgEl("defs", {});
+    const marker = svgEl("marker", {id:"pipe-arrow", markerWidth:8, markerHeight:8, refX:6, refY:4, orient:"auto"});
+    marker.appendChild(svgEl("path", {d:"M0,0 L8,4 L0,8 Z", fill:inkSoft}));
+    defs.appendChild(marker);
+    svgRoot.appendChild(defs);
+
+    const y = H/2;
+    PIPE_STEPS.forEach((s, i) => {
+      const x = 20 + i*(boxW+gap);
+      const cx = x + boxW/2;
+      const color = css.getPropertyValue(s.colorVar).trim();
+      const colorSoftVar = s.colorVar + "-soft";
+      const colorSoft = css.getPropertyValue(colorSoftVar).trim();
+      const isReached = i <= pipeIdx;
+      const isCurrent = i === pipeIdx;
+
+      if (i>0){
+        const prevCx = 20 + (i-1)*(boxW+gap) + boxW;
+        const prevColor = css.getPropertyValue(PIPE_STEPS[i-1].colorVar).trim();
+        svgRoot.appendChild(svgEl("line", {
+          x1:prevCx, y1:y, x2:x, y2:y, stroke: i<=pipeIdx ? prevColor : inkSoft,
+          "stroke-width":2, "marker-end":"url(#pipe-arrow)",
+        }));
+      }
+
+      svgRoot.appendChild(svgEl("rect", {
+        x, y:y-boxH/2, width:boxW, height:boxH, rx:8,
+        fill: isReached ? colorSoft : "transparent",
+        stroke: isReached ? color : inkSoft,
+        "stroke-width": isCurrent ? 2.75 : 1.5,
+        opacity: isReached ? 1 : 0.5,
+      }));
+      const lbl = svgEl("text", {x:cx, y:y-4, "text-anchor":"middle", "font-size":11.5, "font-weight":700, fill: isReached ? color : inkSoft, "font-family":"JetBrains Mono, monospace"});
+      lbl.textContent = s.label;
+      svgRoot.appendChild(lbl);
+      const sub = svgEl("text", {x:cx, y:y+14, "text-anchor":"middle", "font-size":9.5, fill:inkSoft, "font-family":"JetBrains Mono, monospace"});
+      sub.textContent = s.sub;
+      svgRoot.appendChild(sub);
+
+      const badgeCx = x, badgeCy = y-boxH/2;
+      const numBadge = svgEl("circle", {cx:badgeCx, cy:badgeCy, r:10, fill: isReached ? color : panelBg, stroke: isReached ? color : inkSoft, "stroke-width":1.5});
+      svgRoot.appendChild(numBadge);
+      const numLbl = svgEl("text", {x:badgeCx, y:badgeCy+3.5, "text-anchor":"middle", "font-size":10.5, "font-weight":700, fill: isReached ? "#fff" : inkSoft, "font-family":"JetBrains Mono, monospace"});
+      numLbl.textContent = String(i+1);
+      svgRoot.appendChild(numLbl);
+    });
+
+    stage.innerHTML = "";
+    stage.appendChild(svgRoot);
+
+    const step = PIPE_STEPS[pipeIdx];
+    el("pipe-detail").innerHTML = `<span class="pd-step">Step ${pipeIdx+1} of ${PIPE_STEPS.length} &middot; ${step.label}</span><span class="pd-text">${step.text}</span>`;
+    el("pipe-prev").disabled = pipeIdx===0;
+    el("pipe-next").disabled = pipeIdx===PIPE_STEPS.length-1;
+  }
+
+  el("pipe-prev").addEventListener("click", () => { if(pipeIdx>0){ pipeIdx--; renderPipeline(); }});
+  el("pipe-next").addEventListener("click", () => { if(pipeIdx<PIPE_STEPS.length-1){ pipeIdx++; renderPipeline(); }});
+
+  // ======================================================================
+  // TAB 4: vote-then-reveal FAQ
+  // ======================================================================
+  const VOTES = [
+    {
+      q: "Will this break your bank password or online banking?",
+      options: ["Yes, it will", "No, it won't"],
+      correctIdx: 1,
+      verdict: "No", verdictClass: "no",
+      a: "Modern encryption like RSA relies on how hard it is to <i>factor</i> a huge number into its prime factors — not on where primes are distributed, which is what the Riemann Hypothesis is actually about. Cryptography experts have said explicitly that a proof “wouldn't, in itself, compromise RSA.” Your passwords are exactly as safe as they were last week.",
+      diagram: "rsa",
+    },
+    {
+      q: "Does this make today's encryption algorithms outdated?",
+      options: ["Yes, time to upgrade", "No, unrelated issue"],
+      correctIdx: 1,
+      verdict: "No", verdictClass: "no",
+      a: "The thing that actually threatens RSA-style encryption is a sufficiently powerful <b>quantum computer</b> running Shor's algorithm — a completely different idea than this proof. That threat is real, and it's why the field is already moving toward post-quantum cryptography, but it has nothing to do with this announcement.",
+      diagram: "quantum",
+    },
+    {
+      q: "Is there a real connection to quantum physics?",
+      options: ["Yes, a genuine link", "No, that's a myth"],
+      correctIdx: 0,
+      verdict: "Yes, but indirectly", verdictClass: "nuance",
+      a: "There's a decades-old, still-unexplained observation: the spacing between the zeta function's zeros statistically resembles the spacing between energy levels in certain quantum systems. A confirmed Riemann Hypothesis doesn't change physics directly, but it strengthens one of the strangest open bridges between number theory and physics.",
+    },
+    {
+      q: "Is this “official” and accepted by mathematicians now?",
+      options: ["Yes, fully settled", "Not quite yet"],
+      correctIdx: 1,
+      verdict: "Not fully yet", verdictClass: "nuance",
+      a: "The <i>formal logic</i> is certified — the Lean kernel and an independent tool confirm every step follows from basic axioms. What's missing is the traditional process of the community reading, understanding, and discussing the underlying <i>ideas</i> in plain language. I'd call the logic settled and the mathematics still being digested.",
+    },
+  ];
+
+  function renderVotes(){
+    const list = el("vote-list");
+    list.innerHTML = VOTES.map((v, i) => `
+      <div class="vote-item" data-idx="${i}">
+        <div class="vq">${v.q}</div>
+        <div class="vote-row">
+          ${v.options.map((opt, oi) => `<button class="vote-btn" data-opt="${oi}">${opt}</button>`).join("")}
+        </div>
+        <div class="vote-reveal">
+          <span class="vr-verdict ${v.verdictClass}">${v.verdict}</span>
+          <p>${v.a}</p>
+          ${v.diagram ? `<div class="mini-diagram" data-diagram="${v.diagram}"></div>` : ""}
+        </div>
+      </div>
+    `).join("");
+
+    list.querySelectorAll(".vote-item").forEach((item, i) => {
+      const v = VOTES[i];
+      item.querySelectorAll(".vote-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (item.classList.contains("answered")) return;
+          const chosenIdx = +btn.dataset.opt;
+          item.classList.add("answered");
+          item.querySelectorAll(".vote-btn").forEach((b, bi) => {
+            if (bi===chosenIdx){
+              b.classList.add("chosen", chosenIdx===v.correctIdx ? "right" : "wrong");
+            }
+            if (bi===v.correctIdx){
+              b.classList.add("correct-answer");
+            }
+          });
+          const diagramEl = item.querySelector("[data-diagram]");
+          if (diagramEl && !diagramEl.dataset.rendered){
+            renderMiniDiagram(diagramEl, diagramEl.dataset.diagram);
+            diagramEl.dataset.rendered = "1";
+          }
+        });
+      });
+    });
+  }
+
+  // ======================================================================
+  // INITIAL RENDER
+  // ======================================================================
+  applyTopicUI();
+  renderZetaStage();
+  renderMiniDiagram(el("grh-diagram"), "grh");
+  renderWhyCards();
+  renderPipeline();
+  renderVotes();
+})();
+</script>
